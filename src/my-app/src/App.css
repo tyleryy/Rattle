@@ -56,4 +56,5 @@
 .title {
   width: 20em;
   height: auto;
+  animation: tilt-shaking 0.5s ease-in 2s infinite;
 }
