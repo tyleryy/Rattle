@@ -48,6 +48,37 @@ io.on('/joinlobby', (socket: Socket, code: string) => {
     return code; // return code so that frontend can reference the correct game/room
 })
 
+io.on('/select-character', (socket: Socket, code: string, player_num: number, char: string) => {
+    let game: Game = rattle_games[code];
+    // ! may change later
+    // prevents character assignment if other player has selected it
+    if (player_num === 1 && game.p1) {
+        if (game.p2 && game.p2.char === char) {return "Player 2 has already selected that character";}
+        game.p1.char = char;
+    } else if (player_num === 2 && game.p2) {
+        if (game.p1 && game.p1.char === char) {return "Player 1 has already selcted that character";}
+        game.p2.char = char;
+    }
+    return `Player ${player_num} selected ${char}`;
+})
+
+io.on('/game/end', (socket: Socket, code: string) => {
+    // TODO may add more cleanup
+    delete rattle_games[code];
+    return;
+})
+
+io.on('game/begin', (socket: Socket, code: string) => {
+    // TODO will add more functionality
+    let game: Game = rattle_games[code];
+    game.GameActive = true;
+    if (game.p1) {
+        game.p1.active = true;
+    } else {
+        return "Something went wrong"
+    }
+    return;
+})
 
 
 
