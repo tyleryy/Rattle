@@ -10,7 +10,6 @@ const app = express();
 const server = createServer(app)
 const io = new Server(server, {cors: {origin: '*'}});
 
-let id_set = new Set<string>();
 let rattle_games: Rattle;
 
 app.get('/', (req: Request, res: Response) => {
@@ -21,10 +20,8 @@ io.on('connection', (socket) => {
     console.log('a user connected');
 });
   
-io.on('createlobby', (socket: Socket) => {
-    let result = generateLobbyCode(id_set);
-    let lobby_code: string = result.result;
-    id_set = result.id_set;
+io.on('/createlobby', (socket: Socket) => {
+    let lobby_code = generateLobbyCode(rattle_games);
     socket.join(lobby_code);
     let host = new Player(1, socket.id);
     let game: Game = {
@@ -37,8 +34,22 @@ io.on('createlobby', (socket: Socket) => {
     }
     rattle_games[lobby_code] = game;
     // possibly return success or fail
-    return;
+    return lobby_code; // return code so that frontend can reference the correct game/room
 })
+
+io.on('/joinlobby', (socket: Socket, code: string) => {
+    socket.join(code);
+
+    let game: Game = (rattle_games[code] ?? null); // ! do updates to game var update rattle games?
+    if (!game) {
+        return "Lobby not found";
+    }
+    game.p2 = new Player(2, socket.id);
+    return code; // return code so that frontend can reference the correct game/room
+})
+
+
+
 
 server.listen(2000, () => console.log("server up"));
 
