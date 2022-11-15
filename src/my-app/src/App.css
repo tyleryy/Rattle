@@ -36,3 +36,24 @@
     transform: rotate(360deg);
   }
 }
+
+.common_button {
+  position: relative;
+  height: 18em;
+  width: auto;
+  left: -45em;
+  padding-bottom: 3em;
+}
+
+@keyframes tilt-shaking {
+  0% {transform: rotate(0deg);}
+  25% { transform: rotate(5deg); }
+  50% { transform: rotate(0eg); }
+  75% { transform: rotate(-5deg); }
+  100% { transform: rotate(0deg);}
+}
+
+.title {
+  width: 20em;
+  height: auto;
+}
