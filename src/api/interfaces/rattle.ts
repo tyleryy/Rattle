@@ -11,7 +11,8 @@ export interface Game {
     p2: Player | null; // player 2
 
     // game configuration options from frontened
-
+    
+    GameActive: boolean;
     currRounds: number; // the round the game is currently at
     time: number; // the time per round
     totalRounds: number; // the total rounds before ending the game
