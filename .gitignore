@@ -105,4 +105,4 @@ dist
 
 
 # typescript
-*/**/lib
+**/lib
