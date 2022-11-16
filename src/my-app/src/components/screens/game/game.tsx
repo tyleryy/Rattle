@@ -99,7 +99,7 @@ function Game() {
             // when we move, we want to add the coordinate to the array
             let coordinate: Coordinate = {
                 // x: Math.floor(e.clientX - e.target.offsetLeft), // subtract to account for the stage position
-                x: lockedX - e.target.offsetLeft,
+                x: Math.floor(lockedX - e.target.offsetLeft),
                 y: Math.floor(e.clientY - e.target.offsetTop)
             }
             changeLastNonNullPos(coordinate);
@@ -119,7 +119,7 @@ function Game() {
             changeStrokeHistory([...strokeHistory, coordinate]);
         }}>
             <Sprite ref={stageRef} image="./game_sprites/back.png" x={100} y={100} />
-            <Canvas currCord={currCoord} lastNonNull={lastNonNullPos} changeStrokes={changeStrokeHistory} currHistory={strokeHistory} />
+            <Canvas currCord={currCoord} lastNonNull={lastNonNullPos} changeStrokes={changeStrokeHistory} currHistory={strokeHistory} isDrawing={isDrawing} />
         </Stage>
     )
 }
