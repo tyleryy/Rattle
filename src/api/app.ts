@@ -10,17 +10,29 @@ const app = express();
 const server = createServer(app)
 const io = new Server(server, {cors: {origin: '*'}});
 
-let rattle_games: Rattle;
+let rattle_games: Rattle = {};
 
 app.get('/', (req: Request, res: Response) => {
     res.sendStatus(200);
 })
 
+// ! remove later
+function debugLogger(socket: Socket) {
+    console.log(rattle_games)
+    console.log(socket.rooms);
+}
+
+
 io.on('connection', (socket: Socket) => {
-    
+    console.log("A socket has joined! They are " + socket.id)
+
     socket.on('createLobby', () => {
         let lobby_code = generateLobbyCode(rattle_games);
-        socket.join(lobby_code);
+        try {
+            socket.join(lobby_code);
+        } catch (err) {
+            console.log(err);
+        }
         let host = new Player(1, socket.id);
         let game: Game = {
             p1: host,
@@ -32,6 +44,7 @@ io.on('connection', (socket: Socket) => {
         }
         rattle_games[lobby_code] = game;
         // possibly return success or fail
+        debugLogger(socket)
         return lobby_code; // return code so that frontend can reference the correct game/room
     })
 
@@ -39,11 +52,13 @@ io.on('connection', (socket: Socket) => {
         socket.join(code);
         let game: Game = (rattle_games[code] ?? null); // ! do updates to game var update rattle games?
         if (!game) {
+            console.log("Lobby not found")
             return "Lobby not found";
         }
         game.p2 = new Player(2, socket.id);
         // send data to frontend
         socket.to(code).emit("P2JoinedLobby", {p1char: game.p1?.char, p2char: game.p2.char});
+        debugLogger(socket);
         return code; // return code so that frontend can reference the correct game/room
     })
     

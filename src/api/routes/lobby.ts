@@ -8,6 +8,6 @@ export function generateLobbyCode(rattle_games : Rattle) : string {
         for ( var i = 0; i < 5; i++ ) {
             result += characters.charAt(Math.floor(Math.random() * characters.length));
         }
-    } while (!(result in rattle_games))
+    } while (result in rattle_games)
     return result;
 }
