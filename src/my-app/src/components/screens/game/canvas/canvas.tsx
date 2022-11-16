@@ -1,49 +1,40 @@
 import { Container, Graphics, useTick } from "@inlet/react-pixi";
 import { useEffect, useRef, useState } from "react";
-import { coordinate } from "../../../../interfaces/interfaces";
+import { Coordinate } from "../../../../interfaces/interfaces";
 
-function Canvas({ nextStrokes }: { nextStrokes: coordinate[] }) {
-    // useTick((delta) => {
-    //     console.log("Frame");
-    // })
+function Canvas({ currCord, isDrawing, changeStrokes, currHistory }: { currCord: Coordinate, isDrawing: boolean, changeStrokes: (input: Coordinate[]) => void, currHistory: Coordinate[] }) {
+    const [prevCoord, changePrevCoord] = useState<Coordinate>({ x: -100, y: -100 });
+    useTick((delta) => {
+        if (isDrawing) {
+            // remember the strokes
+            changeStrokes([...currHistory, currCord]);
+            changePrevCoord(currCord);
+        } else {
+            // push -100's
+            const dummyCoord = { x: -100, y: -100 }
+            changeStrokes([...currHistory, dummyCoord]);
+            changePrevCoord(dummyCoord);
+        }
+
+    })
 
 
     function recreateStrokes(g: any) {
-        const strokes = nextStrokes;
-        if (strokes.length !== 0) {
-            g.clear()
-            g.lineStyle(4, 0xffd900, 1);
-            g.beginFill(0xffd900);
-            for (let i = 0; i < strokes.length - 1; i++) {
-                const start = strokes.at(i);
-                if (!start) {
-                    console.log("Start is undefined")
-                    return;
-                }
-                const startX = start.x;
-                const startY = start.y;
-                const end = strokes.at(i + 1);
-                if (!end) {
-                    console.log("End is undefined")
-                    return
-                }
-                const endX = end.x;
-                const endY = end.y;
-                // lastX = endX;
-                // lastY = endY;
-                g.moveTo(startX, startY);
-                g.lineTo(endX, endY);
+        // ! This is hacking it, can't get deepStrictEqual to work
+        if (JSON.stringify(prevCoord) !== JSON.stringify({ x: -100, y: -100 }) && JSON.stringify(prevCoord) !== JSON.stringify({ y: -100, x: -100 })) {
+            const nextStroke = currHistory.at(-1);
+            if (nextStroke && nextStroke.x !== -100 && nextStroke.y !== -100) {
+                console.log("DRAWING BETWEEN ", prevCoord, nextStroke)
+                g.lineStyle(4, 0xffd900, 1);
+                g.beginFill(0xffd900);
+                g.moveTo(prevCoord.x, prevCoord.y);
+                g.lineTo(nextStroke.x, nextStroke.y);
+                g.endFill();
             }
-            // g.moveTo(lastCoord.x, lastCoord.y);
-            // const end = strokes.at(0);
-            // g.lineTo(end.x, end.y);
-            g.endFill();
-            // changeLastCoord({ x: end.x, y: end.y })
-            // changeNextStrokes([]);
         }
     }
     return (
-        <Graphics draw={recreateStrokes} />
+        <Graphics draw={isDrawing ? recreateStrokes : () => { }} />
     )
 }
 

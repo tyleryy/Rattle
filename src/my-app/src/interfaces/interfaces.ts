@@ -1,5 +1,5 @@
 
-export interface coordinate {
+export interface Coordinate {
     x: number,
     y: number
 }

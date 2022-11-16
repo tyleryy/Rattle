@@ -1,31 +1,64 @@
 import { Stage } from '@inlet/react-pixi'
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Canvas from './canvas/canvas';
-import { coordinate } from '../../../interfaces/interfaces';
+import { Coordinate } from '../../../interfaces/interfaces';
 
 function Game() {
-    const [strokes, changeStrokes] = useState<coordinate[]>([]);
-    const [nextStrokes, changeNextStrokes] = useState<coordinate[]>([]);
+    // remember the strokes done
+    const [strokeHistory, changeStrokeHistory] = useState<Coordinate[]>([]);
+    const [isDrawing, flipDrawingKey] = useState<boolean>(false);
+    const [currCoord, changeCurrCord] = useState<Coordinate>({ x: -100, y: -100 });
+
+    // stage size
+    const [stageW, changeW] = useState<number>(800);
+    const [stageH, changeH] = useState<number>(600);
+
+    useEffect(() => {
+        // get the width of the screen
+        const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
+        changeW(vw);
+        const vh = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0);
+        changeH(vh);
+
+        window.addEventListener("keydown", keysDown);
+        window.addEventListener("keyup", keysUp);
+
+    }, []);
+
+    const drawKey = "Space"
+
+    function keysDown(e: KeyboardEvent) {
+        const key = e.code;
+        if (key === drawKey) {
+            flipDrawingKey(true);
+            // console.log("Key down " + drawKey);
+        }
+    }
+
+    function keysUp(e: KeyboardEvent) {
+        const key = e.code;
+        if (key === drawKey) {
+            flipDrawingKey(false);
+            // console.log("Key up " + drawKey);
+
+        }
+    }
 
 
     return (
-        <Stage onPointerMove={(e: any) => {
+        <Stage width={stageW} height={stageH} onPointerMove={(e: any) => {
             // when we move, we want to add the coordinate to the array
             const coordinate = {
                 x: Math.floor(e.clientX - e.target.offsetLeft), // subtract to account for the stage position
                 y: Math.floor(e.clientY - e.target.offsetTop)
             }
-            // let currStrokes = strokes;
-            // currStrokes.push(coordinate);
-            // changeStrokes(currStroke)
-            // console.log(currStrokes)
-            changeStrokes([...strokes, coordinate]);
-            changeNextStrokes([...nextStrokes, coordinate]);
-            console.log([...nextStrokes, coordinate]);
+            changeStrokeHistory([...strokeHistory, coordinate]);
+            changeCurrCord(coordinate);
+            // console.log([...nextStrokes, coordinate]);
             // console.log(currStrokes);
         }}>
             {/* <Sprite ref={stageRef} image="./bunny.png" x={100} y={100} /> */}
-            <Canvas nextStrokes={nextStrokes} />
+            <Canvas currCord={currCoord} isDrawing={isDrawing} changeStrokes={changeStrokeHistory} currHistory={strokeHistory} />
         </Stage>
     )
 }
