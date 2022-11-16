@@ -36,3 +36,99 @@
     transform: rotate(360deg);
   }
 }
+
+.screen {
+  position: relative;
+  height: 150vh;
+  width: 100vw;
+}
+
+.home {
+  position: absolute;
+  top: 0em;
+  left: 13em;
+  z-index: 2;
+}
+
+.join {
+  position: absolute;
+  top: 0em;
+  left: 15em;
+  z-index: 2;
+}
+
+.choose {
+  position: absolute;
+  top: 0em;
+  left: 15em;
+  z-index: 2;
+}
+
+.buttonChar {
+  position: relative;
+  float: left;
+  vertical-align: middle;
+  margin-top: 10px;
+  top: 15em;
+  height: 13em;
+  width: auto;
+  left: 20em;
+  padding-bottom: 0.01em;
+  transition: transform .2s;
+}
+
+.buttonChar:hover {
+  transform: scale(1.2)
+}
+
+.msg {
+  position: absolute;
+  text-align: center;
+  top: 10em;
+  right: -8em;
+  font-size: 50px;
+}
+
+.msg_butt {
+  position: relative;
+  transition: transform .2s;
+  top: 13em;
+  left: 55em;
+}
+
+.msg_butt:hover {
+  transform: scale(1.2);
+}
+.common_button {
+  position: relative;
+  top: 3em;
+  height: 18em;
+  width: auto;
+  left: -30em;
+  padding-bottom: 3em;
+  transition: transform .2s;
+}
+
+.common_button:hover {
+  transform: scale(1.2)
+}
+
+@keyframes tilt-shaking {
+  0% {transform: rotate(0deg);}
+  25% { transform: rotate(5deg); }
+  50% { transform: rotate(0eg); }
+  75% { transform: rotate(-5deg); }
+  100% { transform: rotate(0deg);}
+}
+
+.title {
+  position: relative;
+  text-align: center;
+  width: 20em;
+  left: 7.8em;
+  top: 1em;
+  height: auto;
+  animation: tilt-shaking 0.5s ease-in 2s infinite;
+}
+
+
