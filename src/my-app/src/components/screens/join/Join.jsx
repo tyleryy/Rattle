@@ -1,9 +1,9 @@
 import React from "react";
 import {useRef} from "react";
 import { useNavigate } from "react-router-dom";
-import Screen from '../screen_bg/Screen'
-import Button from '../buton/Button';
-import Button2 from '../buton/Button2';
+import Screen from '../../screen_bg/Screen'
+import Button from '../../buton/Button';
+import Button2 from '../../buton/Button2';
 
 function Join(props) {
     /*

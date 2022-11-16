@@ -1,7 +1,7 @@
 import React from "react";
-import Button from '../buton/Button';
-import Title from '../title/Title';
-import Screen from '../screen_bg/Screen'
+import Button from '../../buton/Button';
+import Title from '../../title/Title';
+import Screen from '../../screen_bg/Screen'
 
 const Home = (props) => {
 
