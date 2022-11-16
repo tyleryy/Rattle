@@ -10,6 +10,7 @@ function Game() {
     const [isDrawing, flipDrawingKey] = useState<boolean>(false);
     const [currCoord, changeCurrCord] = useState<Coordinate>({ x: null, y: null });
     const [prevCoord, changePrevCord] = useState<Coordinate>({ x: null, y: null });
+    const [lastNonNullPos, changeLastNonNullPos] = useState<Coordinate>({ x: null, y: null })
     const [loopInterval, changeLoopInterval] = useState<NodeJS.Timer>()
     const stageRef = useRef(null);
 
@@ -24,10 +25,12 @@ function Game() {
         const vh = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0);
         changeH(vh);
 
+        changeLastNonNullPos({ x: lockedX, y: vh / 2 });
+
         window.addEventListener("keydown", keysDown);
         window.addEventListener("keyup", keysUp);
+        // loopPosition(isDrawing, prevCoord, currCoord);
         // window.addEventListener("mousemove", mouseInPlay);
-        loopPosition(isDrawing, prevCoord, currCoord);
     }, []);
 
     // when we change the drawing status, reset the looping
@@ -69,22 +72,11 @@ function Game() {
                 // console.log(currCoord);
                 // console.log(prevCoord)
                 if (prevCoord.y && currCoord.y && prevCoord.x && currCoord.x) {
-                    if (Math.abs(prevCoord.y - currCoord.y) < 1) {
-                        // console.log("stading still?")
-                        // console.log(prevCoord, currCoord);
-                        // console.log([...strokeHistory, currCoord])
-                        if (Math.abs(prevCoord.x - currCoord.x) > 1) {
-                            prevCoord = currCoord;
-                            changePrevCord(prevCoord)
-                        }
+                    if (Math.abs(prevCoord.y - currCoord.y) <= 1) {
+                        // standing still but trying to draw
+                        console.log("STANDING STILL")
                         changeStrokeHistory([...strokeHistory, currCoord]);
-                        let tinyCoord = currCoord;
-                        if (tinyCoord.x) {
-                            tinyCoord.x = tinyCoord.x + 0.01;
-                            changeCurrCord(tinyCoord);
-                        } else {
-                            console.log("no tin")
-                        }
+                        // console.log("stading still?")
                     }
                 }
                 // if (currCoord.x === prevCoord.x && currCoord.y === prevCoord.y) {
@@ -105,20 +97,29 @@ function Game() {
     return (
         <Stage width={stageW} height={stageH} onPointerMove={(e: any) => {
             // when we move, we want to add the coordinate to the array
-            let coordinate = {
+            let coordinate: Coordinate = {
                 // x: Math.floor(e.clientX - e.target.offsetLeft), // subtract to account for the stage position
                 x: lockedX - e.target.offsetLeft,
                 y: Math.floor(e.clientY - e.target.offsetTop)
             }
-            // changeStrokeHistory([...strokeHistory, coordinate]);
-            // console.log("CURR CORD IS", coordinate);
-            changePrevCord(currCoord);
+            changeLastNonNullPos(coordinate);
+            if (!isDrawing) {
+                // push null
+                // console.log("NULL")
+                coordinate = {
+                    x: null,
+                    y: null
+                }
+            }
+            const newPrevCoord = strokeHistory.at(-1);
+            if (newPrevCoord) {
+                changePrevCord(newPrevCoord);
+            }
             changeCurrCord(coordinate);
-            // console.log([...nextStrokes, coordinate]);
-            // console.log(currStrokes);
+            changeStrokeHistory([...strokeHistory, coordinate]);
         }}>
             <Sprite ref={stageRef} image="./game_sprites/back.png" x={100} y={100} />
-            <Canvas currCord={currCoord} isDrawing={isDrawing} changeStrokes={changeStrokeHistory} currHistory={strokeHistory} />
+            <Canvas currCord={currCoord} lastNonNull={lastNonNullPos} changeStrokes={changeStrokeHistory} currHistory={strokeHistory} />
         </Stage>
     )
 }
