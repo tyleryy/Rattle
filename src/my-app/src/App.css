@@ -37,12 +37,56 @@
   }
 }
 
+.screen {
+  position: relative;
+  height: 150vh;
+  width: 100vw;
+}
+
+.home {
+  position: absolute;
+  top: 0em;
+  left: 13em;
+  z-index: 2;
+}
+
+.join {
+  position: absolute;
+  top: 0em;
+  left: 15em;
+  z-index: 2;
+}
+
+.msg {
+  position: absolute;
+  text-align: center;
+  top: 10em;
+  right: -8em;
+  font-size: 50px;
+}
+
+.msg_butt {
+  position: relative;
+  transition: transform .2s;
+  top: 13em;
+  left: 55em;
+}
+
+.msg_butt:hover {
+  transform: scale(1.2);
+}
 .common_button {
   position: relative;
+  top: 3em;
   height: 18em;
   width: auto;
-  left: -45em;
+  left: -30em;
   padding-bottom: 3em;
+  transition: transform .2s;
+}
+
+.common_button:hover {
+  transform: scale(1.2)
 }
 
 @keyframes tilt-shaking {
@@ -54,7 +98,12 @@
 }
 
 .title {
+  position: relative;
   width: 20em;
+  left: 7.8em;
+  top: 1em;
   height: auto;
   animation: tilt-shaking 0.5s ease-in 2s infinite;
 }
+
+
