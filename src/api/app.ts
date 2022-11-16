@@ -18,7 +18,7 @@ app.get('/', (req: Request, res: Response) => {
 
 // ! remove later
 function debugLogger(socket: Socket) {
-    console.log(rattle_games)
+    console.log(rattle_games);
     console.log(socket.rooms);
 }
 
