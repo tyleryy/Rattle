@@ -6,11 +6,24 @@ import { lockedX } from './constants';
 
 function Game() {
     // remember the strokes done
+
+    /** Static stroke history recording the x and the y */
     const [strokeHistory, changeStrokeHistory] = useState<Coordinate[]>([]);
+
+    /** Animated stroke history where the canvas will be animating the position of the stroke. This will change over time */
+    const [animatedStrokeHistory, changeAnimatedStrokeHistory] = useState<Coordinate[]>([]);
+
+    /** Controls whether the key to draw is being pressed or not */
     const [isDrawing, flipDrawingKey] = useState<boolean>(false);
+
+    /** Coordinate of the mouse, or null if not drawing */
     const [currCoord, changeCurrCord] = useState<Coordinate>({ x: null, y: null });
     const [prevCoord, changePrevCord] = useState<Coordinate>({ x: null, y: null });
+
+    /** Position of the mouse at all times (relative to the stage), used to control the player circle */
     const [lastNonNullPos, changeLastNonNullPos] = useState<Coordinate>({ x: null, y: null })
+
+    /** Interval function to run repeatedly (attempt to draw while standing still) */
     const [loopInterval, changeLoopInterval] = useState<NodeJS.Timer>()
     const stageRef = useRef(null);
 
@@ -25,6 +38,7 @@ function Game() {
         const vh = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0);
         changeH(vh);
 
+        // default starting position of the circle
         changeLastNonNullPos({ x: lockedX, y: vh / 2 });
 
         window.addEventListener("keydown", keysDown);
@@ -76,6 +90,8 @@ function Game() {
                         // standing still but trying to draw
                         console.log("STANDING STILL")
                         changeStrokeHistory([...strokeHistory, currCoord]);
+                        changeAnimatedStrokeHistory([...animatedStrokeHistory, currCoord]);
+
                         // console.log("stading still?")
                     }
                 }
@@ -117,9 +133,10 @@ function Game() {
             }
             changeCurrCord(coordinate);
             changeStrokeHistory([...strokeHistory, coordinate]);
+            changeAnimatedStrokeHistory([...animatedStrokeHistory, coordinate]);
         }}>
             <Sprite ref={stageRef} image="./game_sprites/back.png" x={100} y={100} />
-            <Canvas currCord={currCoord} lastNonNull={lastNonNullPos} changeStrokes={changeStrokeHistory} currHistory={strokeHistory} isDrawing={isDrawing} />
+            <Canvas currCord={currCoord} lastNonNull={lastNonNullPos} changeStrokes={changeAnimatedStrokeHistory} currHistory={animatedStrokeHistory} isDrawing={isDrawing} />
         </Stage>
     )
 }
