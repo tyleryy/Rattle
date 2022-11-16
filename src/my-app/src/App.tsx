@@ -13,6 +13,10 @@ import Join from './components/screens/join/Join';
 import Game from './components/screens/game/game';
 // import background from './img/brick2.png'
 
+import io from 'socket.io-client';
+
+const socket = io();
+
 function App() {
   return (
     <div className="App">
