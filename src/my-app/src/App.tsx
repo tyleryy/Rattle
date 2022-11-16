@@ -4,7 +4,7 @@ import './App.css';
 import Button from './components/buton/Button';
 import Title from './components/title/Title';
 import Screen from './components/screen_bg/Screen'
-import {BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import Home from "./components/screens/home/Home";
 import Choose from "./components/screens/choose/Choose";
