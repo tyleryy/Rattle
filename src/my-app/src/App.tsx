@@ -6,10 +6,10 @@ import Title from './components/title/Title';
 import Screen from './components/screen_bg/Screen'
 import {BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
-import Home from "./components/home/Home";
-import Choose from "./components/choose/Choose";
-import Credit from './components/credit/Credit';
-import Join from './components/join/Join';
+import Home from "./components/screens/home/Home";
+import Choose from "./components/screens/choose/Choose";
+import Credit from './components/screens/credit/Credit';
+import Join from './components/screens/join/Join';
 // import background from './img/brick2.png'
 
 function App() {
