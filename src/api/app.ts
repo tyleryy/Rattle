@@ -18,19 +18,38 @@ app.get('/', (req: Request, res: Response) => {
 
 // ! remove later
 function debugLogger(socket: Socket) {
-    console.log('--------------------------');
+    console.log('\n--------------------------');
     console.log(rattle_games);
     console.log(socket.rooms);
     console.log(io.sockets.sockets.size);
-    console.log('--------------------------');
+    console.log('--------------------------\n');
 }
+
+function cleanUp(socket: Socket) {
+    for (let room of socket.rooms) {
+        io.in(room).socketsLeave(room);
+        console.log('room '+ room + ' cleared');
+        delete rattle_games[room]
+    }
+}
+
+io.of("/").adapter.on("delete-room", (room) => {
+    console.log(`room ${room} was destroyed`);
+    // io.in(room).emit("Go Home");
+    io.emit("Go Home");
+});
 
 io.on('connection', (socket: Socket) => {
     console.log("A socket has joined! They are " + socket.id)
     console.log(socket.rooms)
     console.log(io.sockets.sockets.size)
 
-    socket.once('createLobby', () => {
+    socket.on('enterHome', () => {
+        cleanUp(socket);
+        debugLogger(socket);
+    })
+
+    socket.on('createLobby', () => {
         let lobby_code = generateLobbyCode(rattle_games);
         try {
             socket.join(lobby_code);
@@ -47,10 +66,12 @@ io.on('connection', (socket: Socket) => {
             totalRounds: 0
         }
         rattle_games[lobby_code] = game;
+        socket.emit('doneCreateLobby', lobby_code);
+        debugLogger(socket);
         return lobby_code; // return code so that frontend can reference the correct game/room
     })
 
-    socket.once('joinLobby', (code) => {
+    socket.on('joinLobby', (code) => {
         socket.join(code);
         let game: Game = (rattle_games[code] ?? null); // ! do updates to game var update rattle games?
         if (!game) {
@@ -105,18 +126,7 @@ io.on('connection', (socket: Socket) => {
     })
 
     socket.on('disconnecting', (reason) => {
-        // TODO clean up
-
-        let socket_room = io.of("/").adapter.sids.get(socket.id);
-        console.log(socket_room)
-        if (socket_room) {
-            for (let room of socket_room) {
-                console.log('left '+room);
-                //send both frontends to disconnect screen
-                delete rattle_games[room]
-                io.to(room).emit("disconnect-screen");
-            }
-        }
+        cleanUp(socket)
         console.log("disconnected");
     })
 

@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import { useNavigate } from "react-router-dom";
 import Screen from '../../screen_bg/Screen'
 import ButtonChar from '../../buton/ButtonChar';
@@ -7,9 +7,29 @@ import ButtonChar from '../../buton/ButtonChar';
 
 function Choose(props) {
     const navigate = useNavigate();
+    const [socket, changeSocket] = useState(props.socket);
+    const [code, changeCode] = useState(props.lobbyCode);
+
+
+    useEffect(() => {
+        socket.on('P2JoinedLobby', (game_obj) => {
+            let p1 = game_obj.p1;
+            let p2 = game_obj.p2;
+            
+          });
+
+          socket.on('Go Home', () => {
+            navigate('/');
+          })
+        
+        
+        return () => {socket.removeAllListeners()};
+    }, [])
+
     return (
         <div className="App">
             <header className="App-header">
+                <div>{props.code}</div>
                 <Screen image="./game_sprites/brick3.png"></Screen>
                 <div className = "choose">
                     <div>

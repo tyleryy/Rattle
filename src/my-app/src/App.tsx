@@ -22,6 +22,7 @@ let socket: Socket = io(PORT);
 function App() {
   const [isConnected, setIsConnected] = useState(socket.connected);
   const [socketObj, setSocket] = useState(socket);
+  const [lobbyCode, changeLobbyCode] = useState<string>("");
 
   useEffect(() => {
     if (!socket) {
@@ -45,8 +46,8 @@ function App() {
       <header className="App-header">
         <Router>
           <Routes>
-            <Route path="/" element={<Home socket={socketObj}/>}  />
-            <Route path="/choose" element={<Choose />} />
+            <Route path="/" element={<Home socket={socketObj} changeLobbyCode={changeLobbyCode}/>}  />
+            <Route path="/choose" element={<Choose socket={socketObj} code={lobbyCode}/>} />
             <Route path="/join" element={<Join />} />
             <Route path="/credit" element={<Credit />} />
             {/* DELETE ME LATER */}

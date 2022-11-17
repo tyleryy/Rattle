@@ -1,20 +1,27 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import Button from '../../buton/Button';
 import Title from '../../title/Title';
 import Screen from '../../screen_bg/Screen'
+import { useNavigate } from "react-router-dom";
+
 
 const Home = (props) => {
-  const socket = props.socket;
-
+  const [socket, _] = useState(props.socket);
+  // const socket = props.socket;
+  const navigate = useNavigate();
   useEffect(() => {
 
-    socket.on('P2JoinedLobby', () => {
+    socket.emit('enterHome');
 
-    });
+    socket.on('doneCreateLobby', (data) => {
+      console.log(data);
+      props.changeLobbyCode(data);
+      navigate("/choose");
+    })
 
     return () => {socket.removeAllListeners()};
 
-});
+}, []);
 
   return (
     <div className="App">
