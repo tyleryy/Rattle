@@ -2,6 +2,7 @@ import React, {useEffect} from "react";
 import Button from '../../buton/Button';
 import Title from '../../title/Title';
 import Screen from '../../screen_bg/Screen'
+import "./Home.css";
 
 const Home = (props) => {
   const socket = props.socket;
