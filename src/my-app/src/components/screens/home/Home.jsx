@@ -1,9 +1,20 @@
-import React from "react";
+import React, {useEffect} from "react";
 import Button from '../../buton/Button';
 import Title from '../../title/Title';
 import Screen from '../../screen_bg/Screen'
 
 const Home = (props) => {
+  const socket = props.socket;
+
+  useEffect(() => {
+
+    socket.on('P2JoinedLobby', () => {
+
+    });
+
+    return () => {socket.removeAllListeners()};
+
+});
 
   return (
     <div className="App">
@@ -15,7 +26,7 @@ const Home = (props) => {
             <Title class="title-shaking"></Title>
           </span>
           <div>
-            <Button imageEnter="./game_sprites/create2.png" imageLeave="./game_sprites/create.png" routesPath="/choose">dog</Button>
+            <Button imageEnter="./game_sprites/create2.png" imageLeave="./game_sprites/create.png" routesPath="/choose" socketEmitEvent={"createLobby"} socket={socket}>dog</Button>
           </div>
           <div>
             <Button imageEnter="./game_sprites/join.png" imageLeave="./game_sprites/join2.png" routesPath="/join">dog</Button>

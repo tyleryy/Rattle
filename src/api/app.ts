@@ -19,12 +19,15 @@ app.get('/', (req: Request, res: Response) => {
 // ! remove later
 function debugLogger(socket: Socket) {
     console.log(rattle_games);
-    console.log(socket.rooms);
+    console.log(socket.rooms)
+    console.log(io.sockets.sockets.size);
 }
 
 
 io.on('connection', (socket: Socket) => {
     console.log("A socket has joined! They are " + socket.id)
+    console.log(socket.rooms)
+    console.log(io.sockets.sockets.size)
 
     socket.on('createLobby', () => {
         let lobby_code = generateLobbyCode(rattle_games);
@@ -99,10 +102,14 @@ io.on('connection', (socket: Socket) => {
     })
 
     socket.on('disconnect', () => {
-        let socket_room = io.of("/").adapter.sids.get(socket.id)
+        // TODO clean up
+        console.log("disconnecting")
+        let socket_room = io.of("/").adapter.sids.get(socket.id);
         if (socket_room) {
-            let room = socket_room.values().next().value;
-            io.to(room).emit("disconnect-screen")
+            console.log("hello " + socket_room)
+            for (let room of socket_room) {
+                io.to(room).emit("disconnect-screen")
+            }
         }
     })
 
