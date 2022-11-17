@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Screen from '../../screen_bg/Screen'
 import ButtonChar from '../../buton/ButtonChar';
 import Button from '../../buton/Button';
+import Button2 from '../../buton/Button2';
 import Platform from "../../platform/Platform";
 import { Stage, Sprite } from '@inlet/react-pixi'
 import { useState, useEffect, useRef } from 'react';
@@ -66,6 +67,8 @@ function Choose() {
                 </div>
             </div>
             <div className="parent">          
+
+                <Button imageEnter="./game_sprites/back.png" imageLeave="./game_sprites/back2.png" routesPath="/">dog</Button>
 
                 <div className="join_but">
                     <Button imageEnter="./game_sprites/join.png" imageLeave="./game_sprites/join2.png" routesPath="/options"></Button>
