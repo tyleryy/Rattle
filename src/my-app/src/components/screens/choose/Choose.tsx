@@ -6,6 +6,8 @@ import Button from '../../buton/Button';
 import Platform from "../../platform/Platform";
 import { Stage, Sprite } from '@inlet/react-pixi'
 import { useState, useEffect, useRef } from 'react';
+import { Container, Col, Row } from 'react-bootstrap';
+import "./Choose.css";
 
 
 function Choose() {
@@ -29,44 +31,49 @@ function Choose() {
     }, [player1])
 
     return (
-        <div className="App">
-            <header className="App-header">
-                <Screen image="./game_sprites/brick3.png"></Screen>
-                <div className = "choose">
-                    <div>
-                        <ButtonChar imageEnter="./game_sprites/char1_but.png" imageLeave="./game_sprites/char1_but2.png" changeChar={changeChar1} butChar="./game_sprites/test.png"></ButtonChar>
-                    </div>
-                    <div>
-                        <ButtonChar imageEnter="./game_sprites/check.png" imageLeave="./game_sprites/char2_but2.png"></ButtonChar>
-                    </div>
-                    <div>
-                        <ButtonChar imageEnter="./game_sprites/char3_but2.png" imageLeave="./game_sprites/char3_but.png"></ButtonChar>
-                    </div>
+        <div>
+            <div className="roomCode">Test Room Code</div>
+            <div className="parent">
+                        
+                <div className="column">
                     <div className = "stage">
-                        <Stage width={400} height={800}>
+                        <Stage width={400} height={600}>
                             <Sprite ref={stageRef} image= {player1} x={100} y={100} />
                         </Stage>
-                    </div>
-                    <div className = "stage_right">
-                        <Stage width={400} height={800}>
-                            <Sprite ref={stageRef} image="./game_sprites/back.png" x={100} y={100} />
-                        </Stage>
-                    </div>
-
-                    <div>
-                        <Platform image="./game_sprites/platform2.png"></Platform>
                     </div>
                     <div className= "platform_left">
                         <Platform image="./game_sprites/platform2.png"></Platform>
                     </div>
+                </div>
 
-                    <div className="join_but">
-                        <Button imageEnter="./game_sprites/join.png" imageLeave="./game_sprites/join2.png" routesPath="/options"></Button>
+                <div className="column">
+                    <ButtonChar imageEnter="./game_sprites/char1_but.png" imageLeave="./game_sprites/char1_but2.png" changeChar={changeChar1} butChar="./game_sprites/test.png"></ButtonChar>
+                
+                    <ButtonChar imageEnter="./game_sprites/check.png" imageLeave="./game_sprites/char2_but2.png"></ButtonChar>
+                
+                    <ButtonChar imageEnter="./game_sprites/char3_but2.png" imageLeave="./game_sprites/char3_but.png"></ButtonChar>
+                </div>
+            
+                <div className="column">
+                    <div className = "stage_right">
+                        <Stage width={400} height={600}>
+                            <Sprite ref={stageRef} image="./game_sprites/back.png" x={100} y={100} />
+                        </Stage>
+                    </div>
+                    <div>
+                        <Platform image="./game_sprites/platform2.png"></Platform>
                     </div>
                 </div>
-            </header>
-        </div>
+            </div>
+            <div className="parent">          
 
+                <div className="join_but">
+                    <Button imageEnter="./game_sprites/join.png" imageLeave="./game_sprites/join2.png" routesPath="/options"></Button>
+                </div>
+                    
+                
+            </div>
+        </div>
     )
 }
 

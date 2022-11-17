@@ -13,7 +13,7 @@ function Choose(props) {
             <header className="App-header">
                 <Screen image="./game_sprites/brick3.png"></Screen>
                 <div className = "choose">
-                <Button imageEnter="./game_sprites/back.png" imageLeave="./game_sprites/back2.png" routesPath="/">dog</Button>
+                    <Button imageEnter="./game_sprites/back.png" imageLeave="./game_sprites/back2.png" routesPath="/">dog</Button>
                     <div>
                         <ButtonChar imageEnter="./game_sprites/char1_but.png" imageLeave="./game_sprites/char1_but2.png"></ButtonChar>
                     </div>

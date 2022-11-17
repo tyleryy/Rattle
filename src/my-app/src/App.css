@@ -61,23 +61,23 @@ body, html {
 }
 
 .choose {
-  position: absolute;
+  /* position: absolute;
   top: 0em;
   left: 15em;
-  z-index: 2;
+  z-index: 2; */
 }
 
 .buttonChar {
-  position: relative;
+  /* position: relative;
   float: left;
   vertical-align: middle;
   margin-top: 10px;
-  top: 15em;
+  top: 15em; */
   height: 13em;
-  width: auto;
+  /* width: auto;
   left: 20em;
   padding-bottom: 0.01em;
-  transition: transform .2s;
+  transition: transform .2s; */
 }
 
 .buttonChar:hover {
