@@ -11,13 +11,13 @@ import { Container, Col, Row } from 'react-bootstrap';
 import "./Choose.css";
 
 
-function Choose() {
+function Choose( {lobby_code} : {lobby_code: string}) {
      // stage size
      const [stageW, changeW] = useState<number>(800);
      const [stageH, changeH] = useState<number>(600);
      const stageRef = useRef(null);
      const [player1, changeChar1] = useState<string>("./game_sprites/back.png");
- 
+
      useEffect(() => {
          // get the width of the screen
          const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
@@ -33,7 +33,7 @@ function Choose() {
 
     return (
         <div className="background">
-            <div className="roomCode">Test Room Code</div>
+            <div className="roomCode">{lobby_code}</div>
             <div className="parent">
                         
                 <div className="column">
