@@ -1,17 +1,19 @@
 import { Graphics, useTick } from "@inlet/react-pixi";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { Coordinate } from "../../../../interfaces/interfaces";
 import { drawSpeedMultiplier, lockedX, circleDrawingRadius, circleIdleRadius } from "../constants";
 
-function Canvas({ currCord, lastNonNull, changeStrokes, currHistory, isDrawing }: { currCord: Coordinate, lastNonNull: Coordinate, changeStrokes: (input: Coordinate[]) => void, currHistory: Coordinate[], isDrawing: boolean }) {
+function Canvas({ lastNonNull, animateHistory, isDrawing }: { currCoord: Coordinate, lastNonNull: Coordinate, changeAnimatedStrokes: (input: Coordinate[]) => void, animateHistory: Coordinate[], isDrawing: boolean }) {
     const [time, changeTime] = useState(0);
+    const [justDrew, flipJustDrew] = useState<boolean>(false);
+
     useTick((delta) => {
-        // console.log("Start Delta");
+
         const newTime = time + delta;
         changeTime(newTime);
 
         // update the history with the new delta x
-        let historyCopy = [...currHistory];
+        let historyCopy = [...animateHistory];
         let deltaX = delta * drawSpeedMultiplier;
         if (deltaX > 4) {
             // console.log("delta is", delta)
@@ -20,19 +22,15 @@ function Canvas({ currCord, lastNonNull, changeStrokes, currHistory, isDrawing }
         }
         // console.log(historyCopy)
         for (let stroke of historyCopy) {
-            // if (prevStroke.x && stroke.x) {
-            //     if (Math.abs(prevStroke.x - stroke.x) > 4) {
-            //         console.log("Weird")
-            //     }
-            // }
             if (stroke.x) {
                 stroke.x = stroke.x - deltaX;
             } else {
                 // console.log("x is null")
             }
         }
-        changeStrokes([...historyCopy]);
-        // now check if we're drawing
+
+
+
     })
 
     const [circleRad, changeCircleRad] = useState(circleIdleRadius);
@@ -44,40 +42,42 @@ function Canvas({ currCord, lastNonNull, changeStrokes, currHistory, isDrawing }
 
         // draw player circle
         const animationSpeed = 1;
-        // let newRadius: number = circleRad;
-        // if (isDrawing) {
-        //     // make circle larger like an animation
-        //     if (circleRad < circleDrawingRadius) {
-        //         changeCircleRad(circleRad + animationSpeed);
-        //         newRadius = newRadius + animationSpeed;
-        //     }
-        // } else {
-        //     // make circle shrink like an animation
-        //     if (circleRad > circleIdleRadius) {
-        //         changeCircleRad(circleRad - animationSpeed)
-        //         newRadius = newRadius - animationSpeed;
-        //     }
-        // }
-        const newRadius = isDrawing ? circleDrawingRadius : circleIdleRadius
+        let newRadius: number = circleRad;
+        if (isDrawing) {
+            // make circle larger like an animation
+            if (circleRad < circleDrawingRadius) {
+                changeCircleRad(circleRad + animationSpeed);
+                newRadius = newRadius + animationSpeed;
+            }
+        } else {
+            // make circle shrink like an animation
+            if (circleRad > circleIdleRadius) {
+                changeCircleRad(circleRad - animationSpeed)
+                newRadius = newRadius - animationSpeed;
+            }
+        }
+        // const newRadius = isDrawing ? circleDrawingRadius : circleIdleRadius
         g.lineStyle(4, 0xff3300, 1);
         g.beginFill(0xff3300)
-        // console.log(newRadius)   
-        g.drawCircle(lockedX, lastNonNull.y, newRadius)
+        // console.log(newRadius) 
+        const circleX = lockedX;
+        g.drawCircle(circleX, lastNonNull.y, newRadius)
         g.endFill()
 
         g.lineStyle(4, 0xffd900, 1);
         g.beginFill(0xffd900)
-        g.drawCircle(lockedX, lastNonNull.y, newRadius - 2)
+        g.drawCircle(circleX, lastNonNull.y, newRadius - 2)
         g.endFill();
 
         // redraw strokes based on history
         g.lineStyle(circleDrawingRadius, 0xffd900, 1);
 
-        if (currHistory.length !== 0) {
-            for (let i = 0; i < currHistory.length - 1; i++) {
+        if (animateHistory.length !== 0) {
+            // console.log("Drawing " + animateHistory.length + " strokes")
+            for (let i = 0; i < animateHistory.length - 1; i++) {
                 // check if our current or prev is null
-                const start = currHistory.at(i);
-                const end = currHistory.at(i + 1);
+                const start = animateHistory.at(i);
+                const end = animateHistory.at(i + 1);
 
                 if (start && end) {
                     const startX = start.x;
