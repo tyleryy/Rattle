@@ -12,7 +12,7 @@ import { circleDrawingRadius, circleIdleRadius } from "../constants";
  * @param strokeX the starting x position of strokes
  * @param playerX the player x position
  */
-export function recreateStrokes(g: any, isDrawing: boolean, circleRad: number, animateHistory: Coordinate[], lastNonNull: Coordinate, changeCircleRad: (input: number) => void, strokeX: number, playerX: number) {
+export function recreateStrokes(g: any, isDrawing: boolean, circleRad: number, animateHistory: Coordinate[], lastNonNull: Coordinate, changeCircleRad: (input: number) => void, strokeX: number, playerX: number, p2Coord: Coordinate) {
     // must clear to animate
     g.clear();
 
@@ -33,17 +33,20 @@ export function recreateStrokes(g: any, isDrawing: boolean, circleRad: number, a
         }
     }
     // const newRadius = isDrawing ? circleDrawingRadius : circleIdleRadius
-    g.lineStyle(4, 0xff3300, 1);
-    g.beginFill(0xff3300)
-    // console.log(newRadius) 
-    const circleX = playerX;
-    g.drawCircle(circleX, lastNonNull.y, newRadius)
-    g.endFill()
 
-    g.lineStyle(4, 0xffd900, 1);
-    g.beginFill(0xffd900)
-    g.drawCircle(circleX, lastNonNull.y, newRadius - 2)
-    g.endFill();
+    // draw opponent player
+    const fakeCoord = {
+        x: p2Coord.x,
+        y: lastNonNull.y! + Math.floor(Math.random() * 100)
+    }
+    drawPlayerCircle(g, playerX, fakeCoord, circleIdleRadius, 0x334DFF, 0xFFD233);
+
+    // use this function if want to render player2 movement
+    // drawPlayerCircle(g, playerX, p2Coord, circleIdleRadius, 0x334DFF, 0xFFD233);
+
+
+    // draw client player
+    drawPlayerCircle(g, playerX, lastNonNull, newRadius, 0xff3300, 0xffd900);
 
     // redraw strokes based on history
     g.lineStyle(circleDrawingRadius, 0xffd900, 1);
@@ -72,4 +75,22 @@ export function recreateStrokes(g: any, isDrawing: boolean, circleRad: number, a
             }
         }
     }
+}
+
+function drawPlayerCircle(g: any, playerXPos: number, playerCoord: Coordinate, playerRadius: number, outerColor: number, innerColor: number) {
+    // g.lineStyle(4, 0xff3300, 1);
+    // g.beginFill(0xff3300)
+    g.lineStyle(4, outerColor, 1);
+    g.beginFill(outerColor);
+
+    const circleX = playerXPos;
+    // draw larger outer circle for player
+    g.drawCircle(circleX, playerCoord.y, playerRadius)
+    g.endFill()
+
+    // draw inner circle for player
+    g.lineStyle(4, 0xffd900, 1);
+    g.beginFill(0xffd900)
+    g.drawCircle(circleX, playerCoord.y, playerRadius - 2)
+    g.endFill();
 }

@@ -5,6 +5,7 @@ import { Coordinate } from '../../../interfaces/interfaces';
 import { lockedX } from './constants';
 import PlayCanvas from './canvas/playCanvas';
 import { Socket } from 'socket.io-client';
+import { IPlayer, GameState } from "../../../interfaces/interfaces";
 
 function Game({ socket }: { socket: Socket }) {
     // remember the strokes done
@@ -31,7 +32,26 @@ function Game({ socket }: { socket: Socket }) {
     const [stageW, changeW] = useState<number>(800);
     const [stageH, changeH] = useState<number>(600);
 
-    // TEST
+    /** States regarding the game status */
+
+    // game state
+    const [gameState, setGameState] = useState<GameState>();
+
+    // client player (not the opponent)
+    const [playerState, setPlayerState] = useState<IPlayer>();
+
+    // opponent player
+    const [opponentState, setOpponentState] = useState<IPlayer>();
+
+    // what phase the game is in
+    const [isDrawPhase, setDrawPhase] = useState<boolean>();
+
+    // opponent position
+    const [p2Pos, setP2Pos] = useState<Coordinate>({ x: null, y: null });
+
+
+
+    // TEST STROKE RECREATION ONLY DELETE THIS LATER
     const [showMemory, flipShowMemory] = useState(false);
 
     useEffect(() => {
@@ -48,8 +68,6 @@ function Game({ socket }: { socket: Socket }) {
         window.addEventListener("keydown", keysDown);
         window.addEventListener("keyup", keysUp);
         // loopPosition(isDrawing, prevCoord, currCoord);
-        // window.addEventListener("mousemove", mouseInPlay);
-
     }, []);
 
     // when we change the drawing status, reset the looping
@@ -165,8 +183,8 @@ function Game({ socket }: { socket: Socket }) {
             }
         }}>
             <Sprite ref={stageRef} image="./game_sprites/back.png" x={100} y={100} />
-            <DrawCanvas lastNonNull={lastNonNullPos} changeAnimatedStrokes={changeAnimatedStrokeHistory} animateHistory={animatedStrokeHistory} isDrawing={isDrawing} socket={socket} />
-            {showMemory ? <PlayCanvas lastNonNull={lastNonNullPos} strokeHistory={strokeHistory} /> : null}
+            <DrawCanvas lastNonNull={lastNonNullPos} changeAnimatedStrokes={changeAnimatedStrokeHistory} animateHistory={animatedStrokeHistory} isDrawing={isDrawing} socket={socket} p2Pos={p2Pos} />
+            {showMemory ? <PlayCanvas lastNonNull={lastNonNullPos} strokeHistory={strokeHistory} p2Pos={p2Pos} /> : null}
         </Stage>
     )
 }
