@@ -1,4 +1,4 @@
-body, html {
+body {
   background-image: url("../public/game_sprites/brick2.png");
   background-size: cover;
 }

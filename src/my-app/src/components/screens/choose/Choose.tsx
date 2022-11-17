@@ -32,7 +32,7 @@ function Choose() {
     }, [player1])
 
     return (
-        <div>
+        <div className="background">
             <div className="roomCode">Test Room Code</div>
             <div className="parent">
                         
