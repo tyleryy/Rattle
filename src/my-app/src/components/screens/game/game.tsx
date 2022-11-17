@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from 'react';
 import DrawCanvas from './canvas/drawCanvas';
 import { Coordinate } from '../../../interfaces/interfaces';
 import { lockedX } from './constants';
+import PlayCanvas from './canvas/playCanvas';
 
 function Game() {
     // remember the strokes done
@@ -28,6 +29,9 @@ function Game() {
     // stage size
     const [stageW, changeW] = useState<number>(800);
     const [stageH, changeH] = useState<number>(600);
+
+    // TEST
+    const [showMemory, flipShowMemory] = useState(false);
 
     useEffect(() => {
         // get the width of the screen
@@ -60,8 +64,15 @@ function Game() {
     function keysDown(e: KeyboardEvent) {
         const key = e.code;
         if (key === drawKey) {
-            flipDrawingKey(true);
+
+            if (!showMemory) {
+                flipDrawingKey(true);
+            }
             // console.log("Key down " + drawKey);
+        }
+
+        if (key === "KeyW") {
+            flipShowMemory(true);
         }
     }
 
@@ -70,6 +81,10 @@ function Game() {
         const key = e.code;
         if (key === drawKey) {
             flipDrawingKey(false);
+        }
+
+        if (key === "KeyW") {
+            flipShowMemory(false);
         }
     }
 
@@ -103,6 +118,9 @@ function Game() {
     //     changeLoopInterval(handler);
     // }
 
+    useEffect(() => {
+        // console.log(strokeHistory);
+    }, [strokeHistory])
 
     return (
         <Stage width={stageW} height={stageH} style={{ left: 0, position: "absolute" }} onPointerMove={(e: any) => {
@@ -146,6 +164,7 @@ function Game() {
         }}>
             <Sprite ref={stageRef} image="./game_sprites/back.png" x={100} y={100} />
             <DrawCanvas lastNonNull={lastNonNullPos} changeAnimatedStrokes={changeAnimatedStrokeHistory} animateHistory={animatedStrokeHistory} isDrawing={isDrawing} />
+            {showMemory ? <PlayCanvas lastNonNull={lastNonNullPos} strokeHistory={strokeHistory} /> : null}
         </Stage>
 
     )
