@@ -18,13 +18,36 @@ app.get('/', (req: Request, res: Response) => {
 
 // ! remove later
 function debugLogger(socket: Socket) {
-    console.log(rattle_games)
+    console.log('\n--------------------------');
+    console.log(rattle_games);
     console.log(socket.rooms);
+    console.log(io.sockets.sockets.size);
+    console.log('--------------------------\n');
 }
 
+function cleanUp(socket: Socket) {
+    for (let room of socket.rooms) {
+        io.in(room).socketsLeave(room);
+        console.log('room '+ room + ' cleared');
+        delete rattle_games[room]
+    }
+}
+
+io.of("/").adapter.on("delete-room", (room) => {
+    console.log(`room ${room} was destroyed`);
+    // io.in(room).emit("Go Home");
+    io.emit("Go Home");
+});
 
 io.on('connection', (socket: Socket) => {
     console.log("A socket has joined! They are " + socket.id)
+    console.log(socket.rooms)
+    console.log(io.sockets.sockets.size)
+
+    socket.on('enterHome', () => {
+        cleanUp(socket);
+        debugLogger(socket);
+    })
 
     socket.on('createLobby', () => {
         let lobby_code = generateLobbyCode(rattle_games);
@@ -43,8 +66,8 @@ io.on('connection', (socket: Socket) => {
             totalRounds: 0
         }
         rattle_games[lobby_code] = game;
-        // possibly return success or fail
-        debugLogger(socket)
+        socket.emit('doneCreateLobby', lobby_code);
+        debugLogger(socket);
         return lobby_code; // return code so that frontend can reference the correct game/room
     })
 
@@ -98,13 +121,16 @@ io.on('connection', (socket: Socket) => {
         socket.to(code).emit("goToGame");
     })
 
-    socket.on('disconnect', () => {
-        let socket_room = io.of("/").adapter.sids.get(socket.id)
-        if (socket_room) {
-            let room = socket_room.values().next().value;
-            io.to(room).emit("disconnect-screen")
-        }
+    socket.on("user has left", (id) => {
+        console.log('a user has left')
     })
+
+    socket.on('disconnecting', (reason) => {
+        cleanUp(socket)
+        console.log("disconnected");
+    })
+
+    socket.on('disconnect', () => {debugLogger(socket)})
 
 });
 

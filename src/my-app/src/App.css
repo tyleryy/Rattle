@@ -1,5 +1,15 @@
+body {
+  background-image: url("../public/game_sprites/brick2.png");
+  background-size: cover;
+}
+
 .App {
   text-align: center;
+}
+
+html {
+  overflow: hidden;
+  overflow-y: hidden;
 }
 
 .App-logo {
@@ -14,7 +24,6 @@
 }
 
 .App-header {
-  background-color: #282c34;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -36,3 +45,81 @@
     transform: rotate(360deg);
   }
 }
+
+.screen {
+  position: relative;
+  height: 100vh;
+  width: 100vw;
+}
+
+.home {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.join {
+  position: absolute;
+  top: 0em;
+  left: 15em;
+  z-index: 2; 
+}
+
+.buttonChar {
+  height: 13em;
+}
+
+.buttonChar:hover {
+  transform: scale(1.2)
+}
+
+.platform_left {
+  position: relative;
+  left: -39em;
+  top: -4.3em;
+}
+
+.platform {
+  display: inline-block;
+  position: relative;
+  left: 27em;
+  top: 6em;
+  width: 20em;
+  height: auto;
+}
+
+.msg {
+  position: absolute;
+  text-align: center;
+  top: 9em;
+  right: -8em;
+  font-size: 50px;
+}
+
+.msg_butt {
+  position: relative;
+  transition: transform .2s;
+  top: 13em;
+  left: 55em;
+}
+
+.msg_butt:hover {
+  transform: scale(1.2);
+}
+
+.common_button {
+  position: relative;
+  top: 3em;
+  height: 14em;
+  margin-left: 1em;
+  margin-right: 1em; 
+  width: auto;
+  padding-bottom: 3em;
+  transition: transform .2s;
+}
+
+.common_button:hover {
+  transform: scale(1.2)
+}
+
+
