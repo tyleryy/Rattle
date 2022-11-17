@@ -1,3 +1,8 @@
+body, html {
+  background-image: url("../public/game_sprites/brick2.png");
+  background-size: cover;
+}
+
 .App {
   text-align: center;
 }
@@ -19,7 +24,6 @@ html {
 }
 
 .App-header {
-  background-color: #282c34;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -49,37 +53,20 @@ html {
 }
 
 .home {
-  position: absolute;
-  top: 0em;
-  left: 13em;
-  z-index: 2;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 
 .join {
   position: absolute;
   top: 0em;
   left: 15em;
-  z-index: 2;
-}
-
-.choose {
-  position: absolute;
-  top: 0em;
-  left: 15em;
-  z-index: 2;
+  z-index: 2; 
 }
 
 .buttonChar {
-  position: relative;
-  float: left;
-  vertical-align: middle;
-  margin-top: 10px;
-  top: 9em;
-  height: auto;
-  width: 30em;
-  left: 20em;
-  padding-bottom: 0.001em;
-  transition: transform .2s;
+  height: 13em;
 }
 
 .join_but {
@@ -112,7 +99,7 @@ html {
 .msg {
   position: absolute;
   text-align: center;
-  top: 10em;
+  top: 9em;
   right: -8em;
   font-size: 50px;
 }
@@ -130,10 +117,11 @@ html {
 
 .common_button {
   position: relative;
-  top: 1em;
-  height: 16em;
+  top: 3em;
+  height: 14em;
+  margin-left: 1em;
+  margin-right: 1em; 
   width: auto;
-  left: -30em;
   padding-bottom: 3em;
   transition: transform .2s;
 }
@@ -154,23 +142,14 @@ html {
   position: relative;
   text-align: center;
   width: 20em;
-  left: 7.8em;
-  top: 1em;
   height: auto;
   animation: tilt-shaking 0.5s ease-in 2s infinite;
 }
 
-.stage {
-  position: absolute;
-  top: 5em;
-  left: -9em;
-
+.title-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
 }
 
-.stage_right {
-  position: absolute;
-  top: 5em;
-  left: 30em;
-
-}
 
