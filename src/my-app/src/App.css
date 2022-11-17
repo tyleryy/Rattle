@@ -1,3 +1,8 @@
+body, html {
+  background-image: url("../public/game_sprites/brick2.png");
+  background-size: cover;
+}
+
 .App {
   text-align: center;
 }
@@ -14,7 +19,6 @@
 }
 
 .App-header {
-  background-color: #282c34;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -44,17 +48,16 @@
 }
 
 .home {
-  position: absolute;
-  top: 0em;
-  left: 13em;
-  z-index: 2;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 
 .join {
   position: absolute;
   top: 0em;
   left: 15em;
-  z-index: 2;
+  z-index: 2; 
 }
 
 .choose {
@@ -102,9 +105,10 @@
 .common_button {
   position: relative;
   top: 3em;
-  height: 18em;
+  height: 14em;
+  margin-left: 1em;
+  margin-right: 1em; 
   width: auto;
-  left: -30em;
   padding-bottom: 3em;
   transition: transform .2s;
 }
@@ -125,10 +129,14 @@
   position: relative;
   text-align: center;
   width: 20em;
-  left: 7.8em;
-  top: 1em;
   height: auto;
   animation: tilt-shaking 0.5s ease-in 2s infinite;
+}
+
+.title-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
 }
 
 
