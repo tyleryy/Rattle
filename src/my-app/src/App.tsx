@@ -11,6 +11,7 @@ import Choose from "./components/screens/choose/Choose";
 import Credit from './components/screens/credit/Credit';
 import Join from './components/screens/join/Join';
 import Game from './components/screens/game/game';
+import Options from './components/screens/options/Options';
 // import background from './img/brick2.png'
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
             <Route path="/choose" element={<Choose />} />
             <Route path="/join" element={<Join />} />
             <Route path="/credit" element={<Credit />} />
+            <Route path="/options" element={<Options />} />
             {/* DELETE ME LATER */}
             <Route path="/game" element={<Game />} />
           </Routes>
