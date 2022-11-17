@@ -16,4 +16,4 @@ export const circleDrawingRadius = 10;
 export const deltaX = drawSpeedMultiplier * 0.3;
 
 /** Where the strokes will spawn during the play phase */
-export const strokeSpawnX = 1000;
+export const strokeSpawnX = 2500;
