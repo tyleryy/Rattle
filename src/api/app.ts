@@ -46,8 +46,6 @@ io.on('connection', (socket: Socket) => {
             totalRounds: 0
         }
         rattle_games[lobby_code] = game;
-        // possibly return success or fail
-        debugLogger(socket)
         return lobby_code; // return code so that frontend can reference the correct game/room
     })
 
@@ -101,17 +99,27 @@ io.on('connection', (socket: Socket) => {
         socket.to(code).emit("goToGame");
     })
 
-    socket.on('disconnect', () => {
+    socket.on("user has left", (id) => {
+        console.log('a user has left')
+    })
+
+    socket.on('disconnecting', (reason) => {
         // TODO clean up
-        console.log("disconnecting")
+
         let socket_room = io.of("/").adapter.sids.get(socket.id);
+        console.log(socket_room)
         if (socket_room) {
-            console.log("hello " + socket_room)
             for (let room of socket_room) {
-                io.to(room).emit("disconnect-screen")
+                console.log('left '+room);
+                //send both frontends to disconnect screen
+                delete rattle_games[room]
+                io.to(room).emit("disconnect-screen");
             }
         }
+        console.log("disconnected");
     })
+
+    socket.on('disconnect', () => {debugLogger(socket)})
 
 });
 
