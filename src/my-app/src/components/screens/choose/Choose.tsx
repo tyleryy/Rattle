@@ -8,22 +8,30 @@ import Platform from "../../platform/Platform";
 import { Stage, Sprite } from '@inlet/react-pixi'
 import { useState, useEffect, useRef } from 'react';
 import { Container, Col, Row } from 'react-bootstrap';
+import { Socket } from "socket.io-client";
 import "./Choose.css";
 
 
-function Choose( {lobby_code} : {lobby_code: string}) {
+function Choose(props: any) {
      // stage size
      const [stageW, changeW] = useState<number>(800);
      const [stageH, changeH] = useState<number>(600);
      const stageRef = useRef(null);
      const [player1, changeChar1] = useState<string>("./game_sprites/back.png");
-
+     const socket = props.socket
+     const lobby_code: string = props.lobby_code
+     const navigate = useNavigate();
      useEffect(() => {
+        socket.on('Go Home', () => {
+            navigate('/');
+        })
+        
          // get the width of the screen
          const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
          changeW(vw);
          const vh = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0);
          changeH(vh);
+         return () => {socket.removeAllListeners()};
      }, []);
      
 
