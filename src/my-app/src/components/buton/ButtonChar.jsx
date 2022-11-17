@@ -4,7 +4,7 @@ function ButtonChar (props) {
 
     const [buton, changeImg] = useState(props.imageEnter);
     const handleClick = event => {
-        event.currentTarget.disabled = true;
+        // event.currentTarget.disabled = true;
         console.log('button clicked');
     }
     

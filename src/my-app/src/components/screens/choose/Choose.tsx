@@ -16,7 +16,9 @@ function Choose() {
      // stage size
      const [stageW, changeW] = useState<number>(800);
      const [stageH, changeH] = useState<number>(600);
-     const [player1, changeChar1] = useState<string>("./game_sprites/char1.png");
+     const [player1, changeChar1] = useState({
+        image: "./game_sprites/char1.png",
+        character: 0});
  
      useEffect(() => {
          // get the width of the screen
@@ -39,7 +41,7 @@ function Choose() {
                 <div className="column">
                     <div className = "stage">
                         <Stage width={400} height={600} options={{ backgroundAlpha:0 }}>
-                            <Sprite image= {player1} scale={ {x: 0.8 , y: 0.8} }/>
+                            <Sprite image= {player1.image} scale={ {x: 0.8 , y: 0.8} }/>
                         </Stage>
                     </div>
                     {/* <div className= "platform_left">
@@ -48,11 +50,11 @@ function Choose() {
                 </div>
 
                 <div className="column">
-                    <ButtonChar imageEnter="./game_sprites/char1_but.png" imageLeave="./game_sprites/char1_but2.png" changeChar={changeChar1} butChar="./game_sprites/char1.png"></ButtonChar>
+                    <ButtonChar imageEnter="./game_sprites/char1_but_.png" imageLeave="./game_sprites/char1_but_2.png" changeChar={changeChar1} butChar={{image: "./game_sprites/char1.png", character: 1}}></ButtonChar>
                 
-                    <ButtonChar imageEnter="./game_sprites/check.png" imageLeave="./game_sprites/char2_but2.png" changeChar={changeChar1} butChar="./game_sprites/char2.png"></ButtonChar>
+                    <ButtonChar imageEnter="./game_sprites/char2_but_.png" imageLeave="./game_sprites/char2_but_2.png" changeChar={changeChar1} butChar={{image: "./game_sprites/char2.png", character: 2}}></ButtonChar>
                 
-                    <ButtonChar imageEnter="./game_sprites/char3_but2.png" imageLeave="./game_sprites/char3_but.png" changeChar={changeChar1} butChar="./game_sprites/char3.png"></ButtonChar>
+                    <ButtonChar imageEnter="./game_sprites/char3_but_.png" imageLeave="./game_sprites/char3_but_2.png" changeChar={changeChar1} butChar={{image: "./game_sprites/char3.png", character: 3}}></ButtonChar>
                 </div>
             
                 <div className="column">
