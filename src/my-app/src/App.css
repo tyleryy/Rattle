@@ -122,4 +122,20 @@ html {
   transform: scale(1.2)
 }
 
+.buttonVal {
+  position: relative;
+  top: 3em;
+  height: 14em;
+  margin-left: 1em;
+  margin-right: 1em; 
+  left: 3em;
+  width: auto;
+  padding-bottom: 3em;
+  transition: transform .2s;
+}
+
+.buttonVal:hover {
+  transform: scale(1.2)
+}
+
 
