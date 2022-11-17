@@ -7,6 +7,11 @@ body {
   text-align: center;
 }
 
+html {
+  overflow: hidden;
+  overflow-y: hidden;
+}
+
 .App-logo {
   height: 40vmin;
   pointer-events: none;
@@ -43,7 +48,7 @@ body {
 
 .screen {
   position: relative;
-  height: 150vh;
+  height: 100vh;
   width: 100vw;
 }
 
@@ -68,6 +73,21 @@ body {
   transform: scale(1.2)
 }
 
+.platform_left {
+  position: relative;
+  left: -39em;
+  top: -4.3em;
+}
+
+.platform {
+  display: inline-block;
+  position: relative;
+  left: 27em;
+  top: 6em;
+  width: 20em;
+  height: auto;
+}
+
 .msg {
   position: absolute;
   text-align: center;
@@ -86,6 +106,7 @@ body {
 .msg_butt:hover {
   transform: scale(1.2);
 }
+
 .common_button {
   position: relative;
   top: 3em;
