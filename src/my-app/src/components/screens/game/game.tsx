@@ -1,6 +1,6 @@
 import { Stage, Sprite } from '@inlet/react-pixi'
 import { useState, useEffect, useRef } from 'react';
-import Canvas from './canvas/canvas';
+import DrawCanvas from './canvas/drawCanvas';
 import { Coordinate } from '../../../interfaces/interfaces';
 import { lockedX } from './constants';
 
@@ -70,13 +70,8 @@ function Game() {
         const key = e.code;
         if (key === drawKey) {
             flipDrawingKey(false);
-            // console.log("Key up " + drawKey);
         }
     }
-
-    // function mouseInPlay(e: MouseEvent) {
-    //     e.
-    // }
 
     // function loopPosition(isDrawing: boolean, prevCoord: Coordinate, currCoord: Coordinate) {
     //     // console.log("Resetting interval", isDrawing)
@@ -121,8 +116,6 @@ function Game() {
             changeLastNonNullPos(coordinate);
 
 
-
-
             if (!isDrawing) {
                 // push null
                 // console.log("NULL")
@@ -131,11 +124,6 @@ function Game() {
                     y: null
                 }
             }
-            // const newPrevCoord = strokeHistory.at(-1);
-            // if (newPrevCoord) {
-            //     changePrevCord(newPrevCoord);
-            // }
-            // console.log(strokeHistory);
             changeStrokeHistory([...strokeHistory, coordinate.y]);
 
             // iterate through the strokes to remove the old ones out of the screen
@@ -157,7 +145,7 @@ function Game() {
             }
         }}>
             <Sprite ref={stageRef} image="./game_sprites/back.png" x={100} y={100} />
-            <Canvas lastNonNull={lastNonNullPos} changeAnimatedStrokes={changeAnimatedStrokeHistory} animateHistory={animatedStrokeHistory} isDrawing={isDrawing} />
+            <DrawCanvas lastNonNull={lastNonNullPos} changeAnimatedStrokes={changeAnimatedStrokeHistory} animateHistory={animatedStrokeHistory} isDrawing={isDrawing} />
         </Stage>
 
     )

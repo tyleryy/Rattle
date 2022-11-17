@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Coordinate } from "../../../../interfaces/interfaces";
 import { drawSpeedMultiplier, lockedX, circleDrawingRadius, circleIdleRadius } from "../constants";
 
-function Canvas({ lastNonNull, animateHistory, isDrawing }: { lastNonNull: Coordinate, changeAnimatedStrokes: (input: Coordinate[]) => void, animateHistory: Coordinate[], isDrawing: boolean }) {
+function DrawCanvas({ lastNonNull, animateHistory, isDrawing }: { lastNonNull: Coordinate, changeAnimatedStrokes: (input: Coordinate[]) => void, animateHistory: Coordinate[], isDrawing: boolean }) {
     const [time, changeTime] = useState(0);
 
     useTick((delta) => {
@@ -15,21 +15,13 @@ function Canvas({ lastNonNull, animateHistory, isDrawing }: { lastNonNull: Coord
         let historyCopy = [...animateHistory];
         let deltaX = delta * drawSpeedMultiplier;
         if (deltaX > 4) {
-            // console.log("delta is", delta)
-            // console.log("Delta X is ", deltaX);
             deltaX = 3;
         }
-        // console.log(historyCopy)
         for (let stroke of historyCopy) {
             if (stroke.x) {
                 stroke.x = stroke.x - deltaX;
-            } else {
-                // console.log("x is null")
             }
         }
-
-
-
     })
 
     const [circleRad, changeCircleRad] = useState(circleIdleRadius);
@@ -101,4 +93,4 @@ function Canvas({ lastNonNull, animateHistory, isDrawing }: { lastNonNull: Coord
     )
 }
 
-export default Canvas;
+export default DrawCanvas;
