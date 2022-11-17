@@ -53,7 +53,7 @@ function App() {
             <Route path="/credit" element={<Credit />} />
             <Route path="/options" element={<Options />} />
             {/* DELETE ME LATER */}
-            <Route path="/game" element={<Game />} />
+            <Route path="/game" element={<Game socket={socketObj} />} />
           </Routes>
         </Router>
         {/*
