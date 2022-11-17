@@ -7,32 +7,58 @@ function Canvas({ currCord, isDrawing, changeStrokes, currHistory }: { currCord:
     const [prevCoord, changePrevCoord] = useState<Coordinate>({ x: null, y: null });
     const [time, changeTime] = useState(0);
     useTick((delta) => {
+        // console.log("Start Delta");
         const newTime = time + delta;
         changeTime(newTime);
         // update the history with the new delta x
         let historyCopy = [...currHistory];
+        let deltaX = delta * drawSpeedMultiplier;
+        if (deltaX > 4) {
+            // console.log("delta is", delta)
+            // console.log("Delta X is ", deltaX);
+            deltaX = 3;
+        }
+        // console.log(historyCopy)
         for (let stroke of historyCopy) {
+            // if (prevStroke.x && stroke.x) {
+            //     if (Math.abs(prevStroke.x - stroke.x) > 4) {
+            //         console.log("Weird")
+            //     }
+            // }
             if (stroke.x) {
-                stroke.x = stroke.x - delta * drawSpeedMultiplier;
+                stroke.x = stroke.x - deltaX;
+            } else {
+                // console.log("x is null")
             }
         }
         // now check if we're drawing
         if (isDrawing) {
             // remember the strokes
             let adjustedCoord = currCord;
+            // console.log("in tick", currCord);
+            // console.log(adjustedCoord.x, prevCoord.x)
             if (adjustedCoord.x) {
                 // as if it was over time
                 // adjustedCoord.x = adjustedCoord.x - (time + delta * 10);
+                // console.log("Pushing", currCord);
+                changeStrokes([...historyCopy, currCord]);
+                changePrevCoord(adjustedCoord);
+            } else {
+                console.log("ADJUSTED NOT FOUND")
             }
-            changeStrokes([...historyCopy, currCord]);
-            changePrevCoord(adjustedCoord);
+
         } else {
             // push null's
             const dummyCoord = { x: null, y: null }
             changeStrokes([...historyCopy, dummyCoord]);
             changePrevCoord(dummyCoord);
         }
+        // console.log("End Delta");
     })
+
+    useEffect(() => {
+        // console.log(currCord)
+    }, [currCord])
 
 
     function recreateStrokes(g: any) {
@@ -61,10 +87,10 @@ function Canvas({ currCord, isDrawing, changeStrokes, currHistory }: { currCord:
             }
         }
         if (isDrawing) {
-            // ! This is hacking it, can't get deepStrictEqual to work
-            if (JSON.stringify(prevCoord) !== JSON.stringify({ x: null, y: null }) && JSON.stringify(prevCoord) !== JSON.stringify({ y: null, x: null })) {
+            if (prevCoord.x && prevCoord.y) {
                 const nextStroke = currHistory.at(-1);
                 if (nextStroke && nextStroke.x !== null && nextStroke.y !== null) {
+                    // console.log(nextStroke.x);
                     // console.log("DRAWING BETWEEN ", JSON.stringify(prevCoord), JSON.stringify(nextStroke));
                     // console.log(currHistory);
                     g.moveTo(prevCoord.x, prevCoord.y);

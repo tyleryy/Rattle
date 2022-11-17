@@ -9,6 +9,8 @@ function Game() {
     const [strokeHistory, changeStrokeHistory] = useState<Coordinate[]>([]);
     const [isDrawing, flipDrawingKey] = useState<boolean>(false);
     const [currCoord, changeCurrCord] = useState<Coordinate>({ x: null, y: null });
+    const [prevCoord, changePrevCord] = useState<Coordinate>({ x: null, y: null });
+    const [loopInterval, changeLoopInterval] = useState<NodeJS.Timer>()
     const stageRef = useRef(null);
 
     // stage size
@@ -24,7 +26,18 @@ function Game() {
 
         window.addEventListener("keydown", keysDown);
         window.addEventListener("keyup", keysUp);
+        // window.addEventListener("mousemove", mouseInPlay);
+        loopPosition(isDrawing, prevCoord, currCoord);
     }, []);
+
+    // when we change the drawing status, reset the looping
+    useEffect(() => {
+        // console.log(currCoord)
+        if (loopInterval) {
+            clearInterval(loopInterval);
+            loopPosition(isDrawing, prevCoord, currCoord)
+        }
+    }, [isDrawing, prevCoord, currCoord])
 
     const drawKey = "Space"
 
@@ -41,20 +54,65 @@ function Game() {
         if (key === drawKey) {
             flipDrawingKey(false);
             // console.log("Key up " + drawKey);
-
         }
+    }
+
+    // function mouseInPlay(e: MouseEvent) {
+    //     e.
+    // }
+
+    function loopPosition(isDrawing: boolean, prevCoord: Coordinate, currCoord: Coordinate) {
+        // console.log("Resetting interval", isDrawing)
+        const handler = setInterval(() => {
+            if (isDrawing) {
+                // console.log("Ui")
+                // console.log(currCoord);
+                // console.log(prevCoord)
+                if (prevCoord.y && currCoord.y && prevCoord.x && currCoord.x) {
+                    if (Math.abs(prevCoord.y - currCoord.y) < 1) {
+                        // console.log("stading still?")
+                        // console.log(prevCoord, currCoord);
+                        // console.log([...strokeHistory, currCoord])
+                        if (Math.abs(prevCoord.x - currCoord.x) > 1) {
+                            prevCoord = currCoord;
+                            changePrevCord(prevCoord)
+                        }
+                        changeStrokeHistory([...strokeHistory, currCoord]);
+                        let tinyCoord = currCoord;
+                        if (tinyCoord.x) {
+                            tinyCoord.x = tinyCoord.x + 0.01;
+                            changeCurrCord(tinyCoord);
+                        } else {
+                            console.log("no tin")
+                        }
+                    }
+                }
+                // if (currCoord.x === prevCoord.x && currCoord.y === prevCoord.y) {
+                //     // trying to draw but not moving
+                //     console.log("TRYING TO DRAW")
+                //     let tinyCoord = currCoord;
+                //     if (tinyCoord.x) {
+                //         tinyCoord.x = tinyCoord.x + 0.00001;
+                //         changeCurrCord(tinyCoord);
+                //     }
+                // }
+            }
+        }, 20);
+        changeLoopInterval(handler);
     }
 
 
     return (
         <Stage width={stageW} height={stageH} onPointerMove={(e: any) => {
             // when we move, we want to add the coordinate to the array
-            const coordinate = {
+            let coordinate = {
                 // x: Math.floor(e.clientX - e.target.offsetLeft), // subtract to account for the stage position
                 x: lockedX - e.target.offsetLeft,
                 y: Math.floor(e.clientY - e.target.offsetTop)
             }
             // changeStrokeHistory([...strokeHistory, coordinate]);
+            // console.log("CURR CORD IS", coordinate);
+            changePrevCord(currCoord);
             changeCurrCord(coordinate);
             // console.log([...nextStrokes, coordinate]);
             // console.log(currStrokes);
