@@ -12,11 +12,6 @@ function Choose(props) {
 
 
     useEffect(() => {
-        socket.on('P2JoinedLobby', (game_obj) => {
-            let p1 = game_obj.p1;
-            let p2 = game_obj.p2;
-            
-          });
 
           socket.on('Go Home', () => {
             navigate('/');

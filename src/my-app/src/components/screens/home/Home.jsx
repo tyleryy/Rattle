@@ -19,6 +19,13 @@ const Home = (props) => {
       navigate("/choose");
     })
 
+    socket.on('P2JoinedLobby', (game_obj) => {
+      let p1 = game_obj.p1;
+      let p2 = game_obj.p2;
+      
+      navigate('/choose')
+    });
+
     return () => {socket.removeAllListeners()};
 
 }, []);
@@ -36,7 +43,7 @@ const Home = (props) => {
             <Button imageEnter="./game_sprites/create2.png" imageLeave="./game_sprites/create.png" routesPath="/choose" socketEmitEvent={"createLobby"} socket={socket}>dog</Button>
           </div>
           <div>
-            <Button imageEnter="./game_sprites/join.png" imageLeave="./game_sprites/join2.png" routesPath="/join">dog</Button>
+            <Button imageEnter="./game_sprites/join.png" imageLeave="./game_sprites/join2.png" routesPath="/join" socketEmitEvent={"joinLobby"} socket={socket}>dog</Button>
           </div>
           <div>
             <Button imageEnter="./game_sprites/credits.png" imageLeave="./game_sprites/credits2.png" routesPath="/credit">dog</Button>
