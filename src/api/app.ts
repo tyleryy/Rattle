@@ -18,18 +18,19 @@ app.get('/', (req: Request, res: Response) => {
 
 // ! remove later
 function debugLogger(socket: Socket) {
+    console.log('--------------------------');
     console.log(rattle_games);
-    console.log(socket.rooms)
+    console.log(socket.rooms);
     console.log(io.sockets.sockets.size);
+    console.log('--------------------------');
 }
-
 
 io.on('connection', (socket: Socket) => {
     console.log("A socket has joined! They are " + socket.id)
     console.log(socket.rooms)
     console.log(io.sockets.sockets.size)
 
-    socket.on('createLobby', () => {
+    socket.once('createLobby', () => {
         let lobby_code = generateLobbyCode(rattle_games);
         try {
             socket.join(lobby_code);
@@ -49,7 +50,7 @@ io.on('connection', (socket: Socket) => {
         return lobby_code; // return code so that frontend can reference the correct game/room
     })
 
-    socket.on('joinLobby', (code) => {
+    socket.once('joinLobby', (code) => {
         socket.join(code);
         let game: Game = (rattle_games[code] ?? null); // ! do updates to game var update rattle games?
         if (!game) {
