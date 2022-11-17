@@ -1,10 +1,11 @@
 import { Graphics, useTick } from "@inlet/react-pixi";
 import { useState } from "react";
+import { Socket } from "socket.io-client";
 import { Coordinate } from "../../../../interfaces/interfaces";
 import { drawSpeedMultiplier, circleIdleRadius, deltaX, lockedX } from "../constants";
 import { recreateStrokes } from "./common";
 
-function DrawCanvas({ lastNonNull, animateHistory, isDrawing }: { lastNonNull: Coordinate, changeAnimatedStrokes: (input: Coordinate[]) => void, animateHistory: Coordinate[], isDrawing: boolean }) {
+function DrawCanvas({ lastNonNull, animateHistory, isDrawing, socket }: { lastNonNull: Coordinate, changeAnimatedStrokes: (input: Coordinate[]) => void, animateHistory: Coordinate[], isDrawing: boolean, socket: Socket }) {
     const [time, changeTime] = useState(0);
 
     useTick((delta) => {
@@ -18,6 +19,9 @@ function DrawCanvas({ lastNonNull, animateHistory, isDrawing }: { lastNonNull: C
                 stroke.x = stroke.x - deltaX;
             }
         }
+        socket.emit('update_game_frame', {
+            playerPos: lastNonNull
+        })
     })
 
     const [circleRad, changeCircleRad] = useState(circleIdleRadius);

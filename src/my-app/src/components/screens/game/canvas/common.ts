@@ -1,6 +1,17 @@
 import { Coordinate } from './../../../../interfaces/interfaces';
 import { circleDrawingRadius, circleIdleRadius } from "../constants";
 
+/**
+ * 
+ * @param g pixi graphics
+ * @param isDrawing boolean to represent if the player is drawing or not (render strokes or not)
+ * @param circleRad current radius of the circle 
+ * @param animateHistory the strokes to draw
+ * @param lastNonNull the last position (same as the player position)
+ * @param changeCircleRad function to update player circle size
+ * @param strokeX the starting x position of strokes
+ * @param playerX the player x position
+ */
 export function recreateStrokes(g: any, isDrawing: boolean, circleRad: number, animateHistory: Coordinate[], lastNonNull: Coordinate, changeCircleRad: (input: number) => void, strokeX: number, playerX: number) {
     // must clear to animate
     g.clear();

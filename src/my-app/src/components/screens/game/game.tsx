@@ -4,8 +4,9 @@ import DrawCanvas from './canvas/drawCanvas';
 import { Coordinate } from '../../../interfaces/interfaces';
 import { lockedX } from './constants';
 import PlayCanvas from './canvas/playCanvas';
+import { Socket } from 'socket.io-client';
 
-function Game() {
+function Game({ socket }: { socket: Socket }) {
     // remember the strokes done
 
     /** Static stroke history recording the y */
@@ -48,6 +49,7 @@ function Game() {
         window.addEventListener("keyup", keysUp);
         // loopPosition(isDrawing, prevCoord, currCoord);
         // window.addEventListener("mousemove", mouseInPlay);
+
     }, []);
 
     // when we change the drawing status, reset the looping
@@ -163,10 +165,9 @@ function Game() {
             }
         }}>
             <Sprite ref={stageRef} image="./game_sprites/back.png" x={100} y={100} />
-            <DrawCanvas lastNonNull={lastNonNullPos} changeAnimatedStrokes={changeAnimatedStrokeHistory} animateHistory={animatedStrokeHistory} isDrawing={isDrawing} />
+            <DrawCanvas lastNonNull={lastNonNullPos} changeAnimatedStrokes={changeAnimatedStrokeHistory} animateHistory={animatedStrokeHistory} isDrawing={isDrawing} socket={socket} />
             {showMemory ? <PlayCanvas lastNonNull={lastNonNullPos} strokeHistory={strokeHistory} /> : null}
         </Stage>
-
     )
 }
 
