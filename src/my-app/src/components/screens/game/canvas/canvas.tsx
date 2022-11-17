@@ -3,9 +3,8 @@ import { useState } from "react";
 import { Coordinate } from "../../../../interfaces/interfaces";
 import { drawSpeedMultiplier, lockedX, circleDrawingRadius, circleIdleRadius } from "../constants";
 
-function Canvas({ lastNonNull, animateHistory, isDrawing }: { currCoord: Coordinate, lastNonNull: Coordinate, changeAnimatedStrokes: (input: Coordinate[]) => void, animateHistory: Coordinate[], isDrawing: boolean }) {
+function Canvas({ lastNonNull, animateHistory, isDrawing }: { lastNonNull: Coordinate, changeAnimatedStrokes: (input: Coordinate[]) => void, animateHistory: Coordinate[], isDrawing: boolean }) {
     const [time, changeTime] = useState(0);
-    const [justDrew, flipJustDrew] = useState<boolean>(false);
 
     useTick((delta) => {
 

@@ -19,15 +19,10 @@ function Game() {
     /** Remember whether we just drew or not */
     const [justDrew, flipJustDrew] = useState<boolean>(false);
 
-    /** CurrCord */
-    const [currCoord, changeCurrCord] = useState<Coordinate>({ x: null, y: null });
-
-
     /** Position of the mouse at all times (relative to the stage), used to control the player circle */
     const [lastNonNullPos, changeLastNonNullPos] = useState<Coordinate>({ x: null, y: null })
 
     /** Interval function to run repeatedly (attempt to draw while standing still) */
-    const [loopInterval, changeLoopInterval] = useState<NodeJS.Timer>()
     const stageRef = useRef(null);
 
     // stage size
@@ -162,7 +157,7 @@ function Game() {
             }
         }}>
             <Sprite ref={stageRef} image="./game_sprites/back.png" x={100} y={100} />
-            <Canvas currCoord={currCoord} lastNonNull={lastNonNullPos} changeAnimatedStrokes={changeAnimatedStrokeHistory} animateHistory={animatedStrokeHistory} isDrawing={isDrawing} />
+            <Canvas lastNonNull={lastNonNullPos} changeAnimatedStrokes={changeAnimatedStrokeHistory} animateHistory={animatedStrokeHistory} isDrawing={isDrawing} />
         </Stage>
 
     )
