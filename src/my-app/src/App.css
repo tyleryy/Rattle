@@ -69,14 +69,6 @@ html {
   height: 13em;
 }
 
-.join_but {
-  position: relative;
-  top: -4em;
-  left: 23em;
-  height: 2em;
-  width: 2em;
-}
-
 .buttonChar:hover {
   transform: scale(1.2)
 }
