@@ -17,6 +17,7 @@
   margin-right: 2em;
   width: auto;
   z-index: 2;
+  transition: transform .2s;
 }
 
 .common_button:hover {
@@ -49,6 +50,10 @@
 
 .buttonChar:hover {
   transform: scale(1.2)
+}
+
+.buttonPetr {
+  transition: transform .3s;
 }
 
 .buttonPetr:hover {
