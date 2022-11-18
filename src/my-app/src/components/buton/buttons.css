@@ -1,0 +1,12 @@
+.small_button {
+    position: relative;
+    height: 8em;
+    margin-left: 1em;
+    margin-right: 1em; 
+    width: auto;
+    transition: transform .2s;
+  }
+
+  .small_button:hover {
+    transform: scale(1.2)
+  }

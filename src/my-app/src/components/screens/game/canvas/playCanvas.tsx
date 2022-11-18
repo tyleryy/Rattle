@@ -4,7 +4,7 @@ import { Coordinate } from "../../../../interfaces/interfaces";
 import { circleIdleRadius, deltaX, lockedX, strokeSpawnX } from "../constants";
 import { recreateStrokes } from "./common";
 
-function PlayCanvas({ lastNonNull, strokeHistory }: { lastNonNull: Coordinate, strokeHistory: (number | null)[] }) {
+function PlayCanvas({ lastNonNull, strokeHistory, p2Pos }: { lastNonNull: Coordinate, strokeHistory: (number | null)[], p2Pos: Coordinate }) {
     const [timeTick, changeTimeTick] = useState(0);
 
     // strokeHistory is all the strokes that need to be recreated over time.
@@ -57,7 +57,7 @@ function PlayCanvas({ lastNonNull, strokeHistory }: { lastNonNull: Coordinate, s
         <Graphics draw={(g) => {
             // console.log("PLAY DRAW")
             // console.log(animateHistory)
-            recreateStrokes(g, true, circleRad, animateHistory, lastNonNull, changeCircleRad, strokeSpawnX, lockedX);
+            recreateStrokes(g, true, circleRad, animateHistory, lastNonNull, changeCircleRad, strokeSpawnX, lockedX, p2Pos);
         }} />
     )
 }

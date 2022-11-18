@@ -9,7 +9,7 @@ body {
 
 html {
   overflow: hidden;
-  overflow-y: hidden;
+  overflow-y: scroll;
 }
 
 .App-logo {

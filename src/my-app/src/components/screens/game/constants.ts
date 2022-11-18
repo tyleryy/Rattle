@@ -12,8 +12,8 @@ export const circleIdleRadius = 5;
 /** Size of player circle if drawing */
 export const circleDrawingRadius = 10;
 
-/** how many pixels the strokes will move */
-export const deltaX = drawSpeedMultiplier * 0.3;
+/** how many pixels the strokes will move per tick */
+export const deltaX = drawSpeedMultiplier * 0.5;
 
 /** Where the strokes will spawn during the play phase */
-export const strokeSpawnX = 1000;
+export const strokeSpawnX = 2200;

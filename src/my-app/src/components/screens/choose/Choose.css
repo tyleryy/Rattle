@@ -10,8 +10,8 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    margin-left: 2em;
-    margin-right: 2em;
+    margin-left: 1em;
+    margin-right: 1em;
 }
 
 .background {
@@ -22,3 +22,4 @@
     width: 100%;
     height: 100%;
 }
+
