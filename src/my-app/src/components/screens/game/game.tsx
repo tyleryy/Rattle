@@ -72,7 +72,7 @@ function Game({ socket }: { socket: Socket }) {
         socket.on('update_game_state', (gameState: GameState) => {
             // update the game state
             setGameState(gameState);
-        })
+        });
 
         // loopPosition(isDrawing, prevCoord, currCoord);
     }, []);
