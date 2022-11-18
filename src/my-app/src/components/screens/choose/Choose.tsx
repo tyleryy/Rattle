@@ -170,21 +170,18 @@ function Choose() {
     return (
         <div className="background">
             <img src="./game_sprites/cyc.png" alt="logo" className="cyc" />
-            <div className="roomCode">{lobby_code}</div>
+            <div className="roomCode">Room Code: {lobby_code}</div>
             <div className="parent">
 
                 <div className="column">
                     <div className="stage">
-                        <Stage width={400} height={700} options={{ backgroundAlpha: 0 }}>
+                        <Stage width={400} height={680} options={{ backgroundAlpha: 0 }}>
                             {/* <Sprite image={player1.image} scale={ {x: 0.8 , y: 0.8} }/> */}
                             <AnimatedSprite animationSpeed={0.05} isPlaying={char1_active} images={["./game_sprites/char1.png", "./game_sprites/char1frame2.png"]} anchor={0.01} visible={char1_active} />
                             <AnimatedSprite animationSpeed={0.05} isPlaying={char2_active} images={["./game_sprites/char2_frames/char2frame1.png", "./game_sprites/char2_frames/char2frame3.png"]} anchor={0.01} visible={char2_active} />
                             <AnimatedSprite animationSpeed={0.05} isPlaying={char3_active} images={["./game_sprites/petrframe1.png", "./game_sprites/char3frame2.png"]} anchor={0.01} visible={char3_active} />
                         </Stage>
                     </div>
-                    {/* <div className= "platform_left">
-                        <Platform image="./game_sprites/platform2.png"></Platform>
-                    </div> */}
                 </div>
 
                 <div className="column">
@@ -197,7 +194,7 @@ function Choose() {
 
                 <div className="column">
                     <div className="stage_right">
-                        <Stage width={400} height={700} options={{ backgroundAlpha: 0 }}>
+                        <Stage width={400} height={680} options={{ backgroundAlpha: 0 }}>
                             {/* <Sprite image="./game_sprites/back.png" /> */}
                             <AnimatedSprite animationSpeed={0.05} isPlaying={otherchar1_active} images={["./game_sprites/char1.png", "./game_sprites/char1frame2.png"]} anchor={0.01} visible={otherchar1_active} />
                             <AnimatedSprite animationSpeed={0.05} isPlaying={otherchar2_active} images={["./game_sprites/char2_frames/char2frame1.png", "./game_sprites/char2_frames/char2frame3.png"]} anchor={0.01} visible={otherchar2_active} />
@@ -205,11 +202,9 @@ function Choose() {
                             {/* {p1Ani} */}
                         </Stage>
                     </div>
-                    {/* <div>
-                        <Platform image="./game_sprites/platform2.png"></Platform>
-                    </div> */}
                 </div>
             </div>
+            <img className="youArrow" src="./game_sprites/you.png" />
             <div className="parent">
 
                 <SmallButton imageEnter="./game_sprites/back.png" imageLeave="./game_sprites/back2.png" routesPath="/" socketEmitEvent="" />
