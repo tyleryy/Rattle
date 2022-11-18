@@ -39,6 +39,10 @@ export class Player implements IPlayer {
         this.char = char;
     }
 
+    getChar() {
+        return this.char;
+    }
+
     setScore(score: number) {
         this.score = score;
     }

@@ -32,7 +32,7 @@ function Join() {
         changeLobbyCode(game_obj.code)
         navigate('/choose')
         // ! might be bad
-        socket.emit("selectCharacter", game_obj.code, "Player 1", game_obj.p1char)
+        socket.emit("selectCharacter",{ lobbyCode: lobby_code, player: player, char: null })
       })
 });
     

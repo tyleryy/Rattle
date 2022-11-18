@@ -86,18 +86,22 @@ io.on('connection', (socket: Socket) => {
         return code; // return code so that frontend can reference the correct game/room
     })
 
-    socket.on('selectCharacter', (JSONStrPayload: string) => {
-        const payload = JSON.parse(JSONStrPayload);
+    socket.on('selectCharacter', (JSONStrPayload: any) => {
+        const payload = JSONStrPayload;
         let code = payload.lobbyCode;
         let player_num = payload.player;
         let char = payload.char;
-        let game: GameInstance = rattle_games[code];
+        const gameRes = findGameFromSocket(socket);
+        if (gameRes) {
+            const game = gameRes.game;
         if (player_num === 'Player 1' && game.p1) { game.p1.char = char; }
         if (player_num === 'Player 2' && game.p2) { game.p2.char = char; }
         // ! may change later
         // prevents character assignment if other player has selected it
-        socket.to(code).emit("updateSelectScreen", { p1: game.p1?.convertToIPlayer, p2: game.p2?.convertToIPlayer }, player_num);
+        socket.to(code).emit("updateSelectScreen", { p1: game.p1?.getChar(), p2: game.p2?.getChar() }, player_num);
         console.log(rattle_games[code]);
+        }
+        
     })
 
     socket.on('gameEnd', (code: string) => {

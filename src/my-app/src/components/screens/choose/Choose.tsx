@@ -125,9 +125,9 @@ function Choose() {
                 other_player = data.p1
             }
 
-            console.log("current player " + curr_player.char)
-            console.log("opponent player " + other_player.char)
-            switch (curr_player.char) {
+            console.log("current player " + curr_player)
+            console.log("opponent player " + other_player)
+            switch (curr_player) {
                 case '1':
                     checkActiveChar1(true)
                     break;
@@ -140,8 +140,9 @@ function Choose() {
                 default:
                     break;
             }
+            console.log("other player"+ other_player)
             if (other_player) {
-                switch (other_player.char) {
+                switch (other_player) {
                     case '1':
                         othercheckActiveChar1(true)
                         break;
@@ -155,7 +156,8 @@ function Choose() {
                         break;
                 }
             }
-
+            
+            console.log(otherchar1_active, otherchar2_active, otherchar3_active)
         })
         // get the width of the screen
         const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
