@@ -44,7 +44,7 @@ function Game({ socket }: { socket: Socket }) {
     const [opponentState, setOpponentState] = useState<IPlayer>();
 
     // what phase the game is in
-    const [isDrawPhase, setDrawPhase] = useState<boolean>();
+    const [isPlayPhase, setPlayPhase] = useState<boolean>();
 
     // opponent position
     const [p2Pos, setP2Pos] = useState<Coordinate>({ x: null, y: null });
@@ -85,14 +85,15 @@ function Game({ socket }: { socket: Socket }) {
         const key = e.code;
         if (key === drawKey) {
 
-            if (!showMemory) {
+            // FOR DEBUGGING REMOVE ME
+            if (!isPlayPhase) {
                 flipDrawingKey(true);
             }
             // console.log("Key down " + drawKey);
         }
 
         if (key === "KeyW") {
-            flipShowMemory(true);
+            setPlayPhase(true);
         }
     }
 
@@ -104,7 +105,7 @@ function Game({ socket }: { socket: Socket }) {
         }
 
         if (key === "KeyW") {
-            flipShowMemory(false);
+            setPlayPhase(false);
         }
     }
 
@@ -183,8 +184,13 @@ function Game({ socket }: { socket: Socket }) {
             }
         }}>
             <Sprite ref={stageRef} image="./game_sprites/back.png" x={100} y={100} />
-            <DrawCanvas lastNonNull={lastNonNullPos} changeAnimatedStrokes={changeAnimatedStrokeHistory} animateHistory={animatedStrokeHistory} isDrawing={isDrawing} socket={socket} p2Pos={p2Pos} />
-            {showMemory ? <PlayCanvas lastNonNull={lastNonNullPos} strokeHistory={strokeHistory} p2Pos={p2Pos} /> : null}
+            {
+                isPlayPhase ?
+                    <PlayCanvas lastNonNull={lastNonNullPos} strokeHistory={strokeHistory} p2Pos={p2Pos} />
+
+                    :
+                    <DrawCanvas lastNonNull={lastNonNullPos} changeAnimatedStrokes={changeAnimatedStrokeHistory} animateHistory={animatedStrokeHistory} isDrawing={isDrawing} socket={socket} p2Pos={p2Pos} />
+            }
         </Stage>
     )
 }
