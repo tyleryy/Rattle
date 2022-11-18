@@ -1,11 +1,12 @@
 import express from 'express';
-import { Request, Response } from 'express';
+import e, { Request, Response } from 'express';
 import { generateLobbyCode } from './util/lobby';
 import { createServer } from 'http';
 import { Server, Socket } from "socket.io";
 import { Player, IPlayer } from './classes/player';
-import { Game, Rattle, GameFrameData, PlayerState } from './interfaces/rattle';
+import { GameInstance, Rattle, GameFrameData, PlayerState, Coordinate } from './interfaces/rattle';
 import { findGameFromSocket, getPlayerFromSocket } from './util/socket';
+import { buildGameStateFromInstance } from './util/game';
 
 const app = express();
 const server = createServer(app)
@@ -22,7 +23,7 @@ function debugLogger(socket: Socket) {
     console.log('\n--------------------------');
     console.log("games: ", rattle_games);
     console.log(socket.rooms);
-    console.log("num of sockets: "+io.sockets.sockets.size);
+    console.log("num of sockets: " + io.sockets.sockets.size);
     console.log('--------------------------\n');
 }
 
@@ -52,14 +53,16 @@ io.on('connection', (socket: Socket) => {
         } catch (err) {
             console.log(err);
         }
-        let host = new Player(1, socket.id);
-        let game: Game = {
+        let host = new Player(1, socket.id, socket);
+        // SET DEFAULT GAME OPTIONS
+        let game: GameInstance = {
             p1: host,
             p2: null,
             GameActive: false,
             currRounds: 0,
-            time: 0,
-            totalRounds: 0
+            time: 5000, // should be in ms
+            totalRounds: 3,
+            roomCode: lobby_code
         }
         rattle_games[lobby_code] = game;
         socket.to(lobby_code).emit('doneCreateLobby', lobby_code);
@@ -70,23 +73,24 @@ io.on('connection', (socket: Socket) => {
     socket.on('joinLobby', (code) => {
         console.log("received")
         socket.join(code);
-        let game: Game = (rattle_games[code] ?? null); // ! do updates to game var update rattle games?
+        let game: GameInstance = (rattle_games[code] ?? null); // ! do updates to game var update rattle games?
         if (!game) {
             console.log("Lobby not found")
             return "Lobby not found";
         }
-        game.p2 = new Player(2, socket.id);
+        console.log("Creating new player for room " + code + " with socket id " + socket.id);
+        game.p2 = new Player(2, socket.id, socket);
         // send data to frontend
-        io.to(code).emit("P2JoinedLobby", {p1char: game.p1?.char, p2char: game.p2.char, code:code});
+        io.to(code).emit("P2JoinedLobby", { p1char: game.p1?.char, p2char: game.p2.char, code: code });
         debugLogger(socket);
         return code; // return code so that frontend can reference the correct game/room
     })
 
     socket.on('selectCharacter', (code, player_num, char) => {
-        let game: Game = rattle_games[code];
-        if (player_num === 'Player 1' && game.p1) {game.p1.char = char;}
-        if (player_num === 'Player 2' && game.p2) {game.p2.char = char;}
-        rattle_games[code] = game;
+        let game: GameInstance = rattle_games[code];
+        if (player_num === 'Player 1' && game.p1) { game.p1.char = char; }
+        if (player_num === 'Player 2' && game.p2) { game.p2.char = char; }
+        // ! may change later
         // prevents character assignment if other player has selected it
         socket.to(code).emit("updateSelectScreen", game, player_num);
         console.log(rattle_games[code]);
@@ -98,17 +102,25 @@ io.on('connection', (socket: Socket) => {
         socket.to(code).emit("endScreen");
     })
 
-    socket.on('startGame', (code: string) => {
-        // TODO will add more functionality
-        let game: Game = rattle_games[code];
-        game.GameActive = true;
-        if (game.p1) {
-            game.p1.active = true;
-        } else {
-            return "Something went wrong"
-        }
-        socket.to(code).emit("goToGame");
-    })
+    // socket.on('startGame', () => {
+    //     // TODO will add more functionality
+    //     console.log("STARTING GAME FOR " + socket.id);
+    //     const gameRes = findGameFromSocket(socket);
+    //     if (gameRes) {
+    //         let game = gameRes.game;
+    //         const room = gameRes.room;
+    //         game.GameActive = true;
+    //         if (game.p1) {
+    //             game.p1.active = true;
+    //         } else {
+    //             return "Something went wrong"
+    //         }
+    //         socket.to(room).emit("goToGame");
+    //     } else {
+    //         console.error("No game found, in startGame")
+    //     }
+
+    // })
 
     socket.on("user has left", (id) => {
         console.log('a user has left')
@@ -116,7 +128,7 @@ io.on('connection', (socket: Socket) => {
 
     socket.on('disconnecting', (reason) => {
         cleanUp(socket)
-        console.log("disconnected");
+        console.log("disconnected " + socket.id);
     })
 
     socket.on('disconnect', () => { debugLogger(socket) });
@@ -124,10 +136,9 @@ io.on('connection', (socket: Socket) => {
     // socket event for updating game state frame by frame
     socket.on('update_game_frame', (frameData: GameFrameData) => {
         // update the player
-
         // find the game associated with this socket using socket.rooms and check all rooms of the socket
         const gameRes = findGameFromSocket(socket);
-        if (gameRes) {
+        if (gameRes !== null) {
             const gameInstance = gameRes.game;
             const room = gameRes.room;
             // figure out who this person that updated the game frame is
@@ -137,23 +148,139 @@ io.on('connection', (socket: Socket) => {
                 // ---> score
                 // ---> yPos
                 player.score = frameData.points;
-                player.yPos = frameData.pos;
+                if (frameData.playerPos.y !== null) {
+                    player.yPos = frameData.playerPos.y;
+                }
 
-                // send all player data to opponent client
-                const playerJSON: IPlayer = {
+                // new data for the sender
+                const senderJSON: IPlayer = {
                     player_num: player.player_num,
                     char: player.char,
                     score: player.score,
                     active: player.active,
                     yPos: player.yPos
                 }
-                socket.to(room).emit('update_opponent_frame', playerJSON);
+
+                // old data for the opponent
+                const opponent = player.player_num === 1 ? gameInstance.p2 : gameInstance.p1;
+                if (opponent) {
+                    const iOpponent = opponent.convertToIPlayer();
+                    // create a game state relative to opponent
+                    const oppGameState = buildGameStateFromInstance(gameInstance, iOpponent, senderJSON);
+                    // tell the opponent to update the game state
+                    socket.to(room).emit('update_game_state', oppGameState);
+
+                    // tell the sender to update the game state
+                    // create a game state relative to sender
+                    const senderGameState = buildGameStateFromInstance(gameInstance, senderJSON, iOpponent);
+                    socket.emit('update_game_state', senderGameState);
+                }
             } else {
                 console.error("No player found in game for " + socket.id);
             }
         }
+    })
 
+    // socket event for going to options screen
+    socket.on('go_to_options', () => {
+        console.log("GOING TO OPTIONS")
+        const gameRes = findGameFromSocket(socket);
+        if (gameRes) {
+            // get the room code to broadcast
+            const code = gameRes.room;
+            // make all clients in the room go to the options screen
+            io.to(code).emit('go_to_options');
+        }
+    });
 
+    // socket event for going to game screen
+    socket.on('go_to_game', () => {
+        console.log("GOING TO GAME")
+        const gameRes = findGameFromSocket(socket);
+        if (gameRes) {
+            // get the room code to broadcast
+            const code = gameRes.room;
+            // make all clients in the room go to the options screen
+            io.to(code).emit('go_to_game');
+        }
+    });
+
+    // call this when a player joins the game screen
+    socket.on("startGame", () => {
+        console.log("STARTING GAME FOR " + socket.id);
+        const gameRes = findGameFromSocket(socket);
+        if (gameRes) {
+            const gameInstance = gameRes.game;
+            const player = getPlayerFromSocket(socket, gameInstance);
+            if (player) {
+                // this player has joined
+                player.joinGame();
+            }
+
+            // check if everyone has joined
+            let allJoined = true;
+            const p1 = gameInstance.p1;
+            const p2 = gameInstance.p2;
+            if (!p1 || !p1.getInGame()) {
+                allJoined = false;
+            }
+            if (!p2 || !p2.getInGame()) {
+                allJoined = false;
+            }
+
+            if (allJoined) {
+                // make host start
+                console.log("ALL PLAYERS IN");
+                const p1Socket = p1?.getSocket();
+                const p2Socket = p2?.getSocket();
+
+                if (!p1Socket || !p2Socket) {
+                    if (!p1Socket) {
+                        console.error("p1Socket undefined");
+                    }
+                    if (!p2Socket) {
+                        console.error("p2Socket undefined");
+                    }
+                } else {
+                    console.log("socket existence verification done")
+                    p1Socket.emit("startTurn");
+                    p2Socket.emit("waitTurn");
+                }
+            } else {
+                console.log("NOT ALL PLAYERS IN")
+            }
+        }
+    });
+
+    socket.on("sendAnimatedHistory", (animatedStrokes: Coordinate[]) => {
+        // send animated strokes to the opponent
+        const gameRes = findGameFromSocket(socket);
+        if (gameRes) {
+            const gameInstance = gameRes.game;
+            const player = getPlayerFromSocket(socket, gameInstance);
+            if (player) {
+                const opponent = player.player_num === 1 ? gameInstance.p2 : gameInstance.p1;
+                if (opponent) {
+                    const opponentSocket = opponent.socket;
+                    opponentSocket.emit("updateAnimatedStrokes", animatedStrokes);
+                } else {
+                    console.error("could not find opponent, this is an error in sendAnimatedHistory");
+                }
+            } else {
+                console.error("could not find player, this is an error in sendAnimatedHistory");
+            }
+        }
+    });
+
+    socket.on("endTurn", (strokeHistory) => {
+        console.log(socket.id + " just ended turn");
+        const gameRes = findGameFromSocket(socket);
+        if (gameRes) {
+            const room = gameRes.room;
+            io.to(room).emit("startPlay", strokeHistory);
+        } else {
+            console.log("no game found for endTurn");
+        }
     })
 
 });

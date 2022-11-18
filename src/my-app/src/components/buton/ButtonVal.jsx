@@ -1,4 +1,5 @@
 import  { useState } from 'react';
+import "./buttons.css";
 
 function ButtonVal (props) {
 

@@ -1,0 +1,34 @@
+.page {
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+}
+
+.column .stage {
+    z-index: 2;
+}
+
+.column img {
+    position: relative;
+    bottom: 7em;
+    right: 2em;
+}
+
+.winner {
+    position: relative;
+    top: 5em;
+    left: 3em;
+    align-items: center;
+    animation: MoveUpDown 1s linear infinite;
+
+}
+
+@keyframes MoveUpDown {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-50px);
+    }
+}
+

@@ -1,6 +1,7 @@
 import  { useState, useContext } from 'react';
 import { Context } from '../../providers/provider';
 import { Socket } from 'socket.io-client';
+import "./buttons.css";
 
 function ButtonChar (props) {
 
