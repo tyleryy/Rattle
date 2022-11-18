@@ -89,6 +89,7 @@ function Choose({ lobby_code, socket }: { lobby_code: string, socket: Socket }) 
      
     return (
         <div className="background">
+            <img src="./game_sprites/cyc.png" alt="logo" className="cyc"/>
             <div className="roomCode">{lobby_code}</div>
             <div className="parent">
 
