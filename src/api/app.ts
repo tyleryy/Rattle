@@ -87,20 +87,16 @@ io.on('connection', (socket: Socket) => {
     })
 
     socket.on('selectCharacter', (JSONStrPayload: string) => {
-        console.log(1);
         const payload = JSON.parse(JSONStrPayload);
         let code = payload.lobbyCode;
         let player_num = payload.player;
         let char = payload.char;
         let game: GameInstance = rattle_games[code];
         if (player_num === 'Player 1' && game.p1) { game.p1.char = char; }
-        console.log(2);
         if (player_num === 'Player 2' && game.p2) { game.p2.char = char; }
         // ! may change later
         // prevents character assignment if other player has selected it
-        console.log(3);
         socket.to(code).emit("updateSelectScreen", { p1: game.p1?.convertToIPlayer, p2: game.p2?.convertToIPlayer }, player_num);
-        console.log(4);
         console.log(rattle_games[code]);
     })
 
@@ -319,6 +315,10 @@ io.on('connection', (socket: Socket) => {
             if (allVerify) {
                 // make host start
                 console.log("ALL PLAYERS DONE VERIFY");
+                // TODO: FIGURE OUT WHY THIS MAKES IT SO THAT THE STATE DOES NOT CYCLE
+                // p1?.setDoneVerify(false);
+                // p2?.setDoneVerify(false);
+
                 const p1Socket = p1?.getSocket();
                 const p2Socket = p2?.getSocket();
 
@@ -332,7 +332,6 @@ io.on('connection', (socket: Socket) => {
                 } else {
                     if (p1 && p2) {
                         // do rules
-                        gameInstance.currRounds = gameInstance.currRounds + 1;
                         if (gameInstance.currRounds > gameInstance.totalRounds) {
                             // game is done
                             // TODO: send winner information
@@ -359,6 +358,7 @@ io.on('connection', (socket: Socket) => {
                                 p2Socket.emit("waitTurn");
                             }
                         }
+                        gameInstance.currRounds = gameInstance.currRounds + 1;
                     } else {
                         console.log("p1 p2 not deefined in endVerify")
                     }
