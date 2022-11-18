@@ -18,7 +18,7 @@ export interface Game {
 
     GameActive: boolean;
     currRounds: number; // the round the game is currently at
-    time: number; // the time per round
+    time: number; // the time per round, in milliseconds
     totalRounds: number; // the total rounds before ending the game
     roomCode: string;
 }

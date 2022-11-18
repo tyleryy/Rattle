@@ -14,7 +14,8 @@ export function buildGameStateFromInstance(instance: GameInstance, client: IPlay
         GameActive: instance.GameActive,
         currRounds: instance.currRounds,
         time: instance.time,
-        totalRounds: instance.totalRounds
+        totalRounds: instance.totalRounds,
+        roomCode: instance.roomCode
     }
     return state;
 }

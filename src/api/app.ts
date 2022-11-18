@@ -1,10 +1,10 @@
 import express from 'express';
-import { Request, Response } from 'express';
+import e, { Request, Response } from 'express';
 import { generateLobbyCode } from './util/lobby';
 import { createServer } from 'http';
 import { Server, Socket } from "socket.io";
 import { Player, IPlayer } from './classes/player';
-import { GameInstance, Rattle, GameFrameData, PlayerState } from './interfaces/rattle';
+import { GameInstance, Rattle, GameFrameData, PlayerState, Coordinate } from './interfaces/rattle';
 import { findGameFromSocket, getPlayerFromSocket } from './util/socket';
 import { buildGameStateFromInstance } from './util/game';
 
@@ -54,13 +54,14 @@ io.on('connection', (socket: Socket) => {
             console.log(err);
         }
         let host = new Player(1, socket.id, socket);
+        // SET DEFAULT GAME OPTIONS
         let game: GameInstance = {
             p1: host,
             p2: null,
             GameActive: false,
             currRounds: 0,
-            time: 0,
-            totalRounds: 0,
+            time: 5000, // should be in ms
+            totalRounds: 3,
             roomCode: lobby_code
         }
         rattle_games[lobby_code] = game;
@@ -109,17 +110,25 @@ io.on('connection', (socket: Socket) => {
         socket.to(code).emit("endScreen");
     })
 
-    socket.on('startGame', (code: string) => {
-        // TODO will add more functionality
-        let game: GameInstance = rattle_games[code];
-        game.GameActive = true;
-        if (game.p1) {
-            game.p1.active = true;
-        } else {
-            return "Something went wrong"
-        }
-        socket.to(code).emit("goToGame");
-    })
+    // socket.on('startGame', () => {
+    //     // TODO will add more functionality
+    //     console.log("STARTING GAME FOR " + socket.id);
+    //     const gameRes = findGameFromSocket(socket);
+    //     if (gameRes) {
+    //         let game = gameRes.game;
+    //         const room = gameRes.room;
+    //         game.GameActive = true;
+    //         if (game.p1) {
+    //             game.p1.active = true;
+    //         } else {
+    //             return "Something went wrong"
+    //         }
+    //         socket.to(room).emit("goToGame");
+    //     } else {
+    //         console.error("No game found, in startGame")
+    //     }
+
+    // })
 
     socket.on("user has left", (id) => {
         console.log('a user has left')
@@ -127,7 +136,7 @@ io.on('connection', (socket: Socket) => {
 
     socket.on('disconnecting', (reason) => {
         cleanUp(socket)
-        console.log("disconnected");
+        console.log("disconnected " + socket.id);
     })
 
     socket.on('disconnect', () => { debugLogger(socket) });
@@ -161,7 +170,7 @@ io.on('connection', (socket: Socket) => {
                 }
 
                 // old data for the opponent
-                const opponent = player.player_num === 1 ? gameInstance.p2 : gameInstance.p1
+                const opponent = player.player_num === 1 ? gameInstance.p2 : gameInstance.p1;
                 if (opponent) {
                     const iOpponent = opponent.convertToIPlayer();
                     // create a game state relative to opponent
@@ -201,6 +210,83 @@ io.on('connection', (socket: Socket) => {
             io.to(code).emit('go_to_game');
         }
     });
+
+    // call this when a player joins the game screen
+    socket.on("startGame", () => {
+        console.log("STARTING GAME FOR " + socket.id);
+        const gameRes = findGameFromSocket(socket);
+        if (gameRes) {
+            const gameInstance = gameRes.game;
+            const player = getPlayerFromSocket(socket, gameInstance);
+            if (player) {
+                // this player has joined
+                player.joinGame();
+            }
+
+            // check if everyone has joined
+            let allJoined = true;
+            const p1 = gameInstance.p1;
+            const p2 = gameInstance.p2;
+            if (!p1 || !p1.getInGame()) {
+                allJoined = false;
+            }
+            if (!p2 || !p2.getInGame()) {
+                allJoined = false;
+            }
+
+            if (allJoined) {
+                // make host start
+                console.log("ALL PLAYERS IN");
+                const p1Socket = p1?.getSocket();
+                const p2Socket = p2?.getSocket();
+
+                if (!p1Socket || !p2Socket) {
+                    if (!p1Socket) {
+                        console.error("p1Socket undefined");
+                    }
+                    if (!p2Socket) {
+                        console.error("p2Socket undefined");
+                    }
+                } else {
+                    p1Socket.emit("startTurn");
+                    p2Socket.emit("waitTurn");
+                }
+            } else {
+                console.log("NOT ALL PLAYERS IN")
+            }
+        }
+    });
+
+    socket.on("sendAnimatedHistory", (animatedStrokes: Coordinate[]) => {
+        // send animated strokes to the opponent
+        const gameRes = findGameFromSocket(socket);
+        if (gameRes) {
+            const gameInstance = gameRes.game;
+            const player = getPlayerFromSocket(socket, gameInstance);
+            if (player) {
+                const opponent = player.player_num === 1 ? gameInstance.p2 : gameInstance.p1;
+                if (opponent) {
+                    const opponentSocket = opponent.socket;
+                    opponentSocket.emit("updateAnimatedStrokes", animatedStrokes);
+                } else {
+                    console.error("could not find opponent, this is an error in sendAnimatedHistory");
+                }
+            } else {
+                console.error("could not find player, this is an error in sendAnimatedHistory");
+            }
+        }
+    });
+
+    socket.on("endTurn", (strokeHistory) => {
+        console.log(socket.id + " just ended turn");
+        const gameRes = findGameFromSocket(socket);
+        if (gameRes) {
+            const room = gameRes.room;
+            io.to(room).emit("startPlay", strokeHistory);
+        } else {
+            console.log("no game found for endTurn");
+        }
+    })
 
 });
 

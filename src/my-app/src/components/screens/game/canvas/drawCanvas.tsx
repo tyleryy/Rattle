@@ -19,9 +19,15 @@ function DrawCanvas({ lastNonNull, animateHistory, isDrawing, socket, p2Pos }: {
                 stroke.x = stroke.x - deltaX;
             }
         }
+
         socket.emit('update_game_frame', {
             playerPos: lastNonNull
         });
+
+        // I don't know if this actually works
+        // console.log("Emitting animated history to backed")
+        // console.log(historyCopy);
+        socket.emit('sendAnimatedStrokes', historyCopy)
 
     })
 

@@ -18,6 +18,7 @@ export class Player implements IPlayer {
     socketId: string | null; // socket.io client ID associated with the character
     yPos: number; // the y position of the player currently
     socket: Socket; // socket object in server
+    inGame: boolean;
 
     constructor(num: number, socketID: string, socket: Socket) {
         this.player_num = num;
@@ -27,6 +28,7 @@ export class Player implements IPlayer {
         this.active = false; // inactive at the beginning
         this.yPos = -100;
         this.socket = socket;
+        this.inGame = false;
     }
 
     setPlayerNum(num: number) {
@@ -51,6 +53,18 @@ export class Player implements IPlayer {
 
     setPos(yPos: number) {
         this.yPos = yPos;
+    }
+
+    joinGame() {
+        this.inGame = true;
+    }
+
+    getInGame() {
+        return this.inGame;
+    }
+
+    getSocket() {
+        return this.socket;
     }
 
     convertToIPlayer(): IPlayer {
