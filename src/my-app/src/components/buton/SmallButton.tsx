@@ -15,7 +15,7 @@ function SmallButton({ imageEnter, imageLeave, routesPath, socketEmitEvent }: { 
             onMouseEnter={() => changeImg(imageLeave)}
             onMouseLeave={() => changeImg(imageEnter)}
             onClick={() => {
-                if (socketEmitEvent !== null && socketEmitEvent !== undefined) {
+                if (socketEmitEvent !== null && socketEmitEvent !== undefined && socketEmitEvent.length !== 0) {
                     socket.emit(socketEmitEvent);
                 } else {
                     navigate(routesPath);

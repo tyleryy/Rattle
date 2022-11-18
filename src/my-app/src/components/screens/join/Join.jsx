@@ -6,6 +6,8 @@ import Button from '../../buton/Button';
 import Button2 from '../../buton/Button2';
 import { useContext } from "react";
 import { Context } from "../../../providers/provider";
+import "./Join.css";
+import BackButtonRow from "../../backButtonRow/backButtonRow";
 
 function Join() {
     /*
@@ -36,14 +38,14 @@ function Join() {
     
 
     return (
-        <div className="App">
-        <header className="App-header">
-          <Screen image="./game_sprites/brick3.png"></Screen>
-          <div className = "join">
-                <Button imageEnter="./game_sprites/back.png" imageLeave="./game_sprites/back2.png" routesPath="/">dog</Button>
-                <Button2 imageEnter="./game_sprites/joinlob2.png" imageLeave="./game_sprites/joinlob.png" ></Button2>
-          </div>
-        </header>
+      <div>
+        <BackButtonRow />
+        <div className = "lobby_title">
+          <img src="./game_sprites/enterlobbycode.png" id="ltitle"/>
+        </div>
+        <div className="inputForm">
+               <Button2 class="input" imageEnter="./game_sprites/joinlob2.png" imageLeave="./game_sprites/joinlob.png" socket={socket} changeLobbyCode={changeLobbyCode}/>
+        </div>
       </div>
     )
 }

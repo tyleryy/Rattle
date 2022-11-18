@@ -1,16 +1,16 @@
 import React from "react";
 import Screen from '../../screen_bg/Screen'
 import Button from '../../buton/Button';
+import BackButtonRow from "../../backButtonRow/backButtonRow";
+import "./Credit.css";
 
 function Credit(props) {
     return (
-        <div className="App">
-            <header className="App-header">
-                <Screen image="./game_sprites/brick3.png"></Screen>
-                <div className = "join">
-                    <Button imageEnter="./game_sprites/back.png" imageLeave="./game_sprites/back2.png" routesPath="/">dog</Button>
-                </div>
-            </header>
+        <div className = "parentCredits">
+            <BackButtonRow />
+            <div className = "crds">
+                <img src="./game_sprites/creditsfr.png" alt="creditsfr" />
+            </div>
         </div>
     )
 }
