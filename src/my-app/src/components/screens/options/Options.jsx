@@ -8,7 +8,7 @@ import "./Options.css"
 
 function Options(props) {
     return (
-        <div className = "parent">
+        <div className = "parentOptions">
             <BackButtonRow />
             <div className = "opts">
                 <img src="./game_sprites/rules.png" alt="rules" />
