@@ -22,10 +22,10 @@ function Choose(props: any) {
      const lobby_code: string = props.lobby_code
      const navigate = useNavigate();
      useEffect(() => {
+        
         socket.on('Go Home', () => {
             navigate('/');
         })
-        
          // get the width of the screen
          const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
          changeW(vw);
@@ -36,7 +36,9 @@ function Choose(props: any) {
      
 
     useEffect(() => {
+
         console.log(player1);
+
     }, [player1])
 
     return (

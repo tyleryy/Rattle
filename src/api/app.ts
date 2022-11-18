@@ -28,17 +28,12 @@ function debugLogger(socket: Socket) {
 
 function cleanUp(socket: Socket) {
     for (let room of socket.rooms) {
+        io.in(room).emit("Go Home");
         io.in(room).socketsLeave(room);
         console.log('room ' + room + ' cleared');
         delete rattle_games[room]
     }
 }
-
-io.of("/").adapter.on("delete-room", (room) => {
-    console.log(`room ${room} was destroyed`);
-    // io.in(room).emit("Go Home");
-    io.in(room).emit("Go Home");
-});
 
 io.on('connection', (socket: Socket) => {
     console.log("A socket has joined! They are " + socket.id)
