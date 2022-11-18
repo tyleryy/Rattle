@@ -82,7 +82,7 @@ io.on('connection', (socket: Socket) => {
         game.p2 = new Player(2, socket.id, socket);
         // send data to frontend
         socket.emit("P2JoinedLobby", {p1char: game.p1?.char, p2char: game.p2.char, code:code});
-        debugLogger(socket);
+        debugLogger(socket); 
         return code; // return code so that frontend can reference the correct game/room
     })
 
