@@ -15,6 +15,7 @@ import Game from './components/screens/game/game';
 import Options from './components/screens/options/Options';
 import Victory from './components/screens/victory/victory';
 // import background from './img/brick2.png'
+import useSound from 'use-sound'
 
 import { io, Socket } from 'socket.io-client';
 import { useEffect, useState } from 'react';
@@ -26,6 +27,9 @@ function App() {
   const [isConnected, setIsConnected] = useState(socket.connected);
   const [socketObj, setSocket] = useState(socket);
   const [lobbyCode, changeLobbyCode] = useState<string>("");
+
+  const [playSound] = useSound("./game_audio/home_audio.mp3", {volume: 0.03})
+  playSound();
 
   useEffect(() => {
     if (!socket) {
