@@ -8,6 +8,7 @@ import { useContext } from 'react';
 import { Context } from '../../../providers/provider';
 import { Socket } from 'socket.io-client';
 import { IPlayer, GameState } from "../../../interfaces/interfaces";
+import PassiveCanvas from './canvas/passiveCanvas';
 
 function Game() {
     // remember the strokes done
@@ -16,7 +17,8 @@ function Game() {
     const [socket, _] = states.socket_state;
 
     /** Static stroke history recording the y */
-    const [strokeHistory, changeStrokeHistory] = useState<(number | null)[]>([]);
+    const [strokeHistory, setStrokeHistory] = useState<(number | null)[]>([]);
+    const [backendStrokeHistory, setBackendStrokeHistory] = useState<(number | null)[]>([]);
 
     /** Animated stroke history where the canvas will be animating the position of the stroke. This will change over time */
     const [animatedStrokeHistory, changeAnimatedStrokeHistory] = useState<Coordinate[]>([]);
@@ -43,23 +45,26 @@ function Game() {
     const [gameState, setGameState] = useState<GameState>();
 
     // client player (not the opponent)
-    const [playerState, setPlayerState] = useState<IPlayer>();
+    const [playerState, setPlayerState] = useState<"wait" | "draw" | "play">();
+    // figure out if the player just ended drawing phase
+    const [justEndedDraw, setJustEndedDraw] = useState<boolean>(false);
 
     // opponent player
     const [opponentState, setOpponentState] = useState<IPlayer>();
 
     // what phase the game is in
-    const [isPlayPhase, setPlayPhase] = useState<boolean>();
+    // playPhase is the copy strokes phase.
+    // const [isPlayPhase, setPlayPhase] = useState<boolean>(false);
+    // waiting phase renders a passive canvas where all you do is move around
+    // const [isWaiting, setWaiting] = useState<boolean>(true);
+    const [turnImage, setTurnImage] = useState<string>("./game_sprites/wait.png");
 
     // opponent position
     const [p2Pos, setP2Pos] = useState<Coordinate>({ x: null, y: null });
 
 
-
-    // TEST STROKE RECREATION ONLY DELETE THIS LATER
-    const [showMemory, flipShowMemory] = useState(false);
-
     useEffect(() => {
+        console.log("Hello game")
         // get the width of the screen
         const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
         changeW(vw);
@@ -72,8 +77,97 @@ function Game() {
 
         window.addEventListener("keydown", keysDown);
         window.addEventListener("keyup", keysUp);
+
+        // socket events
+
+        // update the game state from info from the backend
+        socket.on('update_game_state', (gameState: GameState) => {
+            // update the game state
+            setGameState(gameState);
+        });
+
+        // start to draw
+        socket.on("startTurn", () => {
+            // setPlayPhase(false);
+            // setWaiting(false);
+            console.log("STARTING TURN")
+            setPlayerState("draw");
+        });
+
+        // waiting for other player to draw
+        socket.on("waitTurn", () => {
+            // setPlayPhase(false);
+            // setWaiting(true);
+            console.log("WAITING TURN")
+            setPlayerState("wait");
+        });
+
+        socket.on("startPlay", (strokeHistory: (number | null)[]) => {
+            console.log("STARTING PLAY NOW STATE");
+            setBackendStrokeHistory(strokeHistory);
+        })
+
+        // start the game
+        socket.emit("startGame");
+
         // loopPosition(isDrawing, prevCoord, currCoord);
     }, []);
+
+    // when we update game state, update the smaller states connected
+    useEffect(() => {
+        if (gameState) {
+            if (gameState.p2) {
+                setP2Pos({ x: lockedX, y: gameState.p2.yPos })
+            }
+        }
+    }, [gameState]);
+
+    // handle player state changes
+    useEffect(() => {
+        // start timer if the player is drawing
+        let imagePath = playerState === "wait" ? "./game_sprites/wait.png" : "./game_sprites/freestyle.png";
+        setTurnImage(imagePath);
+
+        // ! HARDCODE THE TIME
+        const drawTime = 5000;
+        if (playerState === "draw") {
+            console.log("SETTING TIMER FOR " + drawTime + " ms");
+            setTimeout(() => {
+                console.log("TIMEOUT EXECUTED")
+                setJustEndedDraw(true);
+            }, drawTime)
+        }
+
+        // wipe backendStrokeHistory if not in play phase
+        if (playerState !== "play") {
+            setBackendStrokeHistory([]);
+        }
+    }, [playerState]);
+
+    // used to send drawings to backend with timer
+    useEffect(() => {
+        if (justEndedDraw && playerState === "draw") {
+            console.log("Emitting the following stroke history to backend")
+            console.log(strokeHistory);
+            setJustEndedDraw(false);
+            socket.emit("endTurn", strokeHistory);
+        }
+    }, [justEndedDraw]);
+
+    useEffect(() => {
+        if (backendStrokeHistory.length > 0) {
+            setPlayerState("play");
+            console.log("GOT THIS FROM SOCKET")
+            console.log(strokeHistory)
+        }
+    }, [backendStrokeHistory])
+
+    useEffect(() => {
+        if (playerState === "wait") {
+            console.log("STROKE HISTORY CHANGED");
+            console.log(strokeHistory)
+        }
+    }, [strokeHistory])
 
     // when we change the drawing status, reset the looping
     // useEffect(() => {
@@ -89,17 +183,13 @@ function Game() {
     function keysDown(e: KeyboardEvent) {
         const key = e.code;
         if (key === drawKey) {
-
-            // FOR DEBUGGING REMOVE ME
-            if (!isPlayPhase) {
-                flipDrawingKey(true);
-            }
+            flipDrawingKey(true);
             // console.log("Key down " + drawKey);
         }
 
-        if (key === "KeyW") {
-            setPlayPhase(true);
-        }
+        // if (key === "KeyW") {
+        //     setPlayPhase(true);
+        // }
     }
 
 
@@ -108,41 +198,7 @@ function Game() {
         if (key === drawKey) {
             flipDrawingKey(false);
         }
-
-        if (key === "KeyW") {
-            setPlayPhase(false);
-        }
     }
-
-    // function loopPosition(isDrawing: boolean, prevCoord: Coordinate, currCoord: Coordinate) {
-    //     // console.log("Resetting interval", isDrawing)
-    //     const handler = setInterval(() => {
-    //         if (isDrawing) {
-    //             // console.log("Ui")
-    //             // console.log(currCoord);
-    //             // console.log(prevCoord)
-    //             if (prevCoord.y && currCoord.y && prevCoord.x && currCoord.x) {
-    //                 if (Math.abs(prevCoord.y - currCoord.y) <= 1) {
-    //                     // standing still but trying to draw
-    //                     console.log("STANDING STILL")
-    //                     changeStrokeHistory([...strokeHistory, currCoord]);
-    //                     changeAnimatedStrokeHistory([...animatedStrokeHistory, currCoord]);
-    //                     // console.log("stading still?")
-    //                 }
-    //             }
-    //             // if (currCoord.x === prevCoord.x && currCoord.y === prevCoord.y) {
-    //             //     // trying to draw but not moving
-    //             //     console.log("TRYING TO DRAW")
-    //             //     let tinyCoord = currCoord;
-    //             //     if (tinyCoord.x) {
-    //             //         tinyCoord.x = tinyCoord.x + 0.00001;
-    //             //         changeCurrCord(tinyCoord);
-    //             //     }
-    //             // }
-    //         }
-    //     }, 20);
-    //     changeLoopInterval(handler);
-    // }
 
     useEffect(() => {
         // console.log(strokeHistory);
@@ -159,7 +215,6 @@ function Game() {
 
             changeLastNonNullPos(coordinate);
 
-
             if (!isDrawing) {
                 // push null
                 // console.log("NULL")
@@ -168,7 +223,7 @@ function Game() {
                     y: null
                 }
             }
-            changeStrokeHistory([...strokeHistory, coordinate.y]);
+            setStrokeHistory([...strokeHistory, coordinate.y]);
 
             // iterate through the strokes to remove the old ones out of the screen
             const lengthThreshold = 150;
@@ -188,14 +243,16 @@ function Game() {
                 flipJustDrew(false);
             }
         }}>
-            <Sprite ref={stageRef} image="./game_sprites/back.png" x={100} y={100} />
+            <Sprite ref={stageRef} image={turnImage} x={100} y={100} />
             {
-                isPlayPhase ?
-                    <PlayCanvas lastNonNull={lastNonNullPos} strokeHistory={strokeHistory} p2Pos={p2Pos} />
-
+                playerState === "play" ?
+                    <PlayCanvas lastNonNull={lastNonNullPos} backendStrokeHistory={backendStrokeHistory} p2Pos={p2Pos} />
                     :
-                    <DrawCanvas lastNonNull={lastNonNullPos} changeAnimatedStrokes={changeAnimatedStrokeHistory} animateHistory={animatedStrokeHistory} isDrawing={isDrawing} socket={socket} p2Pos={p2Pos} />
-            }
+                    playerState === "wait" ?
+                        <PassiveCanvas lastNonNull={lastNonNullPos} p2Pos={p2Pos} socket={socket} />
+                        :
+                        <DrawCanvas lastNonNull={lastNonNullPos} changeAnimatedStrokes={changeAnimatedStrokeHistory} animateHistory={animatedStrokeHistory} isDrawing={isDrawing} p2Pos={p2Pos} socket={socket} />}
+
         </Stage>
     )
 }

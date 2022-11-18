@@ -1,3 +1,4 @@
+import { Socket } from 'socket.io';
 
 export interface IPlayer {
     player_num: number; // should be 1 or 2
@@ -16,14 +17,18 @@ export class Player implements IPlayer {
     active: boolean; // whether the player is active or not
     socketId: string | null; // socket.io client ID associated with the character
     yPos: number; // the y position of the player currently
+    socket: Socket; // socket object in server
+    inGame: boolean;
 
-    constructor(num: number, socketID: string, char?: string) {
+    constructor(num: number, socketID: string, socket: Socket, char?: string, ) {
         this.player_num = num;
         this.char = char ? char : null;
         this.socketId = socketID;
         this.score = 0; // start at 0 score
         this.active = false; // inactive at the beginning
         this.yPos = -100;
+        this.socket = socket;
+        this.inGame = false;
     }
 
     setPlayerNum(num: number) {
@@ -48,5 +53,27 @@ export class Player implements IPlayer {
 
     setPos(yPos: number) {
         this.yPos = yPos;
+    }
+
+    joinGame() {
+        this.inGame = true;
+    }
+
+    getInGame() {
+        return this.inGame;
+    }
+
+    getSocket() {
+        return this.socket;
+    }
+
+    convertToIPlayer(): IPlayer {
+        return {
+            char: this.char,
+            player_num: this.player_num,
+            score: this.score,
+            active: this.active,
+            yPos: this.yPos
+        }
     }
 }

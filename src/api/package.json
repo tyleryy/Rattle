@@ -6,8 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "npx tsc",
-    "watch": "npx tsc --watch",
-    "start": "nodemon lib/app.js"
+    "start": "nodemon lib/app.js",
+    "watch": "npx tsc --watch"
   },
   "author": "",
   "license": "ISC",

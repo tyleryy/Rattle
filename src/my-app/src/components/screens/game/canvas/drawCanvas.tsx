@@ -1,7 +1,7 @@
 import { Graphics, useTick } from "@inlet/react-pixi";
 import { useState } from "react";
 import { Socket } from "socket.io-client";
-import { Coordinate } from "../../../../interfaces/interfaces";
+import { Coordinate, GameState } from "../../../../interfaces/interfaces";
 import { circleIdleRadius, deltaX, lockedX } from "../constants";
 import { recreateStrokes } from "./common";
 
@@ -19,9 +19,16 @@ function DrawCanvas({ lastNonNull, animateHistory, isDrawing, socket, p2Pos }: {
                 stroke.x = stroke.x - deltaX;
             }
         }
+
         socket.emit('update_game_frame', {
             playerPos: lastNonNull
-        })
+        });
+
+        // I don't know if this actually works
+        // console.log("Emitting animated history to backed")
+        // console.log(historyCopy);
+        socket.emit('sendAnimatedStrokes', historyCopy)
+
     })
 
     const [circleRad, changeCircleRad] = useState(circleIdleRadius);
