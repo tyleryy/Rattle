@@ -1,13 +1,19 @@
 import  { useRef } from 'react';
-import  { useState } from 'react';
+import  { useState, useContext } from 'react';
+import { Context } from '../../providers/provider';
 
 function Button2 (props) {
     const inputRef = useRef(null);
-    const socket = props.socket;
+    const states = useContext(Context);
+    const [lobby_code, changeLobbyCode] = states.lobby_state;
+    const [player, changePlayer] = states.player_state;
+    const [socket, _] = states.socket_state;
     
     function handleClick() {
         let room = inputRef.current.value;
+        changeLobbyCode(room)
         console.log(room);
+        changePlayer('Player 2')
         socket.emit("joinLobby", room);
     }
 

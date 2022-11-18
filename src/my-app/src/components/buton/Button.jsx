@@ -1,11 +1,13 @@
-import  { useState, useEffect } from 'react';
+import  { useState, useEffect, useContext } from 'react';
+import { Context } from '../../providers/provider';
 import { useNavigate } from 'react-router-dom';
 
 function Button (props) {
+    const states = useContext(Context);
+    const [socket, _] = states.socket_state;
     const navigate = useNavigate();
     const [buton, changeImg] = useState(props.imageEnter);
     const emit_event = props.socketEmitEvent ?? null; 
-    const socket = props.socket;
     
 
     return (

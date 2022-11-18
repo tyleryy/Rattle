@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import Button from '../../buton/Button';
+import { Context } from "../../../providers/provider";
 import Title from '../../title/Title';
 import { Stage, AnimatedSprite, PixiComponent } from '@inlet/react-pixi'
 import ButtonPetr from '../../buton/ButtonPetr'
@@ -7,8 +8,11 @@ import "./Home.css";
 import { useNavigate } from "react-router-dom";
 
 
-const Home = (props) => {
-  const [socket, _] = useState(props.socket);
+const Home = () => {
+  const states = useContext(Context);
+  const [lobby_code, changeLobbyCode] = states.lobby_state;
+  const [player, changePlayer] = states.player_state;
+  const [socket, _] = states.socket_state;
   // const socket = props.socket;
   const navigate = useNavigate();
   useEffect(() => {
@@ -17,7 +21,8 @@ const Home = (props) => {
 
     socket.on('doneCreateLobby', (data) => {
       console.log(data);
-      props.changeLobbyCode(data);
+      changeLobbyCode(data);
+      changePlayer("Player 1")
       navigate("/choose");
     })
 
