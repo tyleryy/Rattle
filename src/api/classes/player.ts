@@ -49,4 +49,14 @@ export class Player implements IPlayer {
     setPos(yPos: number) {
         this.yPos = yPos;
     }
+
+    convertToIPlayer(): IPlayer {
+        return {
+            char: this.char,
+            player_num: this.player_num,
+            score: this.score,
+            active: this.active,
+            yPos: this.yPos
+        }
+    }
 }

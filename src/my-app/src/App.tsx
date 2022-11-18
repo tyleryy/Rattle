@@ -31,7 +31,7 @@ function App() {
       socket = io(PORT);
     }
     socket.on('connect', () => {
-      console.log("client is connected")
+      console.log("client now is connected with id " + socket.id);
       setIsConnected(true);
     });
 

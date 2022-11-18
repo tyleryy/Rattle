@@ -1,7 +1,7 @@
 import { Graphics, useTick } from "@inlet/react-pixi";
 import { useState } from "react";
 import { Socket } from "socket.io-client";
-import { Coordinate } from "../../../../interfaces/interfaces";
+import { Coordinate, GameState } from "../../../../interfaces/interfaces";
 import { circleIdleRadius, deltaX, lockedX } from "../constants";
 import { recreateStrokes } from "./common";
 
@@ -21,7 +21,8 @@ function DrawCanvas({ lastNonNull, animateHistory, isDrawing, socket, p2Pos }: {
         }
         socket.emit('update_game_frame', {
             playerPos: lastNonNull
-        })
+        });
+
     })
 
     const [circleRad, changeCircleRad] = useState(circleIdleRadius);

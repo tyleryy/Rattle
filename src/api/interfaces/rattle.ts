@@ -1,15 +1,19 @@
 import { Player, IPlayer } from "../classes/player";
 
-/** interface for knowing all the game instances */
-export interface Rattle {
-    [lobbyCode: string]: Game;
+
+/** Coordinate for position */
+export interface Coordinate {
+    x: number | null,
+    y: number | null
 }
 
-/** interface for a singular game instance */
-export interface Game {
-    p1: Player | null; // player 1
-    p2: Player | null; // player 2
+/** interface for knowing all the game instances */
+export interface Rattle {
+    [lobbyCode: string]: GameInstance;
+}
 
+/** interface for a singular game instance in the backend */
+export interface Game {
     // game configuration options from frontened
 
     GameActive: boolean;
@@ -18,11 +22,22 @@ export interface Game {
     totalRounds: number; // the total rounds before ending the game
 }
 
+export interface GameInstance extends Game {
+    p1: Player | null; // player 1
+    p2: Player | null; // player 2
+}
+
+/** interface for a singular game instance that the frontend will understand */
+export interface GameState extends Game {
+    p1: IPlayer | null; // player 1
+    p2: IPlayer | null; // player 2
+}
+
 /**
  * Data the game will provide in each frame update
  */
 export interface GameFrameData {
-    pos: number,
+    playerPos: Coordinate,
     strokes: (number | null)[],
     points: number,
 }

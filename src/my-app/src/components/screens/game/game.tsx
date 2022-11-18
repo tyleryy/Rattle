@@ -67,8 +67,24 @@ function Game({ socket }: { socket: Socket }) {
 
         window.addEventListener("keydown", keysDown);
         window.addEventListener("keyup", keysUp);
+
+        // socket events
+        socket.on('update_game_state', (gameState: GameState) => {
+            // update the game state
+            setGameState(gameState);
+        })
+
         // loopPosition(isDrawing, prevCoord, currCoord);
     }, []);
+
+    // when we update game state, update the smaller states connected
+    useEffect(() => {
+        if (gameState) {
+            if (gameState.p2) {
+                setP2Pos({ x: lockedX, y: gameState.p2.yPos })
+            }
+        }
+    }, [gameState])
 
     // when we change the drawing status, reset the looping
     // useEffect(() => {

@@ -49,9 +49,6 @@ const Home = (props) => {
         <div>
           <Button imageEnter="./game_sprites/credits.png" imageLeave="./game_sprites/credits2.png" routesPath="/credit">dog</Button>
         </div>
-        <div>
-          <Button imageEnter="./game_sprites/credits.png" imageLeave="./game_sprites/credits2.png" routesPath="/game">dog</Button>
-        </div>
       </div>
     </div>
   )
