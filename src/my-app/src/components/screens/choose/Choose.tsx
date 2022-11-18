@@ -32,27 +32,20 @@ function Choose({ lobby_code, socket }: { lobby_code: string, socket: Socket }) 
 
         const navigate = useNavigate();
 
-    const [char1Frames, setChar1Frames] = useState(["./game_sprites/back.png", "./game_sprites/back2.png"]);
-    const [charFrameMap, setCharFrameMap] = useState<charSpriteMap>({
-        0: ["./game_sprites/back.png", "./game_sprites/back2.png"],
-        1: ["./game_sprites/back.png", "./game_sprites/back2.png"],
-        2: ["./game_sprites/char2_frames/char2frame1.png", "./game_sprites/char2_frames/char2frame2.png"],
-        3: ["./game_sprites/back.png", "./game_sprites/back2.png"]
-    })
- 
-    const [p1Ani, setP1Ani] = useState<JSX.Element>(<AnimatedSprite animationSpeed={0.05} isPlaying={true} images={["./game_sprites/back.png", "./game_sprites/back2.png"]} anchor={1}/>)
-
-    const animatedSpriteMap: aniSpriteMap = {
-        0: <AnimatedSprite animationSpeed={0.05} isPlaying={true} images={charFrameMap[0]} anchor={0.5}/>,
-        1: <AnimatedSprite animationSpeed={0.05} isPlaying={true} images={charFrameMap[1]} anchor={0.5}/>,
-        2: <AnimatedSprite animationSpeed={0.05} isPlaying={true} images={charFrameMap[2]} anchor={0.5}/>,
-        3: <AnimatedSprite animationSpeed={0.05} isPlaying={true} images={charFrameMap[3]} anchor={0.5}/>
-    }
+    // const animatedSpriteMap: aniSpriteMap = {
+    //     0: <AnimatedSprite animationSpeed={0.05} isPlaying={true} images={["./game_sprites/back.png", "./game_sprites/back2.png"]} anchor={0.5}/>,
+    //     1: <AnimatedSprite animationSpeed={0.05} isPlaying={true} images={["./game_sprites/char1.png", "./game_sprites/char1frame2.png"]} anchor={0.5}/>,
+    //     2: <AnimatedSprite animationSpeed={0.05} isPlaying={true} images={["./game_sprites/char2_frames/char2frame1.png", "./game_sprites/char2_frames/char2frame2.png"]} anchor={0.5}/>,
+    //     3: <AnimatedSprite animationSpeed={0.05} isPlaying={true} images={["./game_sprites/char3.png", "./game_sprites/char3frame2.png"]} anchor={0.5}/>
+    // }
 
     // const charToFrames: charSpriteMap = 
 
-    const [p1Frames, setP1Frames] = useState<any[]>([])
+    // const [p1Frames, setP1Frames] = useState<any[]>([])
  
+    // setting up animation clicker check thing
+    const [buttCheck, setCheck] = useState(false);
+
      useEffect(() => {
          
         socket.on('Go Home', () => {
@@ -67,20 +60,8 @@ function Choose({ lobby_code, socket }: { lobby_code: string, socket: Socket }) 
 
 
          return () => { socket.removeAllListeners() };
-         // load all sprite assets
-        // setP1Frames(
-        //     Object.keys(petrSS.frames).map(frame => )
-        // )
      }, []);
      
-    // useEffect(() => {
-    //     console.log(player1);
-    //     console.log("now trying to switch to");
-    //     console.log(charFrameMap[player1.character])
-    //     // setChar1Frames(charFrameMap[player1.character])
-    //     setP1Ani(animatedSpriteMap[player1.character])
-    // }, [player1])
-    
     return (
         <div className="background">
             <div className="roomCode">{lobby_code}</div>
@@ -88,9 +69,11 @@ function Choose({ lobby_code, socket }: { lobby_code: string, socket: Socket }) 
 
                 <div className="column">
                     <div className = "stage">
-                        <Stage width={400} height={600} options={{ backgroundAlpha:0 }}>
+                        <Stage width={400} height={700} options={{ backgroundAlpha:0 }}>
                             <Sprite image={player1.image} scale={ {x: 0.8 , y: 0.8} }/>
-                            {/* {p1Ani} */}
+                            <AnimatedSprite animationSpeed={0.05} isPlaying={true} images={["./game_sprites/char1.png", "./game_sprites/char1frame2.png"]} anchor={0.01} visible = {true}/> 
+                            <AnimatedSprite animationSpeed={0.05} isPlaying={false} images={["./game_sprites/char2_frames/char2frame1.png", "./game_sprites/char2_frames/char2frame3.png"]} anchor={0.01} visible={false}/>
+                            <AnimatedSprite animationSpeed={0.05} isPlaying={false} images={["./game_sprites/petrframe1.png", "./game_sprites/char3frame2.png"]} anchor={0.01} visible={false}/>
                         </Stage>
                     </div>
                     {/* <div className= "platform_left">
@@ -99,7 +82,7 @@ function Choose({ lobby_code, socket }: { lobby_code: string, socket: Socket }) 
                 </div>
 
                 <div className="column">
-                    <ButtonChar imageEnter="./game_sprites/char1_but_.png" imageLeave="./game_sprites/char1_but_2.png" changeChar={changeChar1} butChar={{ image: "./game_sprites/char1.png", character: 1 }}></ButtonChar>
+                    <ButtonChar imageEnter="./game_sprites/char1_but_.png" imageLeave="./game_sprites/char1_but_2.png" changeChar={changeChar1} butChar={{ image: "./game_sprites/char1.png", character: 1 }} ></ButtonChar>
 
                     <ButtonChar imageEnter="./game_sprites/char2_but_.png" imageLeave="./game_sprites/char2_but_2.png" changeChar={changeChar1} butChar={{ image: "./game_sprites/char2.png", character: 2 }}></ButtonChar>
 
@@ -108,10 +91,11 @@ function Choose({ lobby_code, socket }: { lobby_code: string, socket: Socket }) 
 
                 <div className="column">
                     <div className = "stage_right">
-                        <Stage width={400} height={600} options={{ backgroundAlpha:0 }}>
+                        <Stage width={400} height={700} options={{ backgroundAlpha:0 }}>
                             {/* <Sprite image="./game_sprites/back.png" /> */}
-                             <AnimatedSprite animationSpeed={0.05} isPlaying={true} images={charFrameMap[2]} anchor={0.5}/> 
-                            
+                             <AnimatedSprite animationSpeed={0.05} isPlaying={false} images={["./game_sprites/char1.png", "./game_sprites/char1frame2.png"]} anchor={0.01} visible = {false}/> 
+                             <AnimatedSprite animationSpeed={0.05} isPlaying={false} images={["./game_sprites/char2_frames/char2frame1.png", "./game_sprites/char2_frames/char2frame3.png"]} anchor={0.01} visible={false}/>
+                             <AnimatedSprite animationSpeed={0.05} isPlaying={true} images={["./game_sprites/petrframe1.png", "./game_sprites/char3frame2.png"]} anchor={0.01} visible={true}/>
                              {/* {p1Ani} */}
                         </Stage>
                     </div>
@@ -124,7 +108,7 @@ function Choose({ lobby_code, socket }: { lobby_code: string, socket: Socket }) 
 
                 <SmallButton imageEnter="./game_sprites/back.png" imageLeave="./game_sprites/back2.png" routesPath="/">dog</SmallButton>
 
-                <SmallButton imageEnter="./game_sprites/select.png" imageLeave="./game_sprites/select2.png" routesPath="/options"></SmallButton>
+                <SmallButton imageEnter="./game_sprites/join.png" imageLeave="./game_sprites/join2.png" routesPath="/options"></SmallButton>
 
 
             </div>
