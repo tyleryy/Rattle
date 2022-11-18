@@ -13,6 +13,7 @@ import Credit from './components/screens/credit/Credit';
 import Join from './components/screens/join/Join';
 import Game from './components/screens/game/game';
 import Options from './components/screens/options/Options';
+import Victory from './components/screens/victory/victory';
 // import background from './img/brick2.png'
 
 import { io, Socket } from 'socket.io-client';
@@ -54,6 +55,7 @@ function App() {
             <Route path="/options" element={<Options />} />
             {/* DELETE ME LATER */}
             <Route path="/game" element={<Game socket={socketObj} />} />
+            <Route path="/victory" element={<Victory />} />
           </Routes>
         </Router>
         {/*
