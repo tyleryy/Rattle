@@ -23,3 +23,12 @@
     margin-left: 2em;
     margin-right: 2em;
 }
+
+.row {
+    padding-top: 1em;
+    width: 100vw;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+}

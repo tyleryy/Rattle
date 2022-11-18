@@ -251,6 +251,8 @@ io.on('connection', (socket: Socket) => {
                     }
                 } else {
                     console.log("socket existence verification done")
+                    p1?.setActive(true);
+                    p2?.setActive(false);
                     p1Socket.emit("startTurn");
                     p2Socket.emit("waitTurn");
                 }
@@ -289,7 +291,88 @@ io.on('connection', (socket: Socket) => {
         } else {
             console.log("no game found for endTurn");
         }
-    })
+    });
+
+    socket.on("endVerify", () => {
+        console.log(socket.id + " has ended verify");
+        const gameRes = findGameFromSocket(socket);
+        if (gameRes) {
+            const gameInstance = gameRes.game;
+            const code = gameRes.room;
+            const player = getPlayerFromSocket(socket, gameInstance);
+            if (player) {
+                // this player has finished verify
+                player.setDoneVerify(true);
+            }
+
+            // check if everyone has joined
+            let allVerify = true;
+            const p1 = gameInstance.p1;
+            const p2 = gameInstance.p2;
+            if (!p1 || !p1.getDoneVerify()) {
+                allVerify = false;
+            }
+            if (!p2 || !p2.getDoneVerify()) {
+                allVerify = false;
+            }
+
+            if (allVerify) {
+                // make host start
+                console.log("ALL PLAYERS DONE VERIFY");
+                // TODO: FIGURE OUT WHY THIS MAKES IT SO THAT THE STATE DOES NOT CYCLE
+                // p1?.setDoneVerify(false);
+                // p2?.setDoneVerify(false);
+
+                const p1Socket = p1?.getSocket();
+                const p2Socket = p2?.getSocket();
+
+                if (!p1Socket || !p2Socket) {
+                    if (!p1Socket) {
+                        console.error("p1Socket undefined done verify");
+                    }
+                    if (!p2Socket) {
+                        console.error("p2Socket undefined done verify");
+                    }
+                } else {
+                    if (p1 && p2) {
+                        // do rules
+                        if (gameInstance.currRounds > gameInstance.totalRounds) {
+                            // game is done
+                            // TODO: send winner information
+                            console.log("GAME IS DONE");
+                            io.to(code).emit("endGame");
+                        } else {
+                            // TODO: swap player turns
+                            console.log("GAME NOT DONE ON TURN " + gameInstance.currRounds + " OUT OF " + gameInstance.totalRounds);
+                            gameInstance.currRounds++;
+                            if (p1.active) {
+                                console.log("NOW PLAYER 2");
+                                p1.setActive(false);
+                                p2.setActive(true);
+
+                                p2Socket.emit("startTurn");
+                                p1Socket.emit("waitTurn");
+                            } else {
+                                // make p1 active and start the cycle again
+                                console.log("NOW PLAYER 1");
+                                p2.setActive(false);
+                                p1.setActive(true);
+
+                                p1Socket.emit("startTurn");
+                                p2Socket.emit("waitTurn");
+                            }
+                        }
+                        gameInstance.currRounds = gameInstance.currRounds + 1;
+                    } else {
+                        console.log("p1 p2 not deefined in endVerify")
+                    }
+                }
+            } else {
+                console.log("NOT ALL PLAYERS DONE VERIFY")
+            }
+        }
+        socket.emit("endVerify");
+    });
 
 });
 
