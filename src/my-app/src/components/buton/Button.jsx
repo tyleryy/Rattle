@@ -1,5 +1,6 @@
 import  { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import "./buttons.css";
 
 function Button (props) {
     const navigate = useNavigate();

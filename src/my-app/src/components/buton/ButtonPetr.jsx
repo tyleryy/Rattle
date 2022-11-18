@@ -1,4 +1,5 @@
 import  { useState } from 'react';
+import "./buttons.css";
 
 function ButtonPetr (props) {
     const [buton, changeImg] = useState(props.imageEnter);

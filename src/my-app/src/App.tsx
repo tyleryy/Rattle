@@ -44,8 +44,7 @@ function App() {
   }, []);
 
   return (
-    <div className="App">
-      <header className="App-header">
+    <div>
         <Router>
           <Routes>
             <Route path="/" element={<Home socket={socketObj} changeLobbyCode={changeLobbyCode} />} />
@@ -74,7 +73,6 @@ function App() {
           </div>
         </div>
     */}
-      </header>
     </div>
   );
 }

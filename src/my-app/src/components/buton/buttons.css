@@ -7,6 +7,72 @@
     transition: transform .2s;
   }
 
-  .small_button:hover {
-    transform: scale(1.2)
-  }
+.small_button:hover {
+  transform: scale(1.2)
+}
+
+.common_button {
+  height: 14em; 
+  margin-left: 2em;
+  margin-right: 2em;
+  width: auto;
+  z-index: 2;
+}
+
+.common_button:hover {
+  transform: scale(1.2)
+}
+
+.inputForm {
+  display: flex;
+  align-items: center;
+  justify-content: center;;
+}
+
+.msg {
+  text-align: center;
+  font-size: 50px;
+  margin-right: 0.5em;
+}
+.msg_butt {
+  transition: transform .2s;
+  margin-left: 0.5em;
+}
+
+.msg_butt:hover {
+  transform: scale(1.2);
+}
+
+.buttonChar {
+  height: 13em;
+}
+
+.buttonChar:hover {
+  transform: scale(1.2)
+}
+
+.buttonPetr {
+  position: absolute;
+  top: 45em;
+  transition: transform .2s;
+}
+
+.buttonPetr:hover {
+  transform: translateY(-7.1rem);
+}
+
+.buttonVal {
+  position: relative;
+  top: 3em;
+  height: 14em;
+  margin-left: 1em;
+  margin-right: 1em; 
+  left: 3em;
+  width: auto;
+  padding-bottom: 3em;
+  transition: transform .2s;
+}
+
+.buttonVal:hover {
+  transform: scale(1.2)
+}

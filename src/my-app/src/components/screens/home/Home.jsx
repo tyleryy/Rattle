@@ -34,7 +34,7 @@ const Home = (props) => {
   }, []);
 
   return (
-    <div>
+    <div className="homeParent">
       <div className="title-row">
         <Title class="title-shaking"></Title>
       </div>
