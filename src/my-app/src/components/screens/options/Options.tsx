@@ -5,6 +5,9 @@ import ButtonVal from '../../buton/ButtonVal';
 import { Socket } from "socket.io-client";
 import { useNavigate } from "react-router-dom";
 import { Context } from "../../../providers/provider";
+import BackButtonRow from "../../backButtonRow/backButtonRow";
+import "./Options.css"
+
 
 function Options() {
     const navigate = useNavigate();
@@ -16,18 +19,13 @@ function Options() {
         })
     }, [])
     return (
-        <div className="parent">
+        <div className="parentOptions">
+            <Button imageEnter="./game_sprites/back.png" imageLeave="./game_sprites/back2.png" routesPath="/" socketEmitEvent="" />
             <div className="opts">
-                <div>
-                    <Button imageEnter="./game_sprites/back.png" imageLeave="./game_sprites/back2.png" routesPath="/" socketEmitEvent="" />
-                </div>
-                <div>
-                    <Button imageEnter="./game_sprites/start.png" imageLeave="./game_sprites/start2.png" routesPath="/game" socketEmitEvent="go_to_game" />
-                </div>
-
+                <img src="./game_sprites/rules.png" alt="rules" />
             </div>
-            {/* <input type="number" placeholder="Seconds only. Max 60 seconds" min="0" maxLength="2"/>
-                        <input type="submit" value="Submit" onClick={(console.log("hello"))} /> */}
+                <Button imageEnter="./game_sprites/start.png" imageLeave="./game_sprites/start2.png" routesPath="/game" socketEmitEvent="go_to_game" />
+
         </div>
     )
 }

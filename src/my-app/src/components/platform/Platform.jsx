@@ -1,7 +1,7 @@
 
 
 function Platform(props) {
-    return ( <img src = { props.image } alt="brick" className="platform"/>)
+    return ( <img src = { props.image } alt="brick"/>)
 }
 
 export default Platform;

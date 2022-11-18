@@ -199,10 +199,10 @@ function Choose() {
                     <div className="stage_right">
                         <Stage width={400} height={700} options={{ backgroundAlpha: 0 }}>
                             {/* <Sprite image="./game_sprites/back.png" /> */}
-                             <AnimatedSprite animationSpeed={0.05} isPlaying={otherchar1_active} images={["./game_sprites/char1.png", "./game_sprites/char1frame2.png"]} anchor={0.01} visible = {otherchar1_active}/> 
-                             <AnimatedSprite animationSpeed={0.05} isPlaying={otherchar2_active} images={["./game_sprites/char2_frames/char2frame1.png", "./game_sprites/char2_frames/char2frame3.png"]} anchor={0.01} visible={otherchar2_active}/>
-                             <AnimatedSprite animationSpeed={0.05} isPlaying={otherchar3_active} images={["./game_sprites/petrframe1.png", "./game_sprites/char3frame2.png"]} anchor={0.01} visible={otherchar3_active}/>
-                             {/* {p1Ani} */}
+                            <AnimatedSprite animationSpeed={0.05} isPlaying={otherchar1_active} images={["./game_sprites/char1.png", "./game_sprites/char1frame2.png"]} anchor={0.01} visible={otherchar1_active} />
+                            <AnimatedSprite animationSpeed={0.05} isPlaying={otherchar2_active} images={["./game_sprites/char2_frames/char2frame1.png", "./game_sprites/char2_frames/char2frame3.png"]} anchor={0.01} visible={otherchar2_active} />
+                            <AnimatedSprite animationSpeed={0.05} isPlaying={otherchar3_active} images={["./game_sprites/petrframe1.png", "./game_sprites/char3frame2.png"]} anchor={0.01} visible={otherchar3_active} />
+                            {/* {p1Ani} */}
                         </Stage>
                     </div>
                     {/* <div>
