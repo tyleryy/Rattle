@@ -22,3 +22,8 @@ body {
     justify-content: right;
     align-items: right;
 }
+
+.tag {
+    position: relative;
+    top: 5em;
+}

@@ -203,7 +203,8 @@ function Game({ socket }: { socket: Socket }) {
                         <AnimatedSprite animationSpeed={0.05} isPlaying={false} images={["./game_sprites/char2_frames/char2frame1.png", "./game_sprites/char2_frames/char2rap.png"]} anchor={0.01} visible={false}/>
                         <AnimatedSprite animationSpeed={0.05} isPlaying={false} images={["./game_sprites/petrrap.png", "./game_sprites/petrrap2.png"]} anchor = {[0.01, 0.2]} visible={false}/>
                         {/* not active sprites */}
-                        <AnimatedSprite animationSpeed={0.05} isPlaying={true} images={["./game_sprites/char1.png", "./game_sprites/char1frame2.png"]} anchor={0.01} visible = {true}/> 
+                        {/* can change alpha to be dimmer */}
+                        <AnimatedSprite animationSpeed={0.05} isPlaying={true} images={["./game_sprites/char1.png", "./game_sprites/char1frame2.png"]} anchor={0.01} visible = {true} alpha = {1} /> 
                         <AnimatedSprite animationSpeed={0.05} isPlaying={false} images={["./game_sprites/char2_frames/char2frame1.png", "./game_sprites/char2_frames/char2frame3.png"]} anchor={0.01} visible={false}/>
                         <AnimatedSprite animationSpeed={0.05} isPlaying={false} images={["./game_sprites/petrframe1.png", "./game_sprites/char3frame2.png"]} anchor={[0.01, 0.2]} visible={false}/>             
                 </Stage>
