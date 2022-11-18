@@ -9,8 +9,8 @@ import Platform from "../../platform/Platform";
 import { Stage, Sprite, AnimatedSprite, PixiComponent } from '@inlet/react-pixi'
 import { useState, useEffect, useRef } from 'react';
 import { Container, Col, Row } from 'react-bootstrap';
+import { Socket } from "socket.io-client";
 import "./Choose.css";
-import petrSS from "./petr_spritesheet.json"
 import { JsxElement } from "typescript";
 
 interface charSpriteMap {
@@ -21,7 +21,7 @@ interface aniSpriteMap {
     [key: number]: JSX.Element
 }
 
-function Choose() {
+function Choose({ lobby_code, socket }: { lobby_code: string, socket: Socket }) {
      // stage size
      const [stageW, changeW] = useState<number>(800);
      const [stageH, changeH] = useState<number>(600);
@@ -29,6 +29,8 @@ function Choose() {
         image: "./game_sprites/char1.png",
         character: 0}
         );
+
+        const navigate = useNavigate();
 
     const [char1Frames, setChar1Frames] = useState(["./game_sprites/back.png", "./game_sprites/back2.png"]);
     const [charFrameMap, setCharFrameMap] = useState<charSpriteMap>({
@@ -52,12 +54,19 @@ function Choose() {
     const [p1Frames, setP1Frames] = useState<any[]>([])
  
      useEffect(() => {
-         // get the width of the screen
+         
+        socket.on('Go Home', () => {
+            navigate('/');
+        })
+        
+        // get the width of the screen
          const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
          changeW(vw);
          const vh = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0);
          changeH(vh);
 
+
+         return () => { socket.removeAllListeners() };
          // load all sprite assets
         // setP1Frames(
         //     Object.keys(petrSS.frames).map(frame => )
@@ -74,9 +83,9 @@ function Choose() {
     
     return (
         <div className="background">
-            <div className="roomCode">Test Room Code</div>
+            <div className="roomCode">{lobby_code}</div>
             <div className="parent">
-                        
+
                 <div className="column">
                     <div className = "stage">
                         <Stage width={400} height={600} options={{ backgroundAlpha:0 }}>
@@ -90,13 +99,13 @@ function Choose() {
                 </div>
 
                 <div className="column">
-                    <ButtonChar imageEnter="./game_sprites/char1_but_.png" imageLeave="./game_sprites/char1_but_2.png" changeChar={changeChar1} butChar={{image: "./game_sprites/char1.png", character: 1}}></ButtonChar>
-                
-                    <ButtonChar imageEnter="./game_sprites/char2_but_.png" imageLeave="./game_sprites/char2_but_2.png" changeChar={changeChar1} butChar={{image: "./game_sprites/char2.png", character: 2}}></ButtonChar>
-                
-                    <ButtonChar imageEnter="./game_sprites/char3_but_.png" imageLeave="./game_sprites/char3_but_2.png" changeChar={changeChar1} butChar={{image: "./game_sprites/char3.png", character: 3}}></ButtonChar>
+                    <ButtonChar imageEnter="./game_sprites/char1_but_.png" imageLeave="./game_sprites/char1_but_2.png" changeChar={changeChar1} butChar={{ image: "./game_sprites/char1.png", character: 1 }}></ButtonChar>
+
+                    <ButtonChar imageEnter="./game_sprites/char2_but_.png" imageLeave="./game_sprites/char2_but_2.png" changeChar={changeChar1} butChar={{ image: "./game_sprites/char2.png", character: 2 }}></ButtonChar>
+
+                    <ButtonChar imageEnter="./game_sprites/char3_but_.png" imageLeave="./game_sprites/char3_but_2.png" changeChar={changeChar1} butChar={{ image: "./game_sprites/char3.png", character: 3 }}></ButtonChar>
                 </div>
-            
+
                 <div className="column">
                     <div className = "stage_right">
                         <Stage width={400} height={600} options={{ backgroundAlpha:0 }}>
@@ -111,13 +120,13 @@ function Choose() {
                     </div> */}
                 </div>
             </div>
-            <div className="parent">          
+            <div className="parent">
 
                 <SmallButton imageEnter="./game_sprites/back.png" imageLeave="./game_sprites/back2.png" routesPath="/">dog</SmallButton>
 
                 <SmallButton imageEnter="./game_sprites/join.png" imageLeave="./game_sprites/join2.png" routesPath="/options"></SmallButton>
-                    
-                
+
+
             </div>
         </div>
     )

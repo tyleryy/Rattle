@@ -1,4 +1,4 @@
-import  { useState } from 'react';
+import  { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 function Button (props) {
@@ -7,17 +7,22 @@ function Button (props) {
     const emit_event = props.socketEmitEvent ?? null; 
     const socket = props.socket;
     
+
     return (
         <input type="image" id="image" alt="button_test" className = "common_button"
         src={buton}
+
+         
+
         onMouseEnter={() => changeImg(props.imageLeave)}
         onMouseLeave={() => changeImg(props.imageEnter)}
-        onClick={async () => {
-            console.log(emit_event)
+        onClick={() => {
+            console.log(emit_event);
             if (emit_event) {
-                await socket.emit(emit_event)
+                socket.emit(emit_event);
+            } else {
+                navigate(props.routesPath);
             }
-            navigate(props.routesPath)
         }}
         />
     )

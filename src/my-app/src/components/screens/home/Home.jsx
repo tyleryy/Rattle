@@ -4,14 +4,29 @@ import Title from '../../title/Title';
 import { Stage, AnimatedSprite, PixiComponent } from '@inlet/react-pixi'
 import ButtonPetr from '../../buton/ButtonPetr'
 import "./Home.css";
+import { useNavigate } from "react-router-dom";
+
 
 const Home = (props) => {
-  const socket = props.socket;
-
+  const [socket, _] = useState(props.socket);
+  // const socket = props.socket;
+  const navigate = useNavigate();
   useEffect(() => {
 
-    socket.on('P2JoinedLobby', () => {
+    socket.emit('enterHome');
 
+    socket.on('doneCreateLobby', (data) => {
+      console.log(data);
+      props.changeLobbyCode(data);
+      navigate("/choose");
+    })
+
+    socket.on('P2JoinedLobby', (game_obj) => {
+      console.log("p2 joined")
+      let p1 = game_obj.p1;
+      let p2 = game_obj.p2;
+      console.log("P2JOINED")
+      navigate('/choose')
     });
 
     return () => { socket.removeAllListeners() };
@@ -35,7 +50,7 @@ const Home = (props) => {
           <Button imageEnter="./game_sprites/create2.png" imageLeave="./game_sprites/create.png" routesPath="/choose" socketEmitEvent={"createLobby"} socket={socket}>dog</Button>
         </div>
         <div className = "button1">
-          <Button imageEnter="./game_sprites/join.png" imageLeave="./game_sprites/join2.png" routesPath="/join">dog</Button>
+          <Button imageEnter="./game_sprites/join.png" imageLeave="./game_sprites/join2.png" routesPath="/join" socket={socket}>dog</Button>
           <div className = "petr">
             <ButtonPetr imageEnter="./game_sprites/char3.png" imageLeave="./game_sprites/char3.png">petr!</ButtonPetr>
           </div>
