@@ -2,6 +2,8 @@ import  { useRef } from 'react';
 import  { useState, useContext } from 'react';
 import { Context } from '../../providers/provider';
 
+import "./buttons.css";
+
 function Button2 (props) {
     const inputRef = useRef(null);
     const states = useContext(Context);
@@ -20,7 +22,7 @@ function Button2 (props) {
     const [buton, changeImg] = useState(props.imageEnter);
 
     return (
-        <div>
+        <div className="inputForm">
             <input ref={inputRef} type="text" id="msg" className="msg"/>
             <input type="image" id="image" alt="button_test" className = "msg_butt"
             src={buton}

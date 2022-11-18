@@ -39,7 +39,7 @@ const Home = () => {
   }, []);
 
   return (
-    <div>
+    <div className="homeParent">
       <div className="title-row">
         <Title class="title-shaking"></Title>
       </div>
@@ -56,21 +56,20 @@ const Home = () => {
         </div>
         <div className="button1">
           <Button imageEnter="./game_sprites/join.png" imageLeave="./game_sprites/join2.png" routesPath="/join" socket={socket}>dog</Button>
-          <div className="petr">
-            <ButtonPetr imageEnter="./game_sprites/char3.png" imageLeave="./game_sprites/char3.png">petr!</ButtonPetr>
-          </div>
         </div>
         <div>
           <Button imageEnter="./game_sprites/credits.png" imageLeave="./game_sprites/credits2.png" routesPath="/credit">dog</Button>
         </div>
-        <div className="Sprite">
-          <Stage width={300} height={700} options={{ backgroundAlpha: 0 }}>
-            {/* {p1Ani} */}
-            <AnimatedSprite animationSpeed={0.05} isPlaying={true} images={["./game_sprites/char1.png", "./game_sprites/char1frame2.png"]} anchor={0.01} />
-            {/* <AnimatedSprite animationSpeed={0.05} isPlaying={true} images={["./game_sprites/char2.png", "./game_sprites/back2.png"]} anchor={0.5}/> */}
-          </Stage>
-        </div>
-
+          <div className = "Sprite">
+              <Stage width={300} height={700} options={{ backgroundAlpha:0 }}>
+                {/* {p1Ani} */}
+                <AnimatedSprite animationSpeed={0.05} isPlaying={true} images={["./game_sprites/char1.png", "./game_sprites/char1frame2.png"]} anchor={0.01}/> 
+                {/* <AnimatedSprite animationSpeed={0.05} isPlaying={true} images={["./game_sprites/char2.png", "./game_sprites/back2.png"]} anchor={0.5}/> */}
+              </Stage>
+            </div> 
+      </div>
+      <div className = "petr">
+          <ButtonPetr imageEnter="./game_sprites/char3.png" imageLeave="./game_sprites/char3.png">petr!</ButtonPetr>
       </div>
     </div>
   )

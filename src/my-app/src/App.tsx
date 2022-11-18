@@ -14,6 +14,7 @@ import Credit from './components/screens/credit/Credit';
 import Join from './components/screens/join/Join';
 import Game from './components/screens/game/game';
 import Options from './components/screens/options/Options';
+import Victory from './components/screens/victory/victory';
 // import background from './img/brick2.png'
 
 import { io, Socket } from 'socket.io-client';
@@ -49,8 +50,7 @@ function App() {
   }, []);
 
   return (
-    <div className="App">
-      <header className="App-header">
+    <div>
         <Provider contexts={{ lobby_state: lobby_state, player_state: player_state, socket_state: socket_state }}>
           <Router>
             <Routes>
@@ -61,6 +61,7 @@ function App() {
               <Route path="/options" element={<Options />} />
               {/* DELETE ME LATER */}
               <Route path="/game" element={<Game />} />
+              <Route path="/victory" element={<Victory />} />
             </Routes>
           </Router>
         </Provider>
@@ -81,7 +82,6 @@ function App() {
           </div>
         </div>
     */}
-      </header>
     </div>
   );
 }

@@ -2,6 +2,7 @@ import { useState, useEffect, useContext } from 'react';
 import { Context } from '../../providers/provider';
 import { useNavigate } from 'react-router-dom';
 import { Socket } from 'socket.io-client';
+import "./buttons.css";
 
 function Button({ imageEnter, imageLeave, routesPath, socketEmitEvent }: { imageEnter: string, imageLeave: string, routesPath: string, socketEmitEvent: string | null | undefined, }) {
     const navigate = useNavigate();
@@ -14,7 +15,7 @@ function Button({ imageEnter, imageLeave, routesPath, socketEmitEvent }: { image
             onMouseEnter={() => changeImg(imageLeave)}
             onMouseLeave={() => changeImg(imageEnter)}
             onClick={() => {
-                if (socketEmitEvent !== null && socketEmitEvent !== undefined) {
+                if (socketEmitEvent !== null && socketEmitEvent !== undefined && socketEmitEvent.length !== 0) {
                     socket.emit(socketEmitEvent);
                 } else {
                     navigate(routesPath);
