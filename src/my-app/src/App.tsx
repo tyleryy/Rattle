@@ -28,7 +28,7 @@ function App() {
   const [socketObj, setSocket] = useState(socket);
   const [lobbyCode, changeLobbyCode] = useState<string>("");
 
-  const [playSound] = useSound("./game_audio/home_audio.mp3", {volume: 0.03})
+  const [playSound, {sound}] = useSound("./game_audio/home_audio.mp3", {volume: 0.03, loop: true})
   playSound();
 
   useEffect(() => {
