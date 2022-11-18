@@ -20,6 +20,7 @@ export interface Game {
     currRounds: number; // the round the game is currently at
     time: number; // the time per round
     totalRounds: number; // the total rounds before ending the game
+    roomCode: string;
 }
 
 export interface GameInstance extends Game {

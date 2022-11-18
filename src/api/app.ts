@@ -53,14 +53,15 @@ io.on('connection', (socket: Socket) => {
         } catch (err) {
             console.log(err);
         }
-        let host = new Player(1, socket.id);
+        let host = new Player(1, socket.id, socket);
         let game: GameInstance = {
             p1: host,
             p2: null,
             GameActive: false,
             currRounds: 0,
             time: 0,
-            totalRounds: 0
+            totalRounds: 0,
+            roomCode: lobby_code
         }
         rattle_games[lobby_code] = game;
         socket.to(lobby_code).emit('doneCreateLobby', lobby_code);
@@ -77,7 +78,7 @@ io.on('connection', (socket: Socket) => {
             return "Lobby not found";
         }
         console.log("Creating new player for room " + code + " with socket id " + socket.id);
-        game.p2 = new Player(2, socket.id);
+        game.p2 = new Player(2, socket.id, socket);
         // send data to frontend
         io.to(code).emit("P2JoinedLobby", { p1char: game.p1?.char, p2char: game.p2.char, code: code });
         debugLogger(socket);
@@ -178,6 +179,28 @@ io.on('connection', (socket: Socket) => {
             }
         }
     })
+
+    // socket event for going to options screen
+    socket.on('go_to_options', () => {
+        const gameRes = findGameFromSocket(socket);
+        if (gameRes) {
+            // get the room code to broadcast
+            const code = gameRes.room;
+            // make all clients in the room go to the options screen
+            io.to(code).emit('go_to_options');
+        }
+    });
+
+    // socket event for going to game screen
+    socket.on('go_to_game', () => {
+        const gameRes = findGameFromSocket(socket);
+        if (gameRes) {
+            // get the room code to broadcast
+            const code = gameRes.room;
+            // make all clients in the room go to the options screen
+            io.to(code).emit('go_to_game');
+        }
+    });
 
 });
 
