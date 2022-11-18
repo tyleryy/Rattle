@@ -27,6 +27,7 @@ function ButtonChar (props) {
             props.changeChar(props.butChar)
             socket.emit("selectCharacter", lobby_code, player, player_char)
             console.log("selected character")
+            props.setCheck(true);
             return;
         }}
         />
