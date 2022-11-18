@@ -4,7 +4,7 @@ export interface Coordinate {
     y: number | null
 }
 
-// <--------- These interfaces should be nearly identical to the one in the backend
+// <--------- These interfaces should be identical to the one in the backend
 
 /** interface for a singular game instance */
 export interface GameState {

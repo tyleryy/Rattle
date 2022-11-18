@@ -35,7 +35,7 @@ function App() {
       socket = io(PORT);
     }
     socket.on('connect', () => {
-      console.log("client is connected")
+      console.log("client now is connected with id " + socket.id);
       setIsConnected(true);
     });
 
@@ -51,19 +51,19 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-      <Provider contexts={{lobby_state: lobby_state, player_state: player_state, socket_state: socket_state}}>
-        <Router>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/choose" element={<Choose />} />
-            <Route path="/join" element={<Join />} />
-            <Route path="/credit" element={<Credit />} />
-            <Route path="/options" element={<Options />} />
-            {/* DELETE ME LATER */}
-            <Route path="/game" element={<Game />} />
-          </Routes>
-        </Router>
-      </Provider>
+        <Provider contexts={{ lobby_state: lobby_state, player_state: player_state, socket_state: socket_state }}>
+          <Router>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/choose" element={<Choose />} />
+              <Route path="/join" element={<Join />} />
+              <Route path="/credit" element={<Credit />} />
+              <Route path="/options" element={<Options />} />
+              {/* DELETE ME LATER */}
+              <Route path="/game" element={<Game />} />
+            </Routes>
+          </Router>
+        </Provider>
         {/*
         <Screen image="./game_sprites/brick2.png"></Screen>
         <div className = "home">
