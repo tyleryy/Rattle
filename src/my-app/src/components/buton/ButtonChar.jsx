@@ -7,7 +7,6 @@ function ButtonChar (props) {
         // event.currentTarget.disabled = true;
         console.log('button clicked');
     }
-    props.check = false;
     
     return (
         <input type="image" id="image" alt="button_test" className = "buttonChar"
@@ -16,8 +15,6 @@ function ButtonChar (props) {
         onMouseLeave={() => changeImg(props.imageEnter)}
         onClick={(event) => {
             handleClick(event);
-            props.changeChar(props.butChar)
-            console.log(props.changeChar)
             props.setCheck(true);
             return;
         }}
