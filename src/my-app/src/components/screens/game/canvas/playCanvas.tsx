@@ -4,7 +4,7 @@ import { Coordinate } from "../../../../interfaces/interfaces";
 import { circleIdleRadius, deltaX, lockedX, strokeSpawnX } from "../constants";
 import { recreateStrokes } from "./common";
 
-function PlayCanvas({ lastNonNull, strokeHistory, p2Pos }: { lastNonNull: Coordinate, strokeHistory: (number | null)[], p2Pos: Coordinate }) {
+function PlayCanvas({ lastNonNull, backendStrokeHistory, p2Pos }: { lastNonNull: Coordinate, backendStrokeHistory: (number | null)[], p2Pos: Coordinate }) {
     const [timeTick, changeTimeTick] = useState(0);
 
     // strokeHistory is all the strokes that need to be recreated over time.
@@ -15,7 +15,9 @@ function PlayCanvas({ lastNonNull, strokeHistory, p2Pos }: { lastNonNull: Coordi
 
     useEffect(() => {
         // take in the strokeHistory and convert them all into coordinates with x as null
-        const baseAnimateStroke: Coordinate[] = strokeHistory.map((stroke) => {
+        console.log("PLAY CANVAS RENDERED FOLLOW ME");
+        console.log(backendStrokeHistory)
+        const baseAnimateStroke: Coordinate[] = backendStrokeHistory.map((stroke) => {
             // console.log(stroke)
             return {
                 x: null,
