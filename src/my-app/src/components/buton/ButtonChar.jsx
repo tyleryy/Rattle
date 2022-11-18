@@ -15,8 +15,7 @@ function ButtonChar (props) {
         onMouseLeave={() => changeImg(props.imageEnter)}
         onClick={(event) => {
             handleClick(event);
-            props.changeChar(props.butChar)
-            console.log(props.changeChar)
+            props.setCheck(true);
             return;
         }}
         />
