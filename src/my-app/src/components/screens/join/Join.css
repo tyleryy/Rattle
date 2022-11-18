@@ -1,4 +1,14 @@
-.join {
+
+
+.inputForm {
+    display: flex;
+    flex-flow: row;
+    justify-content: center;
+    align-items: center;
+    padding-top: 10vh;
+}
+
+body,html {
     background-image: url("../../../../public/game_sprites/brick3.png");
     background-size: cover;
 }

@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import Screen from '../../screen_bg/Screen'
 import Button from '../../buton/Button';
 import Button2 from '../../buton/Button2';
+import "./Join.css";
+import BackButtonRow from "../../backButtonRow/backButtonRow";
 
 function Join(props) {
     /*
@@ -16,7 +18,7 @@ function Join(props) {
     }*/
     const socket = props.socket;
     const changeLobbyCode = props.changeLobbyCode;
-  const navigate = useNavigate();
+    const navigate = useNavigate();
     
     useEffect(() => {
   
@@ -32,14 +34,11 @@ function Join(props) {
     
 
     return (
-        <div className="App">
-        <header className="App-header">
-          <Screen image="./game_sprites/brick3.png"></Screen>
-          <div className = "join">
-                <Button imageEnter="./game_sprites/back.png" imageLeave="./game_sprites/back2.png" routesPath="/">dog</Button>
-                <Button2 imageEnter="./game_sprites/joinlob2.png" imageLeave="./game_sprites/joinlob.png" socket={socket} changeLobbyCode={changeLobbyCode}></Button2>
-          </div>
-        </header>
+      <div>
+        <BackButtonRow />
+        <div className="inputForm">
+               <Button2 class="input" imageEnter="./game_sprites/joinlob2.png" imageLeave="./game_sprites/joinlob.png" socket={socket} changeLobbyCode={changeLobbyCode}/>
+        </div>
       </div>
     )
 }
