@@ -50,10 +50,6 @@ function Game({ socket }: { socket: Socket }) {
     const [p2Pos, setP2Pos] = useState<Coordinate>({ x: null, y: null });
 
 
-
-    // TEST STROKE RECREATION ONLY DELETE THIS LATER
-    const [showMemory, flipShowMemory] = useState(false);
-
     useEffect(() => {
         // get the width of the screen
         const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
