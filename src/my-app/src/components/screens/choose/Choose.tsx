@@ -108,7 +108,7 @@ function Choose({ lobby_code, socket }: { lobby_code: string, socket: Socket }) 
 
                 <div className="column">
                     <div className = "stage_right">
-                        <Stage width={400} height={600} options={{ backgroundAlpha:0 }}>
+                        <Stage width={400} height={600} options={{ backgroundAlpha:1 }}>
                             {/* <Sprite image="./game_sprites/back.png" /> */}
                              <AnimatedSprite animationSpeed={0.05} isPlaying={true} images={charFrameMap[2]} anchor={0.5}/> 
                             
