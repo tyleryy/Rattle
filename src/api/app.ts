@@ -61,7 +61,7 @@ io.on('connection', (socket: Socket) => {
             GameActive: false,
             currRounds: 0,
             time: 5000, // should be in ms
-            totalRounds: 3,
+            totalRounds: 6, // divide by 2 
             roomCode: lobby_code
         }
         rattle_games[lobby_code] = game;
@@ -81,8 +81,8 @@ io.on('connection', (socket: Socket) => {
         console.log("Creating new player for room " + code + " with socket id " + socket.id);
         game.p2 = new Player(2, socket.id, socket);
         // send data to frontend
-        socket.emit("P2JoinedLobby", {p1char: game.p1?.char, p2char: game.p2.char, code:code});
-        debugLogger(socket); 
+        socket.emit("P2JoinedLobby", { p1char: game.p1?.char, p2char: game.p2.char, code: code });
+        debugLogger(socket);
     })
 
     socket.on('selectCharacter', (JSONStrPayload: any) => {
@@ -93,14 +93,14 @@ io.on('connection', (socket: Socket) => {
         const gameRes = findGameFromSocket(socket);
         if (gameRes) {
             const game = gameRes.game;
-        if (player_num === 'Player 1' && game.p1) { game.p1.char = char; }
-        if (player_num === 'Player 2' && game.p2) { game.p2.char = char; }
-        // ! may change later
-        // prevents character assignment if other player has selected it
-        socket.to(code).emit("updateSelectScreen", { p1: game.p1?.getChar(), p2: game.p2?.getChar() }, player_num);
-        console.log(rattle_games[code]);
+            if (player_num === 'Player 1' && game.p1) { game.p1.char = char; }
+            if (player_num === 'Player 2' && game.p2) { game.p2.char = char; }
+            // ! may change later
+            // prevents character assignment if other player has selected it
+            socket.to(code).emit("updateSelectScreen", { p1: game.p1?.getChar(), p2: game.p2?.getChar() }, player_num);
+            console.log(rattle_games[code]);
         }
-        
+
     })
 
     socket.on('gameEnd', (code: string) => {
@@ -319,8 +319,8 @@ io.on('connection', (socket: Socket) => {
                 // make host start
                 console.log("ALL PLAYERS DONE VERIFY");
                 // TODO: FIGURE OUT WHY THIS MAKES IT SO THAT THE STATE DOES NOT CYCLE
-                // p1?.setDoneVerify(false);
-                // p2?.setDoneVerify(false);
+                p1?.setDoneVerify(false);
+                p2?.setDoneVerify(false);
 
                 const p1Socket = p1?.getSocket();
                 const p2Socket = p2?.getSocket();

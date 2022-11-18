@@ -17,6 +17,10 @@ function Options() {
         socket.on('go_to_game', () => {
             navigate("/game");
         })
+
+        socket.on('Go Home', () => {
+            navigate('/');
+        });
     }, [])
     return (
         <div className="parentOptions">
@@ -24,7 +28,7 @@ function Options() {
             <div className="opts">
                 <img src="./game_sprites/rules.png" alt="rules" />
             </div>
-                <Button imageEnter="./game_sprites/start.png" imageLeave="./game_sprites/start2.png" routesPath="/game" socketEmitEvent="go_to_game" />
+            <Button imageEnter="./game_sprites/start.png" imageLeave="./game_sprites/start2.png" routesPath="/game" socketEmitEvent="go_to_game" />
 
         </div>
     )
