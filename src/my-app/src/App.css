@@ -65,19 +65,4 @@ html {
   z-index: 2; 
 }
 
-.platform_left {
-  position: relative;
-  left: -39em;
-  top: -4.3em;
-}
-
-.platform {
-  display: inline-block;
-  position: relative;
-  left: 27em;
-  top: 6em;
-  width: 20em;
-  height: auto;
-}
-
 
