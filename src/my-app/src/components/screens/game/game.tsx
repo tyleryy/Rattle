@@ -59,6 +59,7 @@ function Game({ socket }: { socket: Socket }) {
 
 
     useEffect(() => {
+        console.log("Hello game")
         // get the width of the screen
         const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
         changeW(vw);
@@ -84,6 +85,7 @@ function Game({ socket }: { socket: Socket }) {
         socket.on("startTurn", () => {
             // setPlayPhase(false);
             // setWaiting(false);
+            console.log("STARTING TURN")
             setPlayerState("draw");
         });
 
@@ -91,6 +93,7 @@ function Game({ socket }: { socket: Socket }) {
         socket.on("waitTurn", () => {
             // setPlayPhase(false);
             // setWaiting(true);
+            console.log("WAITING TURN")
             setPlayerState("wait");
         });
 
@@ -120,12 +123,14 @@ function Game({ socket }: { socket: Socket }) {
         let imagePath = playerState === "wait" ? "./game_sprites/wait.png" : "./game_sprites/freestyle.png";
         setTurnImage(imagePath);
 
-        if (playerState === "draw" && gameState) {
-            console.log("SETTING TIMER FOR " + gameState.time + " ms");
+        // ! HARDCODE THE TIME
+        const drawTime = 5000;
+        if (playerState === "draw") {
+            console.log("SETTING TIMER FOR " + drawTime + " ms");
             setTimeout(() => {
                 console.log("TIMEOUT EXECUTED")
                 setJustEndedDraw(true);
-            }, gameState.time)
+            }, drawTime)
         }
 
         // wipe backendStrokeHistory if not in play phase

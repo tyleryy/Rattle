@@ -191,6 +191,7 @@ io.on('connection', (socket: Socket) => {
 
     // socket event for going to options screen
     socket.on('go_to_options', () => {
+        console.log("GOING TO OPTIONS")
         const gameRes = findGameFromSocket(socket);
         if (gameRes) {
             // get the room code to broadcast
@@ -202,6 +203,7 @@ io.on('connection', (socket: Socket) => {
 
     // socket event for going to game screen
     socket.on('go_to_game', () => {
+        console.log("GOING TO GAME")
         const gameRes = findGameFromSocket(socket);
         if (gameRes) {
             // get the room code to broadcast
@@ -248,6 +250,7 @@ io.on('connection', (socket: Socket) => {
                         console.error("p2Socket undefined");
                     }
                 } else {
+                    console.log("socket existence verification done")
                     p1Socket.emit("startTurn");
                     p2Socket.emit("waitTurn");
                 }

@@ -52,7 +52,7 @@ function App() {
             <Route path="/choose" element={<Choose socket={socketObj} lobby_code={lobbyCode} />} />
             <Route path="/join" element={<Join socket={socketObj} changeLobbyCode={changeLobbyCode} />} />
             <Route path="/credit" element={<Credit />} />
-            <Route path="/options" element={<Options />} />
+            <Route path="/options" element={<Options socket={socketObj} />} />
             {/* DELETE ME LATER */}
             <Route path="/game" element={<Game socket={socketObj} />} />
           </Routes>

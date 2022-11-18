@@ -75,6 +75,10 @@ function Choose({ lobby_code, socket }: { lobby_code: string, socket: Socket }) 
 
         socket.on('Go Home', () => {
             navigate('/');
+        });
+
+        socket.on('go_to_options', () => {
+            navigate("/options");
         })
 
         // get the width of the screen
@@ -132,9 +136,9 @@ function Choose({ lobby_code, socket }: { lobby_code: string, socket: Socket }) 
             </div>
             <div className="parent">
 
-                <SmallButton imageEnter="./game_sprites/back.png" imageLeave="./game_sprites/back2.png" routesPath="/">dog</SmallButton>
+                <SmallButton imageEnter="./game_sprites/back.png" imageLeave="./game_sprites/back2.png" routesPath="/" socket={socket} socketEmitEvent="" />
 
-                <SmallButton imageEnter="./game_sprites/select.png" imageLeave="./game_sprites/select2.png" routesPath="/options"></SmallButton>
+                <SmallButton imageEnter="./game_sprites/select.png" imageLeave="./game_sprites/select2.png" routesPath="/options" socketEmitEvent="go_to_options" socket={socket} />
             </div>
         </div>
     )
