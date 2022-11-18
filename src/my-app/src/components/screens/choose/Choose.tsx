@@ -124,7 +124,7 @@ function Choose({ lobby_code, socket }: { lobby_code: string, socket: Socket }) 
 
                 <SmallButton imageEnter="./game_sprites/back.png" imageLeave="./game_sprites/back2.png" routesPath="/">dog</SmallButton>
 
-                <SmallButton imageEnter="./game_sprites/join.png" imageLeave="./game_sprites/join2.png" routesPath="/options"></SmallButton>
+                <SmallButton imageEnter="./game_sprites/select.png" imageLeave="./game_sprites/select2.png" routesPath="/options"></SmallButton>
 
 
             </div>
