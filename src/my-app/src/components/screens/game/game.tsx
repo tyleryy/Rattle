@@ -9,13 +9,14 @@ import { Context } from '../../../providers/provider';
 import { Socket } from 'socket.io-client';
 import { IPlayer, GameState } from "../../../interfaces/interfaces";
 import PassiveCanvas from './canvas/passiveCanvas';
+import { useNavigate } from 'react-router-dom';
 
 function Game() {
     // remember the strokes done
 
     const states: any = useContext(Context);
     const [socket, _] = states.socket_state;
-
+    const navigate = useNavigate();
     /** Static stroke history recording the y */
     const [strokeHistory, setStrokeHistory] = useState<(number | null)[]>([]);
     const [backendStrokeHistory, setBackendStrokeHistory] = useState<(number | null)[]>([]);
@@ -80,6 +81,10 @@ function Game() {
 
         // socket events
 
+        socket.on("endGame", () => {
+            navigate("/victory");
+        })
+
         // update the game state from info from the backend
         socket.on('update_game_state', (gameState: GameState) => {
             // update the game state
@@ -105,7 +110,12 @@ function Game() {
         socket.on("startPlay", (strokeHistory: (number | null)[]) => {
             console.log("STARTING PLAY NOW STATE");
             setBackendStrokeHistory(strokeHistory);
-        })
+        });
+
+        socket.on("endVerify", () => {
+            console.log("ENDED VERIFY");
+            setPlayerState("wait");
+        });
 
         // start the game
         socket.emit("startGame");
@@ -132,9 +142,16 @@ function Game() {
         const drawTime = 5000;
         if (playerState === "draw") {
             console.log("SETTING TIMER FOR " + drawTime + " ms");
+            setStrokeHistory([])
             setTimeout(() => {
-                console.log("TIMEOUT EXECUTED")
+                console.log("DRAW TIMEOUT EXECUTED")
                 setJustEndedDraw(true);
+            }, drawTime)
+        } else if (playerState === "play") {
+            console.log("SETTING TIMER FOR " + drawTime + " ms");
+            setTimeout(() => {
+                console.log("PLAYTIME TIMEOUT EXECUTED")
+                socket.emit("endVerify");
             }, drawTime)
         }
 
@@ -164,8 +181,8 @@ function Game() {
 
     useEffect(() => {
         if (playerState === "wait") {
-            console.log("STROKE HISTORY CHANGED");
-            console.log(strokeHistory)
+            // console.log("STROKE HISTORY CHANGED");
+            // console.log(strokeHistory)
         }
     }, [strokeHistory])
 
@@ -246,7 +263,7 @@ function Game() {
             <Sprite ref={stageRef} image={turnImage} x={100} y={100} />
             {
                 playerState === "play" ?
-                    <PlayCanvas lastNonNull={lastNonNullPos} backendStrokeHistory={backendStrokeHistory} p2Pos={p2Pos} />
+                    <PlayCanvas lastNonNull={lastNonNullPos} backendStrokeHistory={backendStrokeHistory} p2Pos={p2Pos} socket={socket} />
                     :
                     playerState === "wait" ?
                         <PassiveCanvas lastNonNull={lastNonNullPos} p2Pos={p2Pos} socket={socket} />
