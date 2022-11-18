@@ -20,9 +20,9 @@ app.get('/', (req: Request, res: Response) => {
 // ! remove later
 function debugLogger(socket: Socket) {
     console.log('\n--------------------------');
-    console.log(rattle_games);
-    console.log(socket.rooms);
-    console.log(io.sockets.sockets.size);
+    console.log("games: ", rattle_games);
+    console.log("rooms: " + socket.rooms);
+    console.log("num of sockets: "+io.sockets.sockets.size);
     console.log('--------------------------\n');
 }
 
