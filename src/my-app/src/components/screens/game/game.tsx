@@ -4,11 +4,16 @@ import DrawCanvas from './canvas/drawCanvas';
 import { Coordinate } from '../../../interfaces/interfaces';
 import { lockedX } from './constants';
 import PlayCanvas from './canvas/playCanvas';
+import { useContext } from 'react';
+import { Context } from '../../../providers/provider';
 import { Socket } from 'socket.io-client';
 import { IPlayer, GameState } from "../../../interfaces/interfaces";
 
-function Game({ socket }: { socket: Socket }) {
+function Game() {
     // remember the strokes done
+
+    const states: any = useContext(Context);
+    const [socket, _] = states.socket_state;
 
     /** Static stroke history recording the y */
     const [strokeHistory, changeStrokeHistory] = useState<(number | null)[]>([]);

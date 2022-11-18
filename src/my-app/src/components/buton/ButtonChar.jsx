@@ -1,9 +1,18 @@
-import  { useState } from 'react';
+import  { useState, useContext } from 'react';
+import { Context } from '../../providers/provider';
+import { Socket } from 'socket.io-client';
 
 function ButtonChar (props) {
 
+    const states = useContext(Context);
+    const [lobby_code, changeLobbyCode] = states.lobby_state;
+    const [player, changePlayer] = states.player_state;
+    const [socket, _] = states.socket_state;
+    const player_char = props.player_char;
+
+
     const [buton, changeImg] = useState(props.imageEnter);
-    const handleClick = event => {
+    const handleClick = (event) => {
         // event.currentTarget.disabled = true;
         console.log('button clicked');
     }
@@ -16,7 +25,8 @@ function ButtonChar (props) {
         onClick={(event) => {
             handleClick(event);
             props.changeChar(props.butChar)
-            console.log(props.changeChar)
+            socket.emit("selectCharacter", lobby_code, player, player_char)
+            console.log("selected character")
             return;
         }}
         />

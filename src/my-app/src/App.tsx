@@ -7,6 +7,7 @@ import Screen from './components/screen_bg/Screen'
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 // import 'bootstrap/dist/css/bootstrap.min.css';
 
+import { Provider } from './providers/provider';
 import Home from "./components/screens/home/Home";
 import Choose from "./components/screens/choose/Choose";
 import Credit from './components/screens/credit/Credit';
@@ -23,8 +24,11 @@ let socket: Socket = io(PORT);
 
 function App() {
   const [isConnected, setIsConnected] = useState(socket.connected);
-  const [socketObj, setSocket] = useState(socket);
-  const [lobbyCode, changeLobbyCode] = useState<string>("");
+  const lobby_state = useState<string>("");
+  const player_state = useState<string>("");
+  const socket_state = useState<Socket>(socket);
+
+
 
   useEffect(() => {
     if (!socket) {
@@ -37,6 +41,7 @@ function App() {
 
     socket.on('disconnect', () => {
       console.log("client is disconnected")
+      player_state[1]("")
       setIsConnected(false);
     });
 
@@ -46,17 +51,19 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
+      <Provider contexts={{lobby_state: lobby_state, player_state: player_state, socket_state: socket_state}}>
         <Router>
           <Routes>
-            <Route path="/" element={<Home socket={socketObj} changeLobbyCode={changeLobbyCode} />} />
-            <Route path="/choose" element={<Choose socket={socketObj} lobby_code={lobbyCode} />} />
-            <Route path="/join" element={<Join socket={socketObj} changeLobbyCode={changeLobbyCode} />} />
+            <Route path="/" element={<Home />} />
+            <Route path="/choose" element={<Choose />} />
+            <Route path="/join" element={<Join />} />
             <Route path="/credit" element={<Credit />} />
             <Route path="/options" element={<Options />} />
             {/* DELETE ME LATER */}
-            <Route path="/game" element={<Game socket={socketObj} />} />
+            <Route path="/game" element={<Game />} />
           </Routes>
         </Router>
+      </Provider>
         {/*
         <Screen image="./game_sprites/brick2.png"></Screen>
         <div className = "home">

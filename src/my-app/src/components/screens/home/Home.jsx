@@ -1,13 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import Button from '../../buton/Button';
 import Title from '../../title/Title';
 import Screen from '../../screen_bg/Screen'
+import { Context } from "../../../providers/provider";
 import "./Home.css";
 import { useNavigate } from "react-router-dom";
 
 
-const Home = (props) => {
-  const [socket, _] = useState(props.socket);
+const Home = () => {
+  const states = useContext(Context);
+  const [lobby_code, changeLobbyCode] = states.lobby_state;
+  const [player, changePlayer] = states.player_state;
+  const [socket, _] = states.socket_state;
   // const socket = props.socket;
   const navigate = useNavigate();
   useEffect(() => {
@@ -16,7 +20,8 @@ const Home = (props) => {
 
     socket.on('doneCreateLobby', (data) => {
       console.log(data);
-      props.changeLobbyCode(data);
+      changeLobbyCode(data);
+      changePlayer("Player 1")
       navigate("/choose");
     })
 
@@ -41,10 +46,10 @@ const Home = (props) => {
       </div>
       <div className="home">
         <div>
-          <Button imageEnter="./game_sprites/create2.png" imageLeave="./game_sprites/create.png" routesPath="/choose" socketEmitEvent={"createLobby"} socket={socket}>dog</Button>
+          <Button setPlayer={changePlayer} imageEnter="./game_sprites/create2.png" imageLeave="./game_sprites/create.png" routesPath="/choose" socketEmitEvent={"createLobby"} socket={socket}>dog</Button>
         </div>
         <div>
-          <Button imageEnter="./game_sprites/join.png" imageLeave="./game_sprites/join2.png" routesPath="/join" socket={socket}>dog</Button>
+          <Button setPlayer={changePlayer} imageEnter="./game_sprites/join.png" imageLeave="./game_sprites/join2.png" routesPath="/join" socket={socket}>dog</Button>
         </div>
         <div>
           <Button imageEnter="./game_sprites/credits.png" imageLeave="./game_sprites/credits2.png" routesPath="/credit">dog</Button>

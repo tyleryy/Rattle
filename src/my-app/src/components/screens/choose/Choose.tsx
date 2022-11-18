@@ -7,12 +7,17 @@ import SmallButton from "../../buton/SmallButton";
 import Button2 from '../../buton/Button2';
 import Platform from "../../platform/Platform";
 import { Stage, Sprite } from '@inlet/react-pixi'
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useContext } from 'react';
+import { Context } from "../../../providers/provider";
 import { Container, Col, Row } from 'react-bootstrap';
 import { Socket } from "socket.io-client";
 import "./Choose.css";
 
-function Choose({ lobby_code, socket }: { lobby_code: string, socket: Socket }) {
+function Choose() {
+    const states: any = useContext(Context);
+    const [lobby_code, changeLobbyCode] = states.lobby_state;
+    const [socket, _] = states.socket_state;
+
     // stage size
     const [stageW, changeW] = useState<number>(800);
     const [stageH, changeH] = useState<number>(600);
@@ -21,10 +26,22 @@ function Choose({ lobby_code, socket }: { lobby_code: string, socket: Socket }) 
         character: 0
     });
     const navigate = useNavigate();
+
+    
     useEffect(() => {
 
         socket.on('Go Home', () => {
             navigate('/');
+        })
+
+        socket.on('updateSelectScreen', (data: any, player: string) => {
+            if (player === "Player 1") {
+                changeChar1(data.p1.char)
+                
+            } else if (player === "Player 2") {
+                changeChar1(data.p2.char)
+            }
+
         })
         // get the width of the screen
         const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
@@ -58,11 +75,11 @@ function Choose({ lobby_code, socket }: { lobby_code: string, socket: Socket }) 
                 </div>
 
                 <div className="column">
-                    <ButtonChar imageEnter="./game_sprites/char1_but_.png" imageLeave="./game_sprites/char1_but_2.png" changeChar={changeChar1} butChar={{ image: "./game_sprites/char1.png", character: 1 }}></ButtonChar>
+                    <ButtonChar player_char={player1} imageEnter="./game_sprites/char1_but_.png" imageLeave="./game_sprites/char1_but_2.png" changeChar={changeChar1} butChar={{ image: "./game_sprites/char1.png", character: 1 }}></ButtonChar>
 
-                    <ButtonChar imageEnter="./game_sprites/char2_but_.png" imageLeave="./game_sprites/char2_but_2.png" changeChar={changeChar1} butChar={{ image: "./game_sprites/char2.png", character: 2 }}></ButtonChar>
+                    <ButtonChar player_char={player1} imageEnter="./game_sprites/char2_but_.png" imageLeave="./game_sprites/char2_but_2.png" changeChar={changeChar1} butChar={{ image: "./game_sprites/char2.png", character: 2 }}></ButtonChar>
 
-                    <ButtonChar imageEnter="./game_sprites/char3_but_.png" imageLeave="./game_sprites/char3_but_2.png" changeChar={changeChar1} butChar={{ image: "./game_sprites/char3.png", character: 3 }}></ButtonChar>
+                    <ButtonChar player_char={player1} imageEnter="./game_sprites/char3_but_.png" imageLeave="./game_sprites/char3_but_2.png" changeChar={changeChar1} butChar={{ image: "./game_sprites/char3.png", character: 3 }}></ButtonChar>
                 </div>
 
                 <div className="column">
