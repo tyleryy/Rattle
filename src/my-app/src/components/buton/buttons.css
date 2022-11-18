@@ -46,6 +46,7 @@
 
 .buttonChar {
   height: 13em;
+  transition: transform .2s;
 }
 
 .buttonChar:hover {
