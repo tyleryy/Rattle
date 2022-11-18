@@ -9,10 +9,10 @@ import Platform from "../../platform/Platform";
 import { Stage, Sprite } from '@inlet/react-pixi'
 import { useState, useEffect, useRef } from 'react';
 import { Container, Col, Row } from 'react-bootstrap';
+import { Socket } from "socket.io-client";
 import "./Choose.css";
 
-
-function Choose() {
+function Choose({ lobby_code, socket }: { lobby_code: string, socket: Socket }) {
     // stage size
     const [stageW, changeW] = useState<number>(800);
     const [stageH, changeH] = useState<number>(600);
@@ -20,23 +20,30 @@ function Choose() {
         image: "./game_sprites/char1.png",
         character: 0
     });
-
+    const navigate = useNavigate();
     useEffect(() => {
+
+        socket.on('Go Home', () => {
+            navigate('/');
+        })
         // get the width of the screen
         const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
         changeW(vw);
         const vh = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0);
         changeH(vh);
+        return () => { socket.removeAllListeners() };
     }, []);
 
 
     useEffect(() => {
+
         console.log(player1);
+
     }, [player1])
 
     return (
         <div className="background">
-            <div className="roomCode">Test Room Code</div>
+            <div className="roomCode">{lobby_code}</div>
             <div className="parent">
 
                 <div className="column">

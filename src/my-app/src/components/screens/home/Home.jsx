@@ -21,19 +21,16 @@ const Home = (props) => {
     })
 
     socket.on('P2JoinedLobby', (game_obj) => {
+      console.log("p2 joined")
       let p1 = game_obj.p1;
       let p2 = game_obj.p2;
-
+      console.log("P2JOINED")
       navigate('/choose')
     });
 
     return () => { socket.removeAllListeners() };
 
-<<<<<<< HEAD
   }, []);
-=======
-  });
->>>>>>> frontend
 
   return (
     <div>
@@ -46,30 +43,17 @@ const Home = (props) => {
         <div>
           <Button imageEnter="./game_sprites/create2.png" imageLeave="./game_sprites/create.png" routesPath="/choose" socketEmitEvent={"createLobby"} socket={socket}>dog</Button>
         </div>
-<<<<<<< HEAD
-  <div className="home">
-    <div>
-      <Button imageEnter="./game_sprites/create2.png" imageLeave="./game_sprites/create.png" routesPath="/choose" socketEmitEvent={"createLobby"} socket={socket}>dog</Button>
-    </div>
-    <div>
-      <Button imageEnter="./game_sprites/join.png" imageLeave="./game_sprites/join2.png" routesPath="/join" socketEmitEvent={"joinLobby"} socket={socket}>dog</Button>
-    </div>
-    <div>
-      <Button imageEnter="./game_sprites/credits.png" imageLeave="./game_sprites/credits2.png" routesPath="/credit">dog</Button>
-    </div>
-=======
         <div>
-      <Button imageEnter="./game_sprites/join.png" imageLeave="./game_sprites/join2.png" routesPath="/join">dog</Button>
->>>>>>> frontend
+          <Button imageEnter="./game_sprites/join.png" imageLeave="./game_sprites/join2.png" routesPath="/join" socket={socket}>dog</Button>
+        </div>
+        <div>
+          <Button imageEnter="./game_sprites/credits.png" imageLeave="./game_sprites/credits2.png" routesPath="/credit">dog</Button>
+        </div>
+        <div>
+          <Button imageEnter="./game_sprites/credits.png" imageLeave="./game_sprites/credits2.png" routesPath="/game">dog</Button>
+        </div>
+      </div>
     </div>
-    <div>
-      <Button imageEnter="./game_sprites/credits.png" imageLeave="./game_sprites/credits2.png" routesPath="/credit">dog</Button>
-    </div>
-    <div>
-      <Button imageEnter="./game_sprites/credits.png" imageLeave="./game_sprites/credits2.png" routesPath="/game">dog</Button>
-    </div>
-  </div>
-    </div >
   )
 }
 

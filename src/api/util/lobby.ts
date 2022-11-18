@@ -4,7 +4,7 @@ export function generateLobbyCode(rattle_games : Rattle) : string {
     let result: string;
     do {
         result = '';
-        let characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        let characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
         for ( var i = 0; i < 5; i++ ) {
             result += characters.charAt(Math.floor(Math.random() * characters.length));
         }
