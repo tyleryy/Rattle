@@ -1,5 +1,4 @@
 
-
 .inputForm {
     display: flex;
     flex-flow: row;
@@ -21,6 +20,11 @@ body,html {
     height: 100%;
     animation: tilt-n-move-shaking 1.5s infinite;
   }
+
+.lobby_title img {
+  width: 50%;
+  height: auto;
+}
 
   @keyframes tilt-n-move-shaking {
     0% { transform: translate(0, 0) rotate(0deg); }

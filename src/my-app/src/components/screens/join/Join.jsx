@@ -35,10 +35,10 @@ function Join(props) {
 
     return (
       <div>
+        <BackButtonRow />
         <div className = "lobby_title">
           <img src="./game_sprites/enterlobbycode.png" id="ltitle"/>
         </div>
-        <BackButtonRow />
         <div className="inputForm">
                <Button2 class="input" imageEnter="./game_sprites/joinlob2.png" imageLeave="./game_sprites/joinlob.png" socket={socket} changeLobbyCode={changeLobbyCode}/>
         </div>
