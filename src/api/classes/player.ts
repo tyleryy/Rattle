@@ -17,9 +17,9 @@ export class Player implements IPlayer {
     socketId: string | null; // socket.io client ID associated with the character
     yPos: number; // the y position of the player currently
 
-    constructor(num: number, socketID: string) {
+    constructor(num: number, socketID: string, char?: string) {
         this.player_num = num;
-        this.char = null;
+        this.char = char ? char : null;
         this.socketId = socketID;
         this.score = 0; // start at 0 score
         this.active = false; // inactive at the beginning
