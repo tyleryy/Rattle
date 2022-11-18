@@ -6,7 +6,12 @@ import "./Credit.css";
 
 function Credit(props) {
     return (
+        <div className = "parentCredits">
             <BackButtonRow />
+            <div className = "crds">
+                <img src="./game_sprites/creditsfr.png" alt="creditsfr" />
+            </div>
+        </div>
     )
 }
 
