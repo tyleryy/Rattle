@@ -8,7 +8,6 @@ function ButtonChar (props) {
     const [lobby_code, changeLobbyCode] = states.lobby_state;
     const [player, changePlayer] = states.player_state;
     const [socket, _] = states.socket_state;
-    const player_char = props.player_char;
 
 
     const [buton, changeImg] = useState(props.imageEnter);
@@ -16,6 +15,7 @@ function ButtonChar (props) {
         // event.currentTarget.disabled = true;
         console.log('button clicked');
     }
+    const char = props.char;
     
     return (
         <input type="image" id="image" alt="button_test" className = "buttonChar"
@@ -24,8 +24,7 @@ function ButtonChar (props) {
         onMouseLeave={() => changeImg(props.imageEnter)}
         onClick={(event) => {
             handleClick(event);
-            props.changeChar(props.butChar)
-            socket.emit("selectCharacter", lobby_code, player, player_char)
+            socket.emit("selectCharacter", lobby_code, player, char)
             console.log("selected character")
             props.setCheck(true);
             return;

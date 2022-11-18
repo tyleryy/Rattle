@@ -26,11 +26,10 @@ function Join() {
   
       socket.on('P2JoinedLobby', (game_obj) => {
         console.log("p2 joined")
-        let p1 = game_obj.p1;
-        let p2 = game_obj.p2;
         console.log("P2JOINED")
         changeLobbyCode(game_obj.code)
         navigate('/choose')
+        socket.in(game_obj.code).emit("updateSelectScreen")
       })
 });
     

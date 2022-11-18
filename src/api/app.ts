@@ -83,10 +83,9 @@ io.on('connection', (socket: Socket) => {
     })
 
     socket.on('selectCharacter', (code, player_num, char) => {
-        console.log(code + player_num + char.image)
         let game: Game = rattle_games[code];
-        if (player_num === 'Player 1' && game.p1) {game.p1.char = char.image;}
-        if (player_num === 'Player 2' && game.p2) {game.p2.char = char.image;}
+        if (player_num === 'Player 1' && game.p1) {game.p1.char = char;}
+        if (player_num === 'Player 2' && game.p2) {game.p2.char = char;}
         rattle_games[code] = game;
         // prevents character assignment if other player has selected it
         socket.to(code).emit("updateSelectScreen", game, player_num);
