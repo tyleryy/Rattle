@@ -27,6 +27,7 @@ function Choose() {
     const [lobby_code, changeLobbyCode] = states.lobby_state;
     const [player, changePlayer] = states.player_state;
     const [socket, _] = states.socket_state;
+    const [character, changeChar] = states.character_state;
 
     // stage size
     const [stageW, changeW] = useState<number>(800);
@@ -140,7 +141,7 @@ function Choose() {
                 default:
                     break;
             }
-            console.log("other player"+ other_player)
+            console.log("other player "+ other_player)
             if (other_player) {
                 switch (other_player) {
                     case '1':
@@ -156,8 +157,7 @@ function Choose() {
                         break;
                 }
             }
-            
-            console.log(otherchar1_active, otherchar2_active, otherchar3_active)
+            changeChar(curr_player);
         })
         // get the width of the screen
         const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
@@ -165,7 +165,7 @@ function Choose() {
         const vh = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0);
         changeH(vh);
 
-
+        console.log(character);
         return () => { socket.removeAllListeners() };
     }, []);
 
@@ -208,9 +208,7 @@ function Choose() {
             </div>
             <img className="youArrow" src="./game_sprites/you.png" />
             <div className="parent">
-
                 <SmallButton imageEnter="./game_sprites/back.png" imageLeave="./game_sprites/back2.png" routesPath="/" socketEmitEvent="" />
-
                 <SmallButton imageEnter="./game_sprites/select.png" imageLeave="./game_sprites/select2.png" routesPath="/options" socketEmitEvent="go_to_options" />
             </div>
         </div>

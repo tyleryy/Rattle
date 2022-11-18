@@ -25,10 +25,11 @@ const PORT = 'http://localhost:2000/'
 let socket: Socket = io(PORT);
 
 function App() {
-  const [isConnected, setIsConnected] = useState(socket.connected);
-  const lobby_state = useState<string>("");
-  const player_state = useState<string>("");
-  const socket_state = useState<Socket>(socket);
+  const [isConnected, setIsConnected] = useState(socket.connected); 
+  const lobby_state = useState<string>(""); // what the lobby code is
+  const player_state = useState<string>(""); // which player the user is 
+  const socket_state = useState<Socket>(socket); // user's socket
+  const character = useState<string>(""); // character selected
 
 
 
@@ -55,7 +56,7 @@ function App() {
 
   return (
     <div>
-        <Provider contexts={{ lobby_state: lobby_state, player_state: player_state, socket_state: socket_state }}>
+        <Provider contexts={{ lobby_state: lobby_state, player_state: player_state, socket_state: socket_state, character_state: character }}>
           <Router>
             <Routes>
               <Route path="/" element={<Home />} />

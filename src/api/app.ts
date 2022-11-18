@@ -83,7 +83,6 @@ io.on('connection', (socket: Socket) => {
         // send data to frontend
         socket.emit("P2JoinedLobby", {p1char: game.p1?.char, p2char: game.p2.char, code:code});
         debugLogger(socket); 
-        return code; // return code so that frontend can reference the correct game/room
     })
 
     socket.on('selectCharacter', (JSONStrPayload: any) => {
