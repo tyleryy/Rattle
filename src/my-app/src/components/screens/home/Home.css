@@ -33,7 +33,10 @@
 }
 
 .petr {
-  z-index: 2;
+  display: flex;
+  align-items: center;
+  position: relative;
+  bottom: 25vh;
 }
 
 .button1 {

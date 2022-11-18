@@ -51,12 +51,6 @@
   transform: scale(1.2)
 }
 
-.buttonPetr {
-  position: absolute;
-  top: 50em;
-  transition: transform .2s;
-}
-
 .buttonPetr:hover {
   transform: translateY(-7.1rem);
 }
