@@ -20,9 +20,9 @@ export class Player implements IPlayer {
     socket: Socket; // socket object in server
     inGame: boolean;
 
-    constructor(num: number, socketID: string, socket: Socket) {
+    constructor(num: number, socketID: string, socket: Socket, char?: string, ) {
         this.player_num = num;
-        this.char = null;
+        this.char = char ? char : null;
         this.socketId = socketID;
         this.score = 0; // start at 0 score
         this.active = false; // inactive at the beginning
@@ -37,6 +37,10 @@ export class Player implements IPlayer {
 
     setChar(char: string | null) {
         this.char = char;
+    }
+
+    getChar() {
+        return this.char;
     }
 
     setScore(score: number) {

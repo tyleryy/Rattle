@@ -25,6 +25,7 @@ interface aniSpriteMap {
 function Choose() {
     const states: any = useContext(Context);
     const [lobby_code, changeLobbyCode] = states.lobby_state;
+    const [player, changePlayer] = states.player_state;
     const [socket, _] = states.socket_state;
 
     // stage size
@@ -52,9 +53,6 @@ function Choose() {
     const [otherchar1_active, othercheckActiveChar1] = useState(false)
     const [otherchar2_active, othercheckActiveChar2] = useState(false)
     const [otherchar3_active, othercheckActiveChar3] = useState(false)
-
-
-
 
 
     const [p1Frames, setP1Frames] = useState<any[]>([])
@@ -105,7 +103,7 @@ function Choose() {
 
 
     useEffect(() => {
-
+         
         socket.on('Go Home', () => {
             navigate('/');
         });
@@ -114,7 +112,8 @@ function Choose() {
             navigate("/options");
         })
 
-        socket.on('updateSelectScreen', (data: any, player: string) => {
+        socket.on('updateSelectScreen', (data: any) => {
+            console.log("updating select screen")
             console.log(data)
             let curr_player: any;
             let other_player: any;
@@ -126,7 +125,9 @@ function Choose() {
                 other_player = data.p1
             }
 
-            switch (curr_player.char) {
+            console.log("current player " + curr_player)
+            console.log("opponent player " + other_player)
+            switch (curr_player) {
                 case '1':
                     checkActiveChar1(true)
                     break;
@@ -139,8 +140,9 @@ function Choose() {
                 default:
                     break;
             }
+            console.log("other player"+ other_player)
             if (other_player) {
-                switch (other_player.char) {
+                switch (other_player) {
                     case '1':
                         othercheckActiveChar1(true)
                         break;
@@ -154,8 +156,8 @@ function Choose() {
                         break;
                 }
             }
-
-
+            
+            console.log(otherchar1_active, otherchar2_active, otherchar3_active)
         })
         // get the width of the screen
         const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);

@@ -25,7 +25,7 @@ function ButtonChar(props) {
             onMouseLeave={() => changeImg(props.imageEnter)}
             onClick={(event) => {
                 handleClick(event);
-                socket.emit("selectCharacter", JSON.stringify({ lobbyCode: lobby_code, player: player, char: char }))
+                socket.emit("selectCharacter", { lobbyCode: lobby_code, player: player, char: char })
                 console.log("selected character")
                 props.setCheck(true);
                 return;
