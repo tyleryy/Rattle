@@ -15,7 +15,7 @@ import Game from './components/screens/game/game';
 import Options from './components/screens/options/Options';
 // import background from './img/brick2.png'
 
-import {io, Socket} from 'socket.io-client';
+import { io, Socket } from 'socket.io-client';
 import { useEffect, useState } from 'react';
 
 const PORT = 'http://localhost:2000/'
@@ -40,7 +40,7 @@ function App() {
       setIsConnected(false);
     });
 
-    return () => {socket.removeAllListeners()};
+    return () => { socket.removeAllListeners() };
   }, []);
 
   return (
@@ -48,13 +48,13 @@ function App() {
       <header className="App-header">
         <Router>
           <Routes>
-            <Route path="/" element={<Home socket={socketObj} changeLobbyCode={changeLobbyCode}/>}  />
-            <Route path="/choose" element={<Choose socket={socketObj} code={lobbyCode}/>} />
+            <Route path="/" element={<Home socket={socketObj} changeLobbyCode={changeLobbyCode} />} />
+            <Route path="/choose" element={<Choose socket={socketObj} code={lobbyCode} />} />
             <Route path="/join" element={<Join />} />
             <Route path="/credit" element={<Credit />} />
             <Route path="/options" element={<Options />} />
             {/* DELETE ME LATER */}
-            <Route path="/game" element={<Game />} />
+            <Route path="/game" element={<Game socket={socketObj} />} />
           </Routes>
         </Router>
         {/*
