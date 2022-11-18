@@ -46,7 +46,7 @@ function Game() {
     const [gameState, setGameState] = useState<GameState>();
 
     // client player (not the opponent)
-    const [playerState, setPlayerState] = useState<"wait" | "draw" | "play">();
+    const [playerState, setPlayerState] = useState<"wait" | "draw" | "play">("wait");
     // figure out if the player just ended drawing phase
     const [justEndedDraw, setJustEndedDraw] = useState<boolean>(false);
 
@@ -85,6 +85,10 @@ function Game() {
             navigate("/victory");
         })
 
+        socket.on('Go Home', () => {
+            navigate('/');
+        });
+
         // update the game state from info from the backend
         socket.on('update_game_state', (gameState: GameState) => {
             // update the game state
@@ -113,8 +117,11 @@ function Game() {
         });
 
         socket.on("endVerify", () => {
-            console.log("ENDED VERIFY");
-            setPlayerState("wait");
+            console.log("ENDED VERIFY, PLAYER STATE RN IS " + playerState);
+            // if (playerState !== "draw") {
+            //     console.log("setting player state to wait from endVerify")
+            //     setPlayerState("wait");
+            // }
         });
 
         // start the game
@@ -134,6 +141,7 @@ function Game() {
 
     // handle player state changes
     useEffect(() => {
+        console.log("PLAYER STATE JUST CHANGED TO " + playerState);
         // start timer if the player is drawing
         let imagePath = playerState === "wait" ? "./game_sprites/wait.png" : "./game_sprites/freestyle.png";
         setTurnImage(imagePath);
@@ -141,18 +149,24 @@ function Game() {
         // ! HARDCODE THE TIME
         const drawTime = 5000;
         if (playerState === "draw") {
-            console.log("SETTING TIMER FOR " + drawTime + " ms");
+            console.log("SETTING DRAW TIME TIMER FOR " + drawTime + " ms");
             setStrokeHistory([])
             setTimeout(() => {
                 console.log("DRAW TIMEOUT EXECUTED")
                 setJustEndedDraw(true);
             }, drawTime)
         } else if (playerState === "play") {
-            console.log("SETTING TIMER FOR " + drawTime + " ms");
+            const playTime = drawTime * 2;
+            console.log("SETTING PLAYTIME TIMER FOR " + playTime + " ms");
             setTimeout(() => {
                 console.log("PLAYTIME TIMEOUT EXECUTED")
                 socket.emit("endVerify");
-            }, drawTime)
+            }, playTime)
+        }
+
+        if (playerState !== "draw") {
+            setJustEndedDraw(false);
+
         }
 
         // wipe backendStrokeHistory if not in play phase
