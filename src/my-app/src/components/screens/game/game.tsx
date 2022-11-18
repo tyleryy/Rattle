@@ -1,4 +1,4 @@
-import { Stage, Sprite } from '@inlet/react-pixi'
+import { Stage, Sprite, AnimatedSprite } from '@inlet/react-pixi'
 import { useState, useEffect, useRef } from 'react';
 import DrawCanvas from './canvas/drawCanvas';
 import { Coordinate } from '../../../interfaces/interfaces';
@@ -10,6 +10,7 @@ import { Socket } from 'socket.io-client';
 import { IPlayer, GameState } from "../../../interfaces/interfaces";
 import PassiveCanvas from './canvas/passiveCanvas';
 import { useNavigate } from 'react-router-dom';
+import "./game.css";
 
 function Game() {
     // remember the strokes done
@@ -222,7 +223,8 @@ function Game() {
     }, [strokeHistory])
 
     return (
-        <Stage width={stageW} height={stageH} style={{ left: 0, position: "absolute" }} onPointerMove={(e: any) => {
+        <div>
+        <Stage width={stageW} height={stageH} options={{ backgroundAlpha:0 }} style={{ left: 0, position: "absolute" }} onPointerMove={(e: any) => {
             // when we move, we want to add the coordinate to the array
             let coordinate: Coordinate = {
                 // x: Math.floor(e.clientX - e.target.offsetLeft), // subtract to account for the stage position
@@ -242,25 +244,26 @@ function Game() {
             }
             setStrokeHistory([...strokeHistory, coordinate.y]);
 
-            // iterate through the strokes to remove the old ones out of the screen
-            const lengthThreshold = 150;
-            // const lengthThreshold = 10;
-            // if we have a defined coordinate
-            if (coordinate.x && coordinate.y && isDrawing) {
-                flipJustDrew(true);
-                if (animatedStrokeHistory.length > lengthThreshold * 3) {
-                    // delete the first few values to maintain performance
-                    changeAnimatedStrokeHistory([...animatedStrokeHistory.slice(lengthThreshold), coordinate]);
-                } else {
-                    changeAnimatedStrokeHistory([...animatedStrokeHistory, coordinate]);
+
+                // iterate through the strokes to remove the old ones out of the screen
+                const lengthThreshold = 150;
+                // const lengthThreshold = 10;
+                // if we have a defined coordinate
+                if (coordinate.x && coordinate.y && isDrawing) {
+                    flipJustDrew(true);
+                    if (animatedStrokeHistory.length > lengthThreshold * 3) {
+                        // delete the first few values to maintain performance
+                        changeAnimatedStrokeHistory([...animatedStrokeHistory.slice(lengthThreshold), coordinate]);
+                    } else {
+                        changeAnimatedStrokeHistory([...animatedStrokeHistory, coordinate]);
+                    }
+                } else if (!coordinate.x && !coordinate.y && justDrew) {
+                    // we did not draw yet, add a null value to separate the strokes
+                    changeAnimatedStrokeHistory([...animatedStrokeHistory, coordinate])
+                    flipJustDrew(false);
                 }
-            } else if (!coordinate.x && !coordinate.y && justDrew) {
-                // we did not draw yet, add a null value to separate the strokes
-                changeAnimatedStrokeHistory([...animatedStrokeHistory, coordinate])
-                flipJustDrew(false);
-            }
-        }}>
-            <Sprite ref={stageRef} image={turnImage} x={100} y={100} />
+            }}>
+                <Sprite ref={stageRef} image={turnImage} x={100} y={100} />
             {
                 playerState === "play" ?
                     <PlayCanvas lastNonNull={lastNonNullPos} backendStrokeHistory={backendStrokeHistory} p2Pos={p2Pos} socket={socket} />
@@ -269,8 +272,35 @@ function Game() {
                         <PassiveCanvas lastNonNull={lastNonNullPos} p2Pos={p2Pos} socket={socket} />
                         :
                         <DrawCanvas lastNonNull={lastNonNullPos} changeAnimatedStrokes={changeAnimatedStrokeHistory} animateHistory={animatedStrokeHistory} isDrawing={isDrawing} p2Pos={p2Pos} socket={socket} />}
-
-        </Stage>
+                            
+            </Stage>
+            <div className = "SStage">
+                {/* player 1 sprites */}
+                <Stage width={400} height={700} options={{ backgroundAlpha:0 }} id="SpriteStage">
+                        {/* active sprites            */}
+                        <AnimatedSprite animationSpeed={0.05} isPlaying={false} images={["./game_sprites/char1.png", "./game_sprites/char1rap.png"]} anchor={0.01} visible = {false}/> 
+                        <AnimatedSprite animationSpeed={0.05} isPlaying={false} images={["./game_sprites/char2_frames/char2frame1.png", "./game_sprites/char2_frames/char2rap.png"]} anchor={0.01} visible={false}/>
+                        <AnimatedSprite animationSpeed={0.05} isPlaying={false} images={["./game_sprites/petrrap.png", "./game_sprites/petrrap2.png"]} anchor = {[0.01, 0.2]} visible={false}/>
+                        {/* not active sprites */}
+                        {/* can change alpha to be dimmer */}
+                        <AnimatedSprite animationSpeed={0.05} isPlaying={true} images={["./game_sprites/char1.png", "./game_sprites/char1frame2.png"]} anchor={0.01} visible = {true} alpha = {1} /> 
+                        <AnimatedSprite animationSpeed={0.05} isPlaying={false} images={["./game_sprites/char2_frames/char2frame1.png", "./game_sprites/char2_frames/char2frame3.png"]} anchor={0.01} visible={false}/>
+                        <AnimatedSprite animationSpeed={0.05} isPlaying={false} images={["./game_sprites/petrframe1.png", "./game_sprites/char3frame2.png"]} anchor={[0.01, 0.2]} visible={false}/>             
+                </Stage>
+                {/* player 2 sprites */}
+                <Stage width={400} height={700} options={{ backgroundAlpha:0 }} id="SpriteStage">
+                        {/* active sprites            */}
+                        <AnimatedSprite animationSpeed={0.05} isPlaying={false} images={["./game_sprites/char1.png", "./game_sprites/char1rap.png"]} anchor={0.01} visible = {false}/> 
+                        <AnimatedSprite animationSpeed={0.05} isPlaying={false} images={["./game_sprites/char2_frames/char2frame1.png", "./game_sprites/char2_frames/char2rap.png"]} anchor={0.01} visible={false}/>
+                        <AnimatedSprite animationSpeed={0.05} isPlaying={true} images={["./game_sprites/petrrap.png", "./game_sprites/petrrap2.png"]} anchor = {[0.01, 0.2]} visible={true}/>
+                        {/* not active sprites */}           
+                        <AnimatedSprite animationSpeed={0.05} isPlaying={false} images={["./game_sprites/char1.png", "./game_sprites/char1frame2.png"]} anchor={0.01} visible = {false}/> 
+                        <AnimatedSprite animationSpeed={0.05} isPlaying={false} images={["./game_sprites/char2_frames/char2frame1.png", "./game_sprites/char2_frames/char2frame3.png"]} anchor={0.01} visible={false}/>
+                        <AnimatedSprite animationSpeed={0.05} isPlaying={false} images={["./game_sprites/petrframe1.png", "./game_sprites/char3frame2.png"]} anchor={[0.01, 0.2]} visible={false}/>           
+                </Stage>
+            </div>
+        </div>
+        
     )
 }
 
