@@ -25,6 +25,7 @@ interface aniSpriteMap {
 function Choose() {
     const states: any = useContext(Context);
     const [lobby_code, changeLobbyCode] = states.lobby_state;
+    const [player, changePlayer] = states.player_state;
     const [socket, _] = states.socket_state;
 
     // stage size
@@ -52,10 +53,6 @@ function Choose() {
     const [otherchar1_active, othercheckActiveChar1] = useState (false)
     const [otherchar2_active, othercheckActiveChar2] = useState (false)
     const [otherchar3_active, othercheckActiveChar3] = useState (false)
-
-    
-
-
 
     const [p1Frames, setP1Frames] = useState<any[]>([])
     
@@ -104,13 +101,14 @@ function Choose() {
     }, [otherchar3_active])
 
 
-     useEffect(() => {
+    useEffect(() => {
          
         socket.on('Go Home', () => {
             navigate('/');
         })
 
-        socket.on('updateSelectScreen', (data: any, player: string) => {
+        socket.on('updateSelectScreen', (data: any) => {
+            console.log("updating select screen")
             console.log(data)
             let curr_player: any;
             let other_player: any;
@@ -122,6 +120,8 @@ function Choose() {
                 other_player = data.p1
             }
 
+            console.log("current player " + curr_player.char)
+            console.log("opponent player " + other_player.char)
             switch (curr_player.char) {
                 case '1':
                     checkActiveChar1(true)
@@ -150,7 +150,6 @@ function Choose() {
                         break;
                 }
             }
-
 
         })
         // get the width of the screen
@@ -195,9 +194,9 @@ function Choose() {
                     <div className = "stage_right">
                         <Stage width={400} height={700} options={{ backgroundAlpha:0 }}>
                             {/* <Sprite image="./game_sprites/back.png" /> */}
-                             <AnimatedSprite animationSpeed={0.05} isPlaying={otherchar1_active} images={["./game_sprites/char1.png", "./game_sprites/char1frame2.png"]} anchor={0.01} visible = {false}/> 
-                             <AnimatedSprite animationSpeed={0.05} isPlaying={otherchar2_active} images={["./game_sprites/char2_frames/char2frame1.png", "./game_sprites/char2_frames/char2frame3.png"]} anchor={0.01} visible={false}/>
-                             <AnimatedSprite animationSpeed={0.05} isPlaying={otherchar3_active} images={["./game_sprites/petrframe1.png", "./game_sprites/char3frame2.png"]} anchor={0.01} visible={true}/>
+                             <AnimatedSprite animationSpeed={0.05} isPlaying={otherchar1_active} images={["./game_sprites/char1.png", "./game_sprites/char1frame2.png"]} anchor={0.01} visible = {otherchar1_active}/> 
+                             <AnimatedSprite animationSpeed={0.05} isPlaying={otherchar2_active} images={["./game_sprites/char2_frames/char2frame1.png", "./game_sprites/char2_frames/char2frame3.png"]} anchor={0.01} visible={otherchar2_active}/>
+                             <AnimatedSprite animationSpeed={0.05} isPlaying={otherchar3_active} images={["./game_sprites/petrframe1.png", "./game_sprites/char3frame2.png"]} anchor={0.01} visible={otherchar3_active}/>
                              {/* {p1Ani} */}
                         </Stage>
                     </div>

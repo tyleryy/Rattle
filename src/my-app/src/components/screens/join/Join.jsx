@@ -29,7 +29,8 @@ function Join() {
         console.log("P2JOINED")
         changeLobbyCode(game_obj.code)
         navigate('/choose')
-        socket.in(game_obj.code).emit("updateSelectScreen")
+        // ! might be bad
+        socket.emit("selectCharacter", game_obj.code, "Player 1", game_obj.p1char)
       })
 });
     

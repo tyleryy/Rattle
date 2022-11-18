@@ -77,7 +77,7 @@ io.on('connection', (socket: Socket) => {
         }
         game.p2 = new Player(2, socket.id);
         // send data to frontend
-        io.to(code).emit("P2JoinedLobby", {p1char: game.p1?.char, p2char: game.p2.char, code:code});
+        socket.emit("P2JoinedLobby", {p1char: game.p1?.char, p2char: game.p2.char, code:code});
         debugLogger(socket);
         return code; // return code so that frontend can reference the correct game/room
     })
@@ -88,7 +88,7 @@ io.on('connection', (socket: Socket) => {
         if (player_num === 'Player 2' && game.p2) {game.p2.char = char;}
         rattle_games[code] = game;
         // prevents character assignment if other player has selected it
-        socket.to(code).emit("updateSelectScreen", game, player_num);
+        socket.to(code).emit("updateSelectScreen", game);
         console.log(rattle_games[code]);
     })
 

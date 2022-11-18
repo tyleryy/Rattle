@@ -26,14 +26,6 @@ const Home = () => {
       navigate("/choose");
     })
 
-    socket.on('P2JoinedLobby', (game_obj) => {
-      console.log("p2 joined")
-      let p1 = game_obj.p1;
-      let p2 = game_obj.p2;
-      console.log("P2JOINED")
-      navigate('/choose')
-    });
-
     return () => { socket.removeAllListeners() };
 
   }, []);
