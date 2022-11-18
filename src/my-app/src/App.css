@@ -116,10 +116,37 @@ html {
   width: auto;
   padding-bottom: 3em;
   transition: transform .2s;
+  z-index: 2;
 }
 
 .common_button:hover {
   transform: scale(1.2)
+}
+
+.buttonVal {
+  position: relative;
+  top: 3em;
+  height: 14em;
+  margin-left: 1em;
+  margin-right: 1em; 
+  left: 3em;
+  width: auto;
+  padding-bottom: 3em;
+  transition: transform .2s;
+}
+
+.buttonVal:hover {
+  transform: scale(1.2)
+}
+
+.buttonPetr {
+  position: absolute;
+  left: 60em;
+  transition: transform .2s;
+}
+
+.buttonPetr:hover {
+  transform: translateY(-7.1rem);
 }
 
 

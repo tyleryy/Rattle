@@ -3,9 +3,12 @@ import  { useState } from 'react';
 
 function Button2 (props) {
     const inputRef = useRef(null);
+    const socket = props.socket;
     
     function handleClick() {
-        console.log(inputRef.current.value);
+        let room = inputRef.current.value;
+        console.log(room);
+        socket.emit("joinLobby", room);
     }
 
     const [buton, changeImg] = useState(props.imageEnter);

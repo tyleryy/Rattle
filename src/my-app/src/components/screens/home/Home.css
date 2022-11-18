@@ -19,3 +19,15 @@
     align-items: flex-start;
     justify-content: center;
   }
+
+  .sprite1 {
+    z-index: 1;
+  }
+
+  .petr {
+    z-index: 2;
+  }
+
+  .button1 {
+    z-index: 1;
+  }
