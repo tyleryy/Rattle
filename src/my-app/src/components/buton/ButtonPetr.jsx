@@ -10,6 +10,7 @@ function ButtonPetr (props) {
         onMouseLeave={() => changeImg(props.imageEnter)}
         onClick={() => {
             console.log("petr!");
+            changeImg("./game_sprites/petrblush.png")
         }}
         />
     )
