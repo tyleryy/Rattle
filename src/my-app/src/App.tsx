@@ -25,7 +25,7 @@ const PORT = 'http://localhost:2000/'
 let socket: Socket = io(PORT);
 
 function App() {
-  const [isConnected, setIsConnected] = useState(socket.connected); 
+  const [isConnected, setIsConnected] = useState(socket.connected);
   const lobby_state = useState<string>(""); // what the lobby code is
   const player_state = useState<string>(""); // which player the user is 
   const socket_state = useState<Socket>(socket); // user's socket
@@ -33,11 +33,14 @@ function App() {
   const char2 = useState<string>("");
 
 
-
-  const [playSound, {sound}] = useSound("./game_audio/home_audio.mp3", {volume: 0.03, loop: true})
+  const [playSound] = useSound("./game_audio/home_audio.mp3", { volume: 0.03, loop: true })
   playSound();
 
+
+
   useEffect(() => {
+    console.log("rattle")
+
     if (!socket) {
       socket = io(PORT);
     }
@@ -53,25 +56,26 @@ function App() {
     });
 
     return () => { socket.removeAllListeners() };
+
   }, []);
 
   return (
     <div>
-        <Provider contexts={{ lobby_state: lobby_state, player_state: player_state, socket_state: socket_state, character_state: character, char2_state: char2 }}>
-          <Router>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/choose" element={<Choose />} />
-              <Route path="/join" element={<Join />} />
-              <Route path="/credit" element={<Credit />} />
-              <Route path="/options" element={<Options />} />
-              {/* DELETE ME LATER */}
-              <Route path="/game" element={<Game />} />
-              <Route path="/victory" element={<Victory />} />
-            </Routes>
-          </Router>
-        </Provider>
-        {/*
+      <Provider contexts={{ lobby_state: lobby_state, player_state: player_state, socket_state: socket_state, character_state: character, char2_state: char2 }}>
+        <Router>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/choose" element={<Choose />} />
+            <Route path="/join" element={<Join />} />
+            <Route path="/credit" element={<Credit />} />
+            <Route path="/options" element={<Options />} />
+            {/* DELETE ME LATER */}
+            <Route path="/game" element={<Game />} />
+            <Route path="/victory" element={<Victory />} />
+          </Routes>
+        </Router>
+      </Provider>
+      {/*
         <Screen image="./game_sprites/brick2.png"></Screen>
         <div className = "home">
           <span>
