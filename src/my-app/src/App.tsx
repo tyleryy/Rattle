@@ -30,6 +30,7 @@ function App() {
   const player_state = useState<string>(""); // which player the user is 
   const socket_state = useState<Socket>(socket); // user's socket
   const character = useState<string>(""); // character selected
+  const char2 = useState<string>("");
 
 
 
@@ -56,7 +57,7 @@ function App() {
 
   return (
     <div>
-        <Provider contexts={{ lobby_state: lobby_state, player_state: player_state, socket_state: socket_state, character_state: character }}>
+        <Provider contexts={{ lobby_state: lobby_state, player_state: player_state, socket_state: socket_state, character_state: character, char2_state: char2 }}>
           <Router>
             <Routes>
               <Route path="/" element={<Home />} />
