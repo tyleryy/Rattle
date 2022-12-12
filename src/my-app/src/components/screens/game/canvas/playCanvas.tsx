@@ -86,7 +86,7 @@ function PlayCanvas({ lastNonNull, backendStrokeHistory, p2Pos, socket }: { last
             if (lastStrokePos) {
                 if (lastStrokePos) {
                     if (lastStrokePos.x) {
-                        if (lastStrokePos.x < (lockedX - 100)) {
+                        if (lastStrokePos.x < (lockedX - 500)) {
                             // stop animating
                             console.log("EMITTING OUT END VERIFY");
                             setDoneAnimate(true);
