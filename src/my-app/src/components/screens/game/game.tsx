@@ -200,12 +200,12 @@ function Game() {
                 setJustEndedDraw(true);
             }, drawTime)
         } else if (playerState === "play") {
-            const playTime = drawTime * 1.5;
-            console.log("SETTING PLAYTIME TIMER FOR " + playTime + " ms");
-            setTimeout(() => {
-                console.log("PLAYTIME TIMEOUT EXECUTED")
-                socket.emit("endVerify");
-            }, playTime)
+            // const playTime = drawTime * 1.5;
+            // console.log("SETTING PLAYTIME TIMER FOR " + playTime + " ms");
+            // setTimeout(() => {
+            //     console.log("PLAYTIME TIMEOUT EXECUTED")
+            //     socket.emit("endVerify");
+            // }, playTime)
         }
 
         if (playerState !== "draw") {
@@ -323,11 +323,14 @@ function Game() {
                 <Sprite ref={stageRef} image={turnImage} x={100} y={100} />
                 {
                     playerState === "play" ?
+                        // this is the both players now draw canvas to (verify also and scoring)
                         <PlayCanvas lastNonNull={lastNonNullPos} backendStrokeHistory={backendStrokeHistory} p2Pos={p2Pos} socket={socket} />
                         :
                         playerState === "wait" ?
+                            // this is the afk canvas
                             <PassiveCanvas lastNonNull={lastNonNullPos} p2Pos={p2Pos} socket={socket} />
                             :
+                            // this is the draw freestyle canvas to start the level
                             <DrawCanvas lastNonNull={lastNonNullPos} changeAnimatedStrokes={changeAnimatedStrokeHistory} animateHistory={animatedStrokeHistory} isDrawing={isDrawing} p2Pos={p2Pos} socket={socket} />}
 
             </Stage>

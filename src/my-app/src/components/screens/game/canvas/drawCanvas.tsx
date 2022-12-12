@@ -27,8 +27,7 @@ function DrawCanvas({ lastNonNull, animateHistory, isDrawing, socket, p2Pos }: {
         // I don't know if this actually works
         // console.log("Emitting animated history to backed")
         // console.log(historyCopy);
-        socket.emit('sendAnimatedStrokes', historyCopy)
-
+        socket.emit('sendAnimatedStrokes', historyCopy);
     })
 
     const [circleRad, changeCircleRad] = useState(circleIdleRadius);
