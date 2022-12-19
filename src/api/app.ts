@@ -28,7 +28,11 @@ app.get("/", (req: Request, res: Response) => {
 function debugLogger(socket: Socket) {
   console.log("\n--------------------------");
   console.log("games: ", rattle_games);
-  console.log(socket.rooms);
+  let rooms = new Set<string>()
+  io.sockets.sockets.forEach( (socket)=> {
+    socket.rooms.forEach( room => rooms.add(room))
+  })
+  console.log(rooms);
   console.log("num of sockets: " + io.sockets.sockets.size);
   console.log("--------------------------\n");
 }
@@ -45,8 +49,6 @@ function cleanUp(socket: Socket) {
 
 io.on("connection", (socket: Socket) => {
   console.log("A socket has joined! They are " + socket.id);
-  console.log(socket.rooms);
-  console.log(io.sockets.sockets.size);
 
   socket.on("enterHome", () => {
     cleanUp(socket);
@@ -123,6 +125,7 @@ io.on("connection", (socket: Socket) => {
         );
       console.log(rattle_games[code]);
     }
+    debugLogger(socket)
   });
 
   socket.on("gameEnd", (code: string) => {
