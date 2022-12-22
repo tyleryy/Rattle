@@ -27,16 +27,22 @@ let socket: Socket = io(PORT);
 function App() {
   const [isConnected, setIsConnected] = useState(socket.connected);
   const lobby_state = useState<string>(""); // what the lobby code is
-  const player_state = useState<string>(""); // which player the user is 
+  const player_state = useState<string>(""); // which player the user is (1 or 2)
   const socket_state = useState<Socket>(socket); // user's socket
-  const character = useState<string>(""); // character selected
-  const char2 = useState<string>("");
+  const character = useState<string>(""); // user's selected character 
+  const char2 = useState<string>(""); // other player's character
+
+  // global variables all components have access to (no props drilling necessary)
+  let __dict__ = {
+    lobby_state: lobby_state, 
+    player_state: player_state, 
+    socket_state: socket_state, 
+    character_state: character, 
+    char2_state: char2 }
 
 
   const [playSound] = useSound("./game_audio/home_audio.mp3", { volume: 0.03, loop: true })
   playSound();
-
-
 
   useEffect(() => {
     console.log("rattle")
@@ -55,13 +61,14 @@ function App() {
       setIsConnected(false);
     });
 
-    return () => { socket.removeAllListeners() };
+    return () => { socket.removeAllListeners() }; //socket cleanup when webapp closes
 
   }, []);
 
+
   return (
     <div>
-      <Provider contexts={{ lobby_state: lobby_state, player_state: player_state, socket_state: socket_state, character_state: character, char2_state: char2 }}>
+      <Provider contexts={__dict__}>
         <Router>
           <Routes>
             <Route path="/" element={<Home />} />
