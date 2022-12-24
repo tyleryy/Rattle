@@ -18,7 +18,7 @@ import useSound from 'use-sound'
 import { io, Socket } from 'socket.io-client';
 import { useEffect, useState } from 'react';
 
-const PORT = 'http://localhost:2000/'
+const PORT = 'http://rattle-api.fly.dev/' // 8080 port exposed
 let socket: Socket = io(PORT);
 
 function App() {

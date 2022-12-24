@@ -8,6 +8,7 @@ import { GameInstance, Rattle, GameFrameData, PlayerState, Coordinate } from './
 import { findGameFromSocket, getPlayerFromSocket } from './util/socket';
 import { buildGameStateFromInstance } from './util/game';
 
+// fly io server url: http://rattle-api.fly.dev
 const app = express();
 const server = createServer(app)
 const io = new Server(server, { cors: { origin: '*' } });
@@ -379,7 +380,7 @@ io.on('connection', (socket: Socket) => {
 
 });
 
-server.listen(2000, () => console.log("server up"));
+server.listen(8080, () => console.log("server up"));
 
 module.exports = {
     app
