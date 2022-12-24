@@ -1,5 +1,6 @@
 import { Graphics, useTick } from "@inlet/react-pixi";
 import { useEffect, useState } from "react";
+import React from 'react'
 import { Socket } from "socket.io-client";
 import { Coordinate } from "../../../../interfaces/interfaces";
 import { circleIdleRadius, deltaX, lockedX, strokeSpawnX } from "../constants";
@@ -14,7 +15,7 @@ function PlayCanvas({ lastNonNull, backendStrokeHistory, p2Pos, socket }: { last
 
     const [doneAnimate, setDoneAnimate] = useState(false);
 
-    const ticksToPlay = (strokeSpawnX - lockedX) / deltaX;
+    // const ticksToPlay = (strokeSpawnX - lockedX) / deltaX;
 
     useEffect(() => {
         // take in the strokeHistory and convert them all into coordinates with x as null
@@ -30,9 +31,9 @@ function PlayCanvas({ lastNonNull, backendStrokeHistory, p2Pos, socket }: { last
         // console.log(baseAnimateStroke)
 
         changeAnimatedStrokes(baseAnimateStroke);
-    }, []);
+    }, [backendStrokeHistory]);
 
-    useTick((delta) => {
+    useTick(() => {
         // wait until the first part has reached the end
         let historyCopy = [...animateHistory];
 

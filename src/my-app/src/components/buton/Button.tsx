@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState, useContext } from 'react';
 import { Context } from '../../providers/provider';
 import { useNavigate } from 'react-router-dom';
 import { Socket } from 'socket.io-client';
@@ -8,7 +8,7 @@ import "./buttons.css";
 function Button({ imageEnter, imageLeave, routesPath, socketEmitEvent }: { imageEnter: string, imageLeave: string, routesPath: string, socketEmitEvent: string | null | undefined, }) {
     const navigate = useNavigate();
     const states = useContext<any>(Context);
-    const [socket, _]: [Socket, any] = states.socket_state;
+    const [socket, ]: [Socket, any] = states.socket_state;
     const [buton, changeImg] = useState(imageEnter);
     const [playSound] = useSound("./game_audio/buttaudio.mp3", {volume: 1.0})
     return (

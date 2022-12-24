@@ -1,8 +1,6 @@
 import React from "react";
-import {useRef, useEffect} from "react";
+import {useEffect} from "react";
 import { useNavigate } from "react-router-dom";
-import Screen from '../../screen_bg/Screen'
-import Button from '../../buton/Button';
 import Button2 from '../../buton/Button2';
 import { useContext } from "react";
 import { Context } from "../../../providers/provider";
@@ -20,8 +18,8 @@ function Join() {
     }*/
     const states = useContext(Context);
     const [lobby_code, changeLobbyCode] = states.lobby_state;
-    const [player, changePlayer] = states.player_state;
-    const [socket, _] = states.socket_state;
+    const [player, ] = states.player_state;
+    const [socket, ] = states.socket_state;
     const navigate = useNavigate();
     
     useEffect(() => {
@@ -41,7 +39,7 @@ function Join() {
       <div>
         <BackButtonRow />
         <div className = "lobby_title">
-          <img src="./game_sprites/enterlobbycode.png" id="ltitle"/>
+          <img src="./game_sprites/enterlobbycode.png" id="ltitle" alt=""/>
         </div>
         <div className="inputForm">
                <Button2 class="input" imageEnter="./game_sprites/joinlob2.png" imageLeave="./game_sprites/joinlob.png" socket={socket} changeLobbyCode={changeLobbyCode}/>

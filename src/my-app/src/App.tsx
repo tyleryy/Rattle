@@ -1,9 +1,6 @@
 import React from 'react';
 // import logo from './logo.svg';
 import './App.css';
-import Button from './components/buton/Button';
-import Title from './components/title/Title';
-import Screen from './components/screen_bg/Screen'
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 // import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -25,7 +22,7 @@ const PORT = 'http://localhost:2000/'
 let socket: Socket = io(PORT);
 
 function App() {
-  const [isConnected, setIsConnected] = useState(socket.connected);
+  const [, setIsConnected] = useState(socket.connected);
   const lobby_state = useState<string>(""); // what the lobby code is
   const player_state = useState<string>(""); // which player the user is 
   const socket_state = useState<Socket>(socket); // user's socket
@@ -51,7 +48,8 @@ function App() {
 
     socket.on('disconnect', () => {
       console.log("client is disconnected")
-      player_state[1]("")
+      let player_state_change = player_state[1]
+      player_state_change("")
       setIsConnected(false);
     });
 

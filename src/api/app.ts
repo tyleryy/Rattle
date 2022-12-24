@@ -43,7 +43,6 @@ io.on('connection', (socket: Socket) => {
 
     socket.on('enterHome', () => {
         cleanUp(socket);
-        debugLogger(socket);
     })
 
     socket.on('createLobby', () => {
@@ -66,7 +65,6 @@ io.on('connection', (socket: Socket) => {
         }
         rattle_games[lobby_code] = game;
         socket.to(lobby_code).emit('doneCreateLobby', lobby_code);
-        debugLogger(socket);
         return lobby_code; // return code so that frontend can reference the correct game/room
     })
 

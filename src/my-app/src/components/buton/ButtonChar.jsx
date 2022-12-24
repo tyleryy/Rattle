@@ -1,23 +1,21 @@
 import { useState, useContext } from 'react';
 import { Context } from '../../providers/provider';
-import { Socket } from 'socket.io-client';
 import useSound from 'use-sound'
 import "./buttons.css";
 
 function ButtonChar(props) {
 
     const states = useContext(Context);
-    const [lobby_code, changeLobbyCode] = states.lobby_state;
-    const [player, changePlayer] = states.player_state;
-    const [socket, _] = states.socket_state;
+    const [lobby_code, ] = states.lobby_state;
+    const [player, ] = states.player_state;
+    const [socket, ] = states.socket_state;
 
 
     const [buton, changeImg] = useState(props.imageEnter);
     const [playSound] = useSound("./game_audio/buttaudio.mp3", {volume: 1.0})
-    const handleClick = (event) => {
-        // event.currentTarget.disabled = true;
-        console.log('button clicked');
-    }
+    // const handleClick = (event) => {
+    //     event.currentTarget.disabled = true;
+    // }
     const char = props.char;
 
     return (
@@ -28,8 +26,7 @@ function ButtonChar(props) {
                 playSound()
             }}
             onMouseLeave={() => changeImg(props.imageEnter)}
-            onClick={(event) => {
-                handleClick(event);
+            onClick={() => {
                 socket.emit("selectCharacter", { lobbyCode: lobby_code, player: player, char: char })
                 console.log("selected character")
                 props.setCheck(true);
