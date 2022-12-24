@@ -61,7 +61,7 @@ io.on('connection', (socket: Socket) => {
             GameActive: false,
             currRounds: 0,
             time: 5000, // should be in ms
-            totalRounds: 6, // divide by 2 
+            totalRounds: 1, // divide by 2 
             roomCode: lobby_code
         }
         rattle_games[lobby_code] = game;

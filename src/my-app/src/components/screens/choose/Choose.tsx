@@ -28,6 +28,7 @@ function Choose() {
     const [player, changePlayer] = states.player_state;
     const [socket, _] = states.socket_state;
     const [character, changeChar] = states.character_state;
+    const [char2, changeChar2] = states.char2_state;
 
     // stage size
     const [stageW, changeW] = useState<number>(800);
@@ -158,6 +159,8 @@ function Choose() {
                 }
             }
             changeChar(curr_player);
+            changeChar2(other_player);
+
         })
         // get the width of the screen
         const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
