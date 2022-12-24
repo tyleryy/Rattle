@@ -30,7 +30,7 @@ function Join() {
         navigate('/choose')
         // ! might be bad
         socket.emit("selectCharacter",{ lobbyCode: lobby_code, player: player, char: null })
-      }
+      })
     }, [socket, changeLobbyCode, navigate])
     
 
