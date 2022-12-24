@@ -1,33 +1,33 @@
 .small_button {
-    position: relative;
-    height: 8em;
-    margin-left: 1em;
-    margin-right: 1em; 
-    width: auto;
-    transition: transform .2s;
-  }
+  position: relative;
+  height: 8em;
+  margin-left: 1em;
+  margin-right: 1em;
+  width: auto;
+  transition: transform 0.2s;
+}
 
 .small_button:hover {
-  transform: scale(1.2)
+  transform: scale(1.2);
 }
 
 .common_button {
-  height: 14em; 
+  height: 14em;
   margin-left: 2em;
   margin-right: 2em;
   width: auto;
   z-index: 2;
-  transition: transform .2s;
+  transition: transform 0.2s;
 }
 
 .common_button:hover {
-  transform: scale(1.2)
+  transform: scale(1.2);
 }
 
 .inputForm {
   display: flex;
   align-items: center;
-  justify-content: center;;
+  justify-content: center;
 }
 
 .msg {
@@ -36,7 +36,7 @@
   margin-right: 0.5em;
 }
 .msg_butt {
-  transition: transform .2s;
+  transition: transform 0.2s;
   margin-left: 0.5em;
 }
 
@@ -46,15 +46,15 @@
 
 .buttonChar {
   height: 13em;
-  transition: transform .2s;
+  transition: transform 0.2s;
 }
 
 .buttonChar:hover {
-  transform: scale(1.2)
+  transform: scale(1.2);
 }
 
 .buttonPetr {
-  transition: transform .3s;
+  transition: transform 0.3s;
 }
 
 .buttonPetr:hover {
@@ -66,13 +66,13 @@
   top: 3em;
   height: 14em;
   margin-left: 1em;
-  margin-right: 1em; 
+  margin-right: 1em;
   left: 3em;
   width: auto;
   padding-bottom: 3em;
-  transition: transform .2s;
+  transition: transform 0.2s;
 }
 
 .buttonVal:hover {
-  transform: scale(1.2)
+  transform: scale(1.2);
 }
