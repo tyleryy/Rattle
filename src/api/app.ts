@@ -22,7 +22,11 @@ app.get('/', (req: Request, res: Response) => {
 function debugLogger(socket: Socket) {
     console.log('\n--------------------------');
     console.log("games: ", rattle_games);
-    console.log(socket.rooms);
+    let rooms = new Set<string>()
+    io.sockets.sockets.forEach( (socket)=> {
+        socket.rooms.forEach( room => rooms.add(room))
+    })
+    console.log(rooms);
     console.log("num of sockets: " + io.sockets.sockets.size);
     console.log('--------------------------\n');
 }
@@ -43,6 +47,7 @@ io.on('connection', (socket: Socket) => {
 
     socket.on('enterHome', () => {
         cleanUp(socket);
+        debugLogger(socket);
     })
 
     socket.on('createLobby', () => {
@@ -64,6 +69,7 @@ io.on('connection', (socket: Socket) => {
             roomCode: lobby_code
         }
         rattle_games[lobby_code] = game;
+        debugLogger(socket)
         socket.to(lobby_code).emit('doneCreateLobby', lobby_code);
         return lobby_code; // return code so that frontend can reference the correct game/room
     })
