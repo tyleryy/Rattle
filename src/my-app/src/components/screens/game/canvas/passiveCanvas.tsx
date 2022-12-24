@@ -18,7 +18,7 @@ function PassiveCanvas({ lastNonNull, p2Pos, socket }: { lastNonNull: Coordinate
         })
     }, []);
 
-    useTick(() => {
+    useTick((delta) => {
         // wait until the first part has reached the end
 
         // // update the history with the new delta x

@@ -15,7 +15,7 @@ function PlayCanvas({ lastNonNull, backendStrokeHistory, p2Pos, socket }: { last
 
     const [doneAnimate, setDoneAnimate] = useState(false);
 
-    // const ticksToPlay = (strokeSpawnX - lockedX) / deltaX;
+    const ticksToPlay = (strokeSpawnX - lockedX) / deltaX;
 
     useEffect(() => {
         // take in the strokeHistory and convert them all into coordinates with x as null
@@ -33,7 +33,7 @@ function PlayCanvas({ lastNonNull, backendStrokeHistory, p2Pos, socket }: { last
         changeAnimatedStrokes(baseAnimateStroke);
     }, []);
 
-    useTick(() => {
+    useTick((delta) => {
         // wait until the first part has reached the end
         let historyCopy = [...animateHistory];
 

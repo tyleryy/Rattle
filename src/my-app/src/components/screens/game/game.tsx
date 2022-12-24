@@ -1,13 +1,12 @@
 import { Stage, Sprite, AnimatedSprite } from '@inlet/react-pixi'
 import { useState, useEffect, useRef } from 'react';
-import React from 'react'
 import DrawCanvas from './canvas/drawCanvas';
 import { Coordinate } from '../../../interfaces/interfaces';
 import { lockedX } from './constants';
 import PlayCanvas from './canvas/playCanvas';
 import { useContext } from 'react';
 import { Context } from '../../../providers/provider';
-import { GameState } from "../../../interfaces/interfaces";
+import { IPlayer, GameState } from "../../../interfaces/interfaces";
 import PassiveCanvas from './canvas/passiveCanvas';
 import { useNavigate } from 'react-router-dom';
 import "./game.css";
@@ -70,6 +69,12 @@ function Game() {
 
 
     useEffect(() => {
+        // ! adding back in but I don't know why they are assigned in useEffect here
+        const [lobby_code, changeLobbyCode] = states.lobby_state;
+        const [player, changePlayer] = states.player_state;
+        const [socket, _] = states.socket_state;
+        const [character, changeChar] = states.character_state;
+        console.log(character)
         console.log("Hello game")
         // get the width of the screen
         const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
@@ -226,8 +231,8 @@ function Game() {
     useEffect(() => {
         if (backendStrokeHistory.length > 0) {
             setPlayerState("play");
-            // console.log("GOT THIS FROM SOCKET")
-            // console.log(strokeHistory)
+            console.log("GOT THIS FROM SOCKET")
+            console.log(strokeHistory)
         }
     }, [backendStrokeHistory])
 

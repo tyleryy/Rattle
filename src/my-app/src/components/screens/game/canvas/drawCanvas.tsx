@@ -1,8 +1,7 @@
 import { Graphics, useTick } from "@inlet/react-pixi";
 import { useState } from "react";
-import React from 'react'
 import { Socket } from "socket.io-client";
-import { Coordinate } from "../../../../interfaces/interfaces";
+import { Coordinate, GameState } from "../../../../interfaces/interfaces";
 import { circleIdleRadius, deltaX, lockedX } from "../constants";
 import { recreateStrokes } from "./common";
 
