@@ -1,4 +1,3 @@
-import React from "react";
 import {useEffect} from "react";
 import { useNavigate } from "react-router-dom";
 import Button2 from '../../buton/Button2';
@@ -31,7 +30,8 @@ function Join() {
         navigate('/choose')
         // ! might be bad
         socket.emit("selectCharacter",{ lobbyCode: lobby_code, player: player, char: null })
-      }, [socket, changeLobbyCode, navigate])
+      }
+    }, [socket, changeLobbyCode, navigate])
     
 
     return (
