@@ -70,10 +70,6 @@ function Game() {
 
 
     useEffect(() => {
-        const [socket, ] = states.socket_state;
-        const [character, ] = states.character_state;
-        console.log(character)
-
         console.log("Hello game")
         // get the width of the screen
         const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
@@ -137,7 +133,7 @@ function Game() {
         socket.emit("startGame");
 
         // loopPosition(isDrawing, prevCoord, currCoord);
-    }, []);
+    }, [socket]);
 
     const [char1, char1Check] = useState(false);
     const [char2, char2Check] = useState(false);
@@ -215,7 +211,7 @@ function Game() {
         if (playerState !== "play") {
             setBackendStrokeHistory([]);
         }
-    }, [playerState]);
+    }, [playerState, socket]);
 
     // used to send drawings to backend with timer
     useEffect(() => {

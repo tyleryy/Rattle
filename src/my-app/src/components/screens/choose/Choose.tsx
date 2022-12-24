@@ -20,8 +20,8 @@ function Choose() {
     const [lobby_code, ] = states.lobby_state;
     const [player, ] = states.player_state;
     const [socket, ] = states.socket_state;
-    const [character, changeChar] = states.character_state;
-    const [other_char, changeChar2] = states.char2_state;
+    const [, changeChar] = states.character_state;
+    const [, changeChar2] = states.char2_state;
 
     // stage size
     // const [, changeW] = useState<number>(800);
@@ -156,10 +156,10 @@ function Choose() {
         // const vh = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0);
         // changeH(vh);
 
-        console.log("current player " + character)
-        console.log("opponent player " + other_char)
+        // console.log("current player " + character)
+        // console.log("opponent player " + other_char)
         return () => { socket.removeAllListeners() };
-    }, []);
+    }, [socket, changeChar, changeChar2, navigate, player]);
 
     return (
         <div className="background">
