@@ -18,7 +18,7 @@ function Options() {
         socket.on('Go Home', () => {
             navigate('/');
         });
-    })
+    }, [socket, navigate])
     return (
         <div className="parentOptions">
             <Button imageEnter="./game_sprites/back.png" imageLeave="./game_sprites/back2.png" routesPath="/" socketEmitEvent="" />

@@ -36,7 +36,6 @@ function App() {
 
 
   useEffect(() => {
-    console.log("rattle")
 
     if (!socket) {
       socket = io(PORT);
