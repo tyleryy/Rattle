@@ -43,8 +43,8 @@ const Home = () => {
         </Stage>
 
         {/* main 3 buttons: create lobby, join lobby, credits */}
-        <Button imageEnter="./game_sprites/create2.png" imageLeave="./game_sprites/create.png" routesPath="/choose" socketEmitEvent={"createLobby"} socket={socket}>dog</Button>
-        <Button imageEnter="./game_sprites/join.png" imageLeave="./game_sprites/join2.png" routesPath="/join" socket={socket}>dog</Button>
+        <Button imageEnter="./game_sprites/create2.png" imageLeave="./game_sprites/create.png" socketEmitEvent={"createLobby"}>dog</Button>
+        <Button imageEnter="./game_sprites/join.png" imageLeave="./game_sprites/join2.png" routesPath="/join">dog</Button>
         <Button imageEnter="./game_sprites/credits.png" imageLeave="./game_sprites/credits2.png" routesPath="/credit">dog</Button>
         
         {/* Character model on right of screen */}

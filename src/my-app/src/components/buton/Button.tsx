@@ -5,7 +5,8 @@ import { Socket } from 'socket.io-client';
 import useSound from 'use-sound'
 import "./buttons.css";
 
-function Button({ imageEnter, imageLeave, routesPath, socketEmitEvent }: { imageEnter: string, imageLeave: string, routesPath: string, socketEmitEvent: string | null | undefined, }) {
+function Button({ imageEnter, imageLeave, routesPath, socketEmitEvent }:
+     { imageEnter: string, imageLeave: string, routesPath: string, socketEmitEvent: string | null | undefined}) {
     const navigate = useNavigate();
     const states = useContext<any>(Context);
     const [socket, _]: [Socket, any] = states.socket_state;
