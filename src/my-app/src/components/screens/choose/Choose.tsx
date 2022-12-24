@@ -159,7 +159,7 @@ function Choose() {
         // console.log("current player " + character)
         // console.log("opponent player " + other_char)
         return () => { socket.removeAllListeners() };
-    }, [socket, changeChar, changeChar2, navigate, player]);
+    }, []);
 
     return (
         <div className="background">

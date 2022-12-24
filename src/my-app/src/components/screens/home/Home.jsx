@@ -28,7 +28,7 @@ const Home = () => {
 
     return () => { socket.removeAllListeners() };
 
-  }, [socket, changeLobbyCode, changePlayer, navigate]);
+  }, []);
 
   return (
     <div className="homeParent">

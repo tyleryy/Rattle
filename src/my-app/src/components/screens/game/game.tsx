@@ -133,7 +133,7 @@ function Game() {
         socket.emit("startGame");
 
         // loopPosition(isDrawing, prevCoord, currCoord);
-    }, [socket]);
+    }, []);
 
     const [char1, char1Check] = useState(false);
     const [char2, char2Check] = useState(false);
@@ -149,7 +149,7 @@ function Game() {
         else if (character === 3) {
             char3Check(true);
         }
-    }, [char1, char2, char3, character])
+    }, [char1, char2, char3])
 
 
     const [otherchar1, otherchar1Check] = useState(false);
@@ -166,7 +166,7 @@ function Game() {
         else if (otherchar === 3) {
             otherchar3Check(true);
         }
-    }, [otherchar1, otherchar2, otherchar3, otherchar])
+    }, [otherchar1, otherchar2, otherchar3])
 
     // when we update game state, update the smaller states connected
     useEffect(() => {
@@ -211,7 +211,7 @@ function Game() {
         if (playerState !== "play") {
             setBackendStrokeHistory([]);
         }
-    }, [playerState, socket]);
+    }, [playerState]);
 
     // used to send drawings to backend with timer
     useEffect(() => {
@@ -221,7 +221,7 @@ function Game() {
             setJustEndedDraw(false);
             socket.emit("endTurn", strokeHistory);
         }
-    }, [justEndedDraw, socket]);
+    }, [justEndedDraw]);
 
     useEffect(() => {
         if (backendStrokeHistory.length > 0) {
@@ -231,12 +231,12 @@ function Game() {
         }
     }, [backendStrokeHistory])
 
-    // useEffect(() => {
-    //     if (playerState === "wait") {
-            // console.log("STROKE HISTORY CHANGED");
-            // console.log(strokeHistory)
-    //     }
-    // }, [strokeHistory])
+    useEffect(() => {
+        if (playerState === "wait") {
+            console.log("STROKE HISTORY CHANGED");
+            console.log(strokeHistory)
+        }
+    }, [strokeHistory])
 
     // when we change the drawing status, reset the looping
     // useEffect(() => {
@@ -270,8 +270,8 @@ function Game() {
     }
 
     useEffect(() => {
-        // console.log(strokeHistory);
-    }, [strokeHistory])
+        console.log(strokeHistory);
+    }, [])
 
     return (
         <div>

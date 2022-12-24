@@ -16,7 +16,7 @@ function PassiveCanvas({ lastNonNull, p2Pos, socket }: { lastNonNull: Coordinate
         socket.on("updateAnimatedStrokes", (animatedStrokes) => {
             changeAnimatedStrokes(animatedStrokes);
         })
-    }, [socket, changeAnimatedStrokes]);
+    }, []);
 
     useTick(() => {
         // wait until the first part has reached the end

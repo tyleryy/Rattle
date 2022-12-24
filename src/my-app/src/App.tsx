@@ -54,7 +54,7 @@ function App() {
 
     return () => { socket.removeAllListeners() };
 
-  }, [player_state]);
+  }, []);
 
   return (
     <div>

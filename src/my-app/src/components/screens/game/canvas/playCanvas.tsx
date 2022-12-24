@@ -31,7 +31,7 @@ function PlayCanvas({ lastNonNull, backendStrokeHistory, p2Pos, socket }: { last
         // console.log(baseAnimateStroke)
 
         changeAnimatedStrokes(baseAnimateStroke);
-    }, [backendStrokeHistory]);
+    }, []);
 
     useTick(() => {
         // wait until the first part has reached the end
