@@ -9,6 +9,15 @@ import { findGameFromSocket, getPlayerFromSocket } from './util/socket';
 import { buildGameStateFromInstance } from './util/game';
 
 // fly io server url: http://rattle-api.fly.dev
+// ENVIRONMENT VARIABLES
+let HOSTNAME: string;
+let PORT: number;
+
+if (process.env.REACT_NODE_APP_ENV === "production") {
+    HOSTNAME = "http://rattle-api.fly.dev";
+    PORT = 8080;
+}
+
 const app = express();
 const server = createServer(app)
 const io = new Server(server, { cors: { origin: '*' } });
@@ -20,7 +29,7 @@ app.get('/', (req: Request, res: Response) => {
 })
 
 // ! remove later
-function debugLogger(socket: Socket) {
+function debugLogger() {
     console.log('\n--------------------------');
     console.log("games: ", rattle_games);
     let rooms = new Set<string>()
@@ -48,7 +57,7 @@ io.on('connection', (socket: Socket) => {
 
     socket.on('enterHome', () => {
         cleanUp(socket);
-        debugLogger(socket);
+        debugLogger();
     })
 
     socket.on('createLobby', () => {
@@ -70,7 +79,7 @@ io.on('connection', (socket: Socket) => {
             roomCode: lobby_code
         }
         rattle_games[lobby_code] = game;
-        debugLogger(socket)
+        debugLogger()
         socket.to(lobby_code).emit('doneCreateLobby', lobby_code);
         return lobby_code; // return code so that frontend can reference the correct game/room
     })
@@ -87,7 +96,7 @@ io.on('connection', (socket: Socket) => {
         game.p2 = new Player(2, socket.id, socket);
         // send data to frontend
         socket.emit("P2JoinedLobby", { p1char: game.p1?.char, p2char: game.p2.char, code: code });
-        debugLogger(socket);
+        debugLogger();
     })
 
     socket.on('selectCharacter', (JSONStrPayload: any) => {
@@ -143,7 +152,7 @@ io.on('connection', (socket: Socket) => {
         console.log("disconnected " + socket.id);
     })
 
-    socket.on('disconnect', () => { debugLogger(socket) });
+    socket.on('disconnect', () => { debugLogger() });
 
     // socket event for updating game state frame by frame
     socket.on('update_game_frame', (frameData: GameFrameData) => {
@@ -380,11 +389,7 @@ io.on('connection', (socket: Socket) => {
 
 });
 
-server.listen(8080, () => console.log("server up"));
-
-module.exports = {
-    app
-}
+server.listen(PORT, () => console.log("server up"));
 
 
 
