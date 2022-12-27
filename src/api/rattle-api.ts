@@ -11,9 +11,9 @@ import { buildGameStateFromInstance } from './util/game';
 // fly io server url: http://rattle-api.fly.dev
 // ENVIRONMENT VARIABLES
 let HOSTNAME: string;
-let PORT: number = 2000;
+let PORT: number = 2000; // for local npm start
 
-if (process.env.REACT_NODE_APP_ENV === "production") {
+if (process.env.REACT_NODE_APP_ENV === "production") { // for deploy npm build
     HOSTNAME = "http://rattle-api.fly.dev";
     PORT = 8080;
 }
