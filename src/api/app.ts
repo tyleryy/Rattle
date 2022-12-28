@@ -38,6 +38,7 @@ function debugLogger(socket: Socket) {
 }
 
 function cleanUp(socket: Socket) {
+  debugLogger(socket)
   console.log("initiate clean up");
   for (let room of socket.rooms) {
     io.in(room).emit("Go Home");
@@ -52,7 +53,6 @@ io.on("connection", (socket: Socket) => {
 
   socket.on("enterHome", () => {
     cleanUp(socket);
-    debugLogger(socket);
   });
 
   socket.on("createLobby", () => {
@@ -74,6 +74,7 @@ io.on("connection", (socket: Socket) => {
       roomCode: lobby_code,
     };
     rattle_games[lobby_code] = game;
+    // send home to create lobby screen after lobby successfully created
     socket.to(lobby_code).emit("doneCreateLobby", lobby_code);
     debugLogger(socket);
     return lobby_code; // return code so that frontend can reference the correct game/room
