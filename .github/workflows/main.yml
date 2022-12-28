@@ -13,5 +13,4 @@ jobs:
     - uses: actions/checkout@v3
     - uses: actions/setup-node@v3
     - uses: superfly/flyctl-actions/setup-flyctl@master
-    - run: echo Build env - $BUILD_ENV
     - run: cd src/api && flyctl deploy --remote-only

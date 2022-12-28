@@ -26,7 +26,7 @@ const io = new Server(server, { cors: { origin: '*' } });
 export let rattle_games: Rattle = {};
 
 app.get('/', (req: Request, res: Response) => {
-    res.sendStatus(200);
+    res.send(`health check -- ${process.env.BUILD_ENV}`)
 })
 
 // ! remove later
@@ -390,7 +390,7 @@ io.on('connection', (socket: Socket) => {
 
 });
 
-server.listen(PORT, () => console.log("server up"));
+server.listen(PORT, () => console.log(`server up in ${process.env.BUILD_ENV}`));
 
 module.exports = {
     app
