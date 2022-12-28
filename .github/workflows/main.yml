@@ -5,7 +5,6 @@ on:
     branches: ["main", "deploy"]
 env:
   FLY_API_TOKEN: ${{ secrets.FLYCTL_AUTH_TOKEN }}
-  BUILD_ENV: ${{ secrets.BUILD_ENV }}
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -14,3 +13,5 @@ jobs:
     - uses: actions/setup-node@v3
     - uses: superfly/flyctl-actions/setup-flyctl@master
     - run: cd src/api && flyctl deploy --remote-only
+  env:
+    BUILD_ENV: ${{ secrets.BUILD_ENV }}
