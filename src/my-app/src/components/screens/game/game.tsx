@@ -7,6 +7,7 @@ import PlayCanvas from './canvas/playCanvas';
 import { useContext } from 'react';
 import { Context } from '../../../providers/provider';
 import { Socket } from 'socket.io-client';
+import { deltaX } from './constants';
 import { IPlayer, GameState } from "../../../interfaces/interfaces";
 import PassiveCanvas from './canvas/passiveCanvas';
 import { useNavigate } from 'react-router-dom';
@@ -30,7 +31,7 @@ function Game() {
     const [animatedStrokeHistory, changeAnimatedStrokeHistory] = useState<Coordinate[]>([]);
 
     /** Controls whether the key to draw is being pressed or not */
-    const [isDrawing, flipDrawingKey] = useState<boolean>(false);
+    const [isDrawing, flipIsDrawing] = useState<boolean>(false);
 
     /** Remember whether we just drew or not */
     const [justDrew, flipJustDrew] = useState<boolean>(false);
@@ -258,7 +259,7 @@ function Game() {
     function keysDown(e: KeyboardEvent) {
         const key = e.code;
         if (key === drawKey) {
-            flipDrawingKey(true);
+            flipIsDrawing(true);
             // console.log("Key down " + drawKey);
         }
 
@@ -271,13 +272,54 @@ function Game() {
     function keysUp(e: KeyboardEvent) {
         const key = e.code;
         if (key === drawKey) {
-            flipDrawingKey(false);
+            flipIsDrawing(false);
         }
     }
 
     useEffect(() => {
         // console.log(strokeHistory);
     }, [strokeHistory])
+
+    /**
+     * This function is called every frame in the canvas to push the new coordinate
+     */
+    function pushCoordinates() {
+        let coordinate = lastNonNullPos;
+        if (!isDrawing) {
+            // push null
+            // console.log("NULL")
+            coordinate = {
+                x: null,
+                y: null
+            }
+        }
+
+        setStrokeHistory([...strokeHistory, coordinate.y]);
+
+        let currHistory = [...animatedStrokeHistory];
+
+        // update the position by the delta x
+        currHistory.forEach((stroke, index) => {
+            if (stroke.x !== null) {
+                currHistory[index] = { y: stroke.y, x: stroke.x - deltaX }
+            }
+        })
+        // for (let stroke of currHistory) {
+        //     if (stroke.x !== null) {
+        //         stroke.x = stroke.x - deltaX;
+        //     }
+        // }
+
+        // iterate through the strokes to remove the old ones out of the screen
+        const lengthThreshold = 150;
+        // const lengthThreshold = 10;
+
+        if (animatedStrokeHistory.length > lengthThreshold * 3) {
+            changeAnimatedStrokeHistory([...currHistory.slice(lengthThreshold), coordinate]);
+        } else {
+            changeAnimatedStrokeHistory([...currHistory, coordinate]);
+        }
+    }
 
     return (
         <div>
@@ -288,51 +330,21 @@ function Game() {
                     x: Math.floor(lockedX),
                     y: Math.floor(e.clientY - e.target.offsetTop)
                 }
-
                 changeLastNonNullPos(coordinate);
-
-                if (!isDrawing) {
-                    // push null
-                    // console.log("NULL")
-                    coordinate = {
-                        x: null,
-                        y: null
-                    }
-                }
-                setStrokeHistory([...strokeHistory, coordinate.y]);
-
-
-                // iterate through the strokes to remove the old ones out of the screen
-                const lengthThreshold = 150;
-                // const lengthThreshold = 10;
-                // if we have a defined coordinate
-                if (coordinate.x && coordinate.y && isDrawing) {
-                    flipJustDrew(true);
-                    if (animatedStrokeHistory.length > lengthThreshold * 3) {
-                        // delete the first few values to maintain performance
-                        changeAnimatedStrokeHistory([...animatedStrokeHistory.slice(lengthThreshold), coordinate]);
-                    } else {
-                        changeAnimatedStrokeHistory([...animatedStrokeHistory, coordinate]);
-                    }
-                } else if (!coordinate.x && !coordinate.y && justDrew) {
-                    // we did not draw yet, add a null value to separate the strokes
-                    changeAnimatedStrokeHistory([...animatedStrokeHistory, coordinate])
-                    flipJustDrew(false);
-                }
             }}>
                 <Sprite ref={stageRef} image={turnImage} x={100} y={100} />
                 {
                     playerState === "play" ?
                         // this is the both players now draw canvas to (verify also and scoring)
-                        <PlayCanvas lastNonNull={lastNonNullPos} backendStrokeHistory={backendStrokeHistory} p2Pos={p2Pos} socket={socket} />
+                        <PlayCanvas lastNonNull={lastNonNullPos} backendStrokeHistory={backendStrokeHistory} p2Pos={p2Pos} socket={socket} updatePosHistory={pushCoordinates} />
                         :
                         playerState === "wait" ?
                             // this is the afk canvas
                             <PassiveCanvas lastNonNull={lastNonNullPos} p2Pos={p2Pos} socket={socket} />
                             :
                             // this is the draw freestyle canvas to start the level
-                            <DrawCanvas lastNonNull={lastNonNullPos} changeAnimatedStrokes={changeAnimatedStrokeHistory} animateHistory={animatedStrokeHistory} isDrawing={isDrawing} p2Pos={p2Pos} socket={socket} />}
-
+                            <DrawCanvas lastNonNull={lastNonNullPos} animateHistory={animatedStrokeHistory} isDrawing={isDrawing} p2Pos={p2Pos} socket={socket} updatePosHistory={pushCoordinates} />
+                }
             </Stage>
             <div className="SStage">
                 {/* player 1 sprites */}

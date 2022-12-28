@@ -5,7 +5,7 @@ import { Coordinate } from "../../../../interfaces/interfaces";
 import { circleIdleRadius, deltaX, lockedX, strokeSpawnX } from "../constants";
 import { recreateStrokes } from "./common";
 
-function PlayCanvas({ lastNonNull, backendStrokeHistory, p2Pos, socket }: { lastNonNull: Coordinate, backendStrokeHistory: (number | null)[], p2Pos: Coordinate, socket: Socket }) {
+function PlayCanvas({ lastNonNull, backendStrokeHistory, p2Pos, socket, updatePosHistory }: { lastNonNull: Coordinate, backendStrokeHistory: (number | null)[], p2Pos: Coordinate, socket: Socket, updatePosHistory: () => void }) {
     // function PlayCanvas({ backendStrokeHistory, socket }: { lastNonNull: Coordinate, backendStrokeHistory: (number | null)[], p2Pos: Coordinate, socket: Socket }) {
 
     const [timeTick, changeTimeTick] = useState(0);
@@ -60,6 +60,8 @@ function PlayCanvas({ lastNonNull, backendStrokeHistory, p2Pos, socket }: { last
     }, []);
 
     useTick((delta) => {
+        // update the coordinate
+        updatePosHistory();
         // wait until the first part has reached the end
         let historyCopy = [...animateHistory];
 

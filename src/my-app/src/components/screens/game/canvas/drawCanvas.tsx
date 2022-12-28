@@ -5,20 +5,21 @@ import { Coordinate, GameState } from "../../../../interfaces/interfaces";
 import { circleIdleRadius, deltaX, lockedX } from "../constants";
 import { recreateStrokes } from "./common";
 
-function DrawCanvas({ lastNonNull, animateHistory, isDrawing, socket, p2Pos }: { lastNonNull: Coordinate, changeAnimatedStrokes: (input: Coordinate[]) => void, animateHistory: Coordinate[], isDrawing: boolean, socket: Socket, p2Pos: Coordinate }) {
+function DrawCanvas({ lastNonNull, animateHistory, isDrawing, socket, p2Pos, updatePosHistory }: { lastNonNull: Coordinate, animateHistory: Coordinate[], isDrawing: boolean, socket: Socket, p2Pos: Coordinate, updatePosHistory: () => void }) {
     const [time, changeTime] = useState(0);
 
     useTick((delta) => {
+        updatePosHistory();
         const newTime = time + delta;
         changeTime(newTime);
 
         // update the history with the new delta x
-        let historyCopy = [...animateHistory];
-        for (let stroke of historyCopy) {
-            if (stroke.x !== null) {
-                stroke.x = stroke.x - deltaX;
-            }
-        }
+        // let historyCopy = [...animateHistory];
+        // for (let stroke of historyCopy) {
+        //     if (stroke.x !== null) {
+        //         stroke.x = stroke.x - deltaX;
+        //     }
+        // }
 
         socket.emit('update_game_frame', {
             playerPos: lastNonNull
@@ -27,7 +28,7 @@ function DrawCanvas({ lastNonNull, animateHistory, isDrawing, socket, p2Pos }: {
         // I don't know if this actually works
         // console.log("Emitting animated history to backed")
         // console.log(historyCopy);
-        socket.emit('sendAnimatedStrokes', historyCopy);
+        // socket.emit('sendAnimatedStrokes', historyCopy);
     })
 
     const [circleRad, changeCircleRad] = useState(circleIdleRadius);
