@@ -12,7 +12,9 @@ dotenv.config()
 
 
 // ENVIRONMENT VARIABLES
-let PORT: number = 2000; // for local npm start (may need to change if local port in use)
+let PORT: number = 2000; // for local npm start 
+// (may need to change if local port in use)
+// also must match in frontend App.tsx
 
 if (process.env.BUILD_ENV === "production") { // for deploy npm build
     // fly io server url: http://rattle-api.fly.dev
