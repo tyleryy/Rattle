@@ -1,5 +1,5 @@
 import express from 'express';
-import e, { Request, Response } from 'express';
+import { Request, Response } from 'express';
 import { generateLobbyCode } from './util/lobby';
 import { createServer } from 'http';
 import { Server, Socket } from "socket.io";
@@ -7,14 +7,15 @@ import { Player, IPlayer } from './classes/player';
 import { GameInstance, Rattle, GameFrameData, PlayerState, Coordinate } from './interfaces/rattle';
 import { findGameFromSocket, getPlayerFromSocket } from './util/socket';
 import { buildGameStateFromInstance } from './util/game';
+import * as dotenv from 'dotenv'
+dotenv.config()
 
-// fly io server url: http://rattle-api.fly.dev
+
 // ENVIRONMENT VARIABLES
-let HOSTNAME: string; 
-let PORT: number = 2000; // for local npm start
+let PORT: number = 2000; // for local npm start (may need to change if local port in use)
 
-if (process.env.REACT_NODE_APP_ENV === "production") { // for deploy npm build
-    HOSTNAME = "http://rattle-api.fly.dev";
+if (process.env.BUILD_ENV === "production") { // for deploy npm build
+    // fly io server url: http://rattle-api.fly.dev
     PORT = 8080;
 }
 
@@ -391,7 +392,9 @@ io.on('connection', (socket: Socket) => {
 
 server.listen(PORT, () => console.log("server up"));
 
-
+module.exports = {
+    app
+}
 
 
 

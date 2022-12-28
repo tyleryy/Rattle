@@ -18,8 +18,13 @@ import useSound from 'use-sound'
 import { io, Socket } from 'socket.io-client';
 import { useEffect, useState } from 'react';
 
-const PORT = 'http://rattle-api.fly.dev/' // 8080 port exposed
-let socket: Socket = io(PORT);
+let HOSTNAME: string = 'http://localhost:2000/' // must match with backend port
+if (process.env.NODE_ENV === "production") { // for deploy npm build
+  HOSTNAME = "http://rattle-api.fly.dev";
+}
+
+
+let socket: Socket = io(HOSTNAME);
 
 function App() {
   const [, setIsConnected] = useState(socket.connected);
@@ -38,7 +43,7 @@ function App() {
   useEffect(() => {
 
     if (!socket) {
-      socket = io(PORT);
+      socket = io(HOSTNAME);
     }
     socket.on('connect', () => {
       console.log("client now is connected with id " + socket.id);
