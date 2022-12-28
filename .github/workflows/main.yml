@@ -12,5 +12,5 @@ jobs:
     - uses: actions/checkout@v3
     - uses: actions/setup-node@v3
     - uses: superfly/flyctl-actions/setup-flyctl@master
-    - run: cd src/api
+    - run: cd src/api && echo pwd
     - run: flyctl deploy --remote-only
