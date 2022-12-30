@@ -61,7 +61,7 @@ const Home = () => {
             </div> 
       </div>
       <div className = "petr">
-          <ButtonPetr imageEnter="./game_sprites/char3.png" imageLeave="./game_sprites/char3.png">petr!</ButtonPetr>
+          <ButtonPetr imageEnter="./game_sprites/char3.png" imageLeave="./game_sprites/char3.png">petr!!</ButtonPetr>
       </div>
     </div>
   )
