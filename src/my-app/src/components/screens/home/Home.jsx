@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import Button from '../../buton/Button';
+import { Context } from "../../../providers/provider";
 import Title from '../../title/Title';
 import { Stage, AnimatedSprite, PixiComponent } from '@inlet/react-pixi'
 import ButtonPetr from '../../buton/ButtonPetr'
@@ -7,8 +8,11 @@ import "./Home.css";
 import { useNavigate } from "react-router-dom";
 
 
-const Home = (props) => {
-  const [socket, _] = useState(props.socket);
+const Home = () => {
+  const states = useContext(Context);
+  const [lobby_code, changeLobbyCode] = states.lobby_state;
+  const [player, changePlayer] = states.player_state;
+  const [socket, _] = states.socket_state;
   // const socket = props.socket;
   const navigate = useNavigate();
   useEffect(() => {
@@ -17,17 +21,10 @@ const Home = (props) => {
 
     socket.on('doneCreateLobby', (data) => {
       console.log(data);
-      props.changeLobbyCode(data);
+      changeLobbyCode(data);
+      changePlayer("Player 1")
       navigate("/choose");
     })
-
-    socket.on('P2JoinedLobby', (game_obj) => {
-      console.log("p2 joined")
-      let p1 = game_obj.p1;
-      let p2 = game_obj.p2;
-      console.log("P2JOINED")
-      navigate('/choose')
-    });
 
     return () => { socket.removeAllListeners() };
 
@@ -39,17 +36,17 @@ const Home = (props) => {
         <Title class="title-shaking"></Title>
       </div>
       <div className="home">
-            <div className = "Sprite">
-              <Stage width={300} height={700} options={{ backgroundAlpha:0 }}>
-                {/* {p1Ani} */}
-                <AnimatedSprite animationSpeed={0.05} isPlaying={true} images={["./game_sprites/char2_frames/char2frame1.png", "./game_sprites/char2_frames/char2frame3.png"]} anchor={0.01}/> 
-                {/* <AnimatedSprite animationSpeed={0.05} isPlaying={true} images={["./game_sprites/char2.png", "./game_sprites/back2.png"]} anchor={0.5}/> */}
-              </Stage>
-            </div>
-        <div className = "button1">
+        <div className="Sprite">
+          <Stage width={300} height={700} options={{ backgroundAlpha: 0 }}>
+            {/* {p1Ani} */}
+            <AnimatedSprite animationSpeed={0.05} isPlaying={true} images={["./game_sprites/char2_frames/char2frame1.png", "./game_sprites/char2_frames/char2frame3.png"]} anchor={0.01} />
+            {/* <AnimatedSprite animationSpeed={0.05} isPlaying={true} images={["./game_sprites/char2.png", "./game_sprites/back2.png"]} anchor={0.5}/> */}
+          </Stage>
+        </div>
+        <div className="button1">
           <Button imageEnter="./game_sprites/create2.png" imageLeave="./game_sprites/create.png" routesPath="/choose" socketEmitEvent={"createLobby"} socket={socket}>dog</Button>
         </div>
-        <div className = "button1">
+        <div className="button1">
           <Button imageEnter="./game_sprites/join.png" imageLeave="./game_sprites/join2.png" routesPath="/join" socket={socket}>dog</Button>
         </div>
         <div>

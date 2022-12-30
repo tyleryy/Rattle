@@ -16,6 +16,7 @@ export function recreateStrokes(g: any, isDrawing: boolean, circleRad: number, a
     // must clear to animate
     g.clear();
 
+
     // draw player circle
     const animationSpeed = 1;
     let newRadius: number = circleRad;
@@ -32,17 +33,16 @@ export function recreateStrokes(g: any, isDrawing: boolean, circleRad: number, a
             newRadius = newRadius - animationSpeed;
         }
     }
-    // const newRadius = isDrawing ? circleDrawingRadius : circleIdleRadius
 
     // draw opponent player
-    const fakeCoord = {
-        x: p2Coord.x,
-        y: lastNonNull.y! + Math.floor(Math.random() * 100)
-    }
-    drawPlayerCircle(g, playerX, fakeCoord, circleIdleRadius, 0x334DFF, 0xFFD233);
+    // const fakeCoord = {
+    //     x: p2Coord.x,
+    //     y: lastNonNull.y! + Math.floor(Math.random() * 100)
+    // }
+    // drawPlayerCircle(g, playerX, fakeCoord, circleIdleRadius, 0x334DFF, 0xFFD233);
 
     // use this function if want to render player2 movement
-    // drawPlayerCircle(g, playerX, p2Coord, circleIdleRadius, 0x334DFF, 0xFFD233);
+    drawPlayerCircle(g, playerX, p2Coord, circleIdleRadius, 0x334DFF, 0xFFD233);
 
 
     // draw client player

@@ -9,7 +9,7 @@
 
 .column {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: center;
     margin-left: 1em;
     margin-right: 1em;
@@ -40,5 +40,28 @@
     50% { transform: translate(0, 0) rotate(0eg); }
     75% { transform: translate(-5px, 5px) rotate(-5deg); }
     100% { transform: translate(0, 0) rotate(0deg); }
-  }
+}
+
+.roomCode {
+    font-size: 2em;
+    color: white;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    margin-top: 0.25em;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.youArrow {
+    position: absolute;
+    height: 8em;
+    left: 22vw;
+    bottom: 0;
+    z-index: 2;
+    animation: point 1s infinite;
+}
+
+@keyframes point {
+    0% { transform: translate(0, -2px); }
+    50% { transform: translate(0, 0px); }
+    100% { transform: translate(0, -2px); }
+}
 
