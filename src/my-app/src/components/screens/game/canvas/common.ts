@@ -16,6 +16,7 @@ export function recreateStrokes(g: any, isDrawing: boolean, circleRad: number, a
     // must clear to animate
     g.clear();
 
+
     // draw player circle
     const animationSpeed = 1;
     let newRadius: number = circleRad;
