@@ -60,7 +60,7 @@ io.on('connection', (socket: Socket) => {
 
     socket.on('enterHome', () => {
         cleanUp(socket);
-        debugLogger();
+        // debugLogger();
     })
 
     socket.on('createLobby', () => {
@@ -82,7 +82,7 @@ io.on('connection', (socket: Socket) => {
             roomCode: lobby_code
         }
         rattle_games[lobby_code] = game;
-        debugLogger()
+        // debugLogger()
         socket.to(lobby_code).emit('doneCreateLobby', lobby_code);
         return lobby_code; // return code so that frontend can reference the correct game/room
     })
@@ -99,7 +99,7 @@ io.on('connection', (socket: Socket) => {
         game.p2 = new Player(2, socket.id, socket);
         // send data to frontend
         socket.emit("P2JoinedLobby", { p1char: game.p1?.char, p2char: game.p2.char, code: code });
-        debugLogger();
+        // debugLogger();
     })
 
     socket.on('selectCharacter', (JSONStrPayload: any) => {
@@ -155,7 +155,7 @@ io.on('connection', (socket: Socket) => {
         console.log("disconnected " + socket.id);
     })
 
-    socket.on('disconnect', () => { debugLogger() });
+    // socket.on('disconnect', () => { debugLogger() });
 
     // socket event for updating game state frame by frame
     socket.on('update_game_frame', (frameData: GameFrameData) => {
