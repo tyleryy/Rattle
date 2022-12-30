@@ -1,5 +1,6 @@
 import { Graphics, useTick } from "@inlet/react-pixi";
 import { useEffect, useState } from "react";
+import React from 'react'
 import { Socket } from "socket.io-client";
 import { Coordinate } from "../../../../interfaces/interfaces";
 import { circleIdleRadius, lockedX, strokeSpawnX } from "../constants";

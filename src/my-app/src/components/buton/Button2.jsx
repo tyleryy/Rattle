@@ -8,9 +8,9 @@ import "./buttons.css";
 function Button2 (props) {
     const inputRef = useRef(null);
     const states = useContext(Context);
-    const [lobby_code, changeLobbyCode] = states.lobby_state;
-    const [player, changePlayer] = states.player_state;
-    const [socket, _] = states.socket_state;
+    const [, changeLobbyCode] = states.lobby_state;
+    const [, changePlayer] = states.player_state;
+    const [socket, ] = states.socket_state;
     const [playSound] = useSound("./game_audio/buttaudio.mp3", {volume: 1.0})
     function handleClick() {
         let room = inputRef.current.value;

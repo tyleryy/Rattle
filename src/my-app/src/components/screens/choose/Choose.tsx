@@ -1,38 +1,30 @@
-import React from "react";
 import { useNavigate } from "react-router-dom";
-import Screen from '../../screen_bg/Screen'
 import ButtonChar from '../../buton/ButtonChar';
-import Button from '../../buton/Button';
 import SmallButton from "../../buton/SmallButton";
-import Button2 from '../../buton/Button2';
-import Platform from "../../platform/Platform";
-import { useState, useEffect, useRef, useContext } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { Context } from "../../../providers/provider";
-import { Stage, Sprite, AnimatedSprite, PixiComponent } from '@inlet/react-pixi'
-import { Container, Col, Row } from 'react-bootstrap';
-import { Socket } from "socket.io-client";
+import { Stage, AnimatedSprite } from '@inlet/react-pixi'
 import "./Choose.css";
-import { JsxElement } from "typescript";
 
-interface charSpriteMap {
-    [key: number]: string[]
-}
+// interface charSpriteMap {
+//     [key: number]: string[]
+// }
 
-interface aniSpriteMap {
-    [key: number]: JSX.Element
-}
+// interface aniSpriteMap {
+//     [key: number]: JSX.Element
+// }
 
 function Choose() {
     const states: any = useContext(Context);
-    const [lobby_code, changeLobbyCode] = states.lobby_state;
-    const [player, changePlayer] = states.player_state;
-    const [socket, _] = states.socket_state;
-    const [character, changeChar] = states.character_state;
-    const [char2, changeChar2] = states.char2_state;
+    const [lobby_code, ] = states.lobby_state;
+    const [player, ] = states.player_state;
+    const [socket, ] = states.socket_state;
+    const [, changeChar] = states.character_state;
+    const [, changeChar2] = states.char2_state;
 
     // stage size
-    const [stageW, changeW] = useState<number>(800);
-    const [stageH, changeH] = useState<number>(600);
+    // const [, changeW] = useState<number>(800);
+    // const [, changeH] = useState<number>(600);
     // const [player1, changeChar1] = useState({
     //     image: "./game_sprites/char1.png",
     //     character: 0
@@ -57,10 +49,9 @@ function Choose() {
     const [otherchar3_active, othercheckActiveChar3] = useState(false)
 
 
-    const [p1Frames, setP1Frames] = useState<any[]>([])
+    // const [p1Frames, setP1Frames] = useState<any[]>([])
 
     useEffect(() => {
-        console.log("Hello word");
         if (char1_active === true) {
             checkActiveChar2(false);
             checkActiveChar3(false);
@@ -82,7 +73,6 @@ function Choose() {
     }, [char3_active])
 
     useEffect(() => {
-        console.log("Hello word");
         if (otherchar1_active === true) {
             othercheckActiveChar2(false);
             othercheckActiveChar3(false);
@@ -127,8 +117,6 @@ function Choose() {
                 other_player = data.p1
             }
 
-            console.log("current player " + curr_player)
-            console.log("opponent player " + other_player)
             switch (curr_player) {
                 case '1':
                     checkActiveChar1(true)
@@ -142,7 +130,6 @@ function Choose() {
                 default:
                     break;
             }
-            console.log("other player "+ other_player)
             if (other_player) {
                 switch (other_player) {
                     case '1':
@@ -163,12 +150,13 @@ function Choose() {
 
         })
         // get the width of the screen
-        const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
-        changeW(vw);
-        const vh = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0);
-        changeH(vh);
+        // const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
+        // changeW(vw);
+        // const vh = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0);
+        // changeH(vh);
 
-        console.log(character);
+        // console.log("current player " + character)
+        // console.log("opponent player " + other_char)
         return () => { socket.removeAllListeners() };
     }, []);
 
@@ -209,7 +197,7 @@ function Choose() {
                     </div>
                 </div>
             </div>
-            <img className="youArrow" src="./game_sprites/you.png" />
+            <img className="youArrow" src="./game_sprites/you.png" alt="arrow pointing at your character" />
             <div className="parent">
                 <SmallButton imageEnter="./game_sprites/back.png" imageLeave="./game_sprites/back2.png" routesPath="/" socketEmitEvent="" />
                 <SmallButton imageEnter="./game_sprites/select.png" imageLeave="./game_sprites/select2.png" routesPath="/options" socketEmitEvent="go_to_options" />

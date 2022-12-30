@@ -1,18 +1,15 @@
 import React, { useEffect, useContext } from "react";
-import Screen from '../../screen_bg/Screen'
 import Button from '../../buton/Button';
-import ButtonVal from '../../buton/ButtonVal';
 import { Socket } from "socket.io-client";
 import { useNavigate } from "react-router-dom";
 import { Context } from "../../../providers/provider";
-import BackButtonRow from "../../backButtonRow/backButtonRow";
 import "./Options.css"
 
 
 function Options() {
     const navigate = useNavigate();
     const states = useContext<any>(Context);
-    const [socket, _]: [Socket, any] = states.socket_state;
+    const [socket, ]: [Socket, any] = states.socket_state;
     useEffect(() => {
         socket.on('go_to_game', () => {
             navigate("/game");
