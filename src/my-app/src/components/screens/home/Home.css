@@ -1,3 +1,4 @@
+/* TODO adjust rotating to match characters on home screen */
 @keyframes tilt-shaking {
     0% {transform: rotate(0deg);}
     25% { transform: rotate(5deg); }
