@@ -20,7 +20,7 @@ import { useEffect, useState } from 'react';
 
 let HOSTNAME: string = 'http://localhost:2000/' // must match with backend port
 if (process.env.NODE_ENV === "production") { // for deploy npm build
-  HOSTNAME = "http://rattle-api.fly.dev";
+  HOSTNAME = "https://rattle-api.fly.dev";
 }
 
 
