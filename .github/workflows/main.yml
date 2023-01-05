@@ -2,7 +2,7 @@ name: super fly and really cool fly.io api deploy
 
 on:
   push:
-    branches: ["main", "deploy"]
+    branches: ["main"]
 env:
   FLY_API_TOKEN: ${{ secrets.FLYCTL_AUTH_TOKEN }}
   BUILD_ENV: ${{ secrets.BUILD_ENV }}
@@ -10,11 +10,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - uses: actions/setup-node@v3
-    - uses: superfly/flyctl-actions/setup-flyctl@master
-    - run: |
-        cd src/api
-        touch .env
-        echo BUILD_ENV=${{ secrets.BUILD_ENV }} >> .env
-        flyctl deploy --remote-only
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+      - uses: superfly/flyctl-actions/setup-flyctl@master
+      - run: |
+          cd src/api
+          touch .env
+          echo BUILD_ENV=${{ secrets.BUILD_ENV }} >> .env
+          flyctl deploy --remote-only
