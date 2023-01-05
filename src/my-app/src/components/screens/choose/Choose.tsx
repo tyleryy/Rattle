@@ -197,7 +197,7 @@ function Choose() {
                     </div>
                 </div>
             </div>
-            <img className="youArrow" src="./game_sprites/you.png" alt="" />
+            <img className="youArrow" src="./game_sprites/you.png" alt="arrow pointing at your character" />
             <div className="parent">
                 <SmallButton imageEnter="./game_sprites/back.png" imageLeave="./game_sprites/back2.png" routesPath="/" socketEmitEvent="" />
                 <SmallButton imageEnter="./game_sprites/select.png" imageLeave="./game_sprites/select2.png" routesPath="/options" socketEmitEvent="go_to_options" />
