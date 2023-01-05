@@ -1,5 +1,5 @@
 import { Socket } from 'socket.io';
-import { rattle_games } from '../app';
+import { rattle_games } from '../rattle-api';
 import { Player } from '../classes/player';
 import { GameInstance } from '../interfaces/rattle';
 

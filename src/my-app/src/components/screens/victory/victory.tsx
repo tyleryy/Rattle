@@ -1,7 +1,6 @@
 import { Stage, AnimatedSprite } from "@inlet/react-pixi";
 import React from "react";
 import BackButtonRow from "../../backButtonRow/backButtonRow";
-import Platform from "../../platform/Platform";
 import "./victory.css";
 
 function Victory() {
@@ -11,7 +10,7 @@ function Victory() {
             <BackButtonRow />
             <div className="column">
                 <div className="winner">
-                    <img src="./game_sprites/winner.png" id="winner" />
+                    <img src="./game_sprites/winner.png" id="winner" alt="winner label"/>
                 </div>
                 <div className="stage">
                     <Stage width={400} height={710} options={{ backgroundAlpha: 0 }}>
@@ -21,7 +20,7 @@ function Victory() {
                         <AnimatedSprite animationSpeed={0.05} isPlaying={false} images={["./game_sprites/petrframe1.png", "./game_sprites/char3frame2.png"]} anchor={0.02} visible={false} />
                     </Stage>
                 </div>
-                <img src="./game_sprites/platform2.png" />
+                <img src="./game_sprites/platform2.png" alt="winner display platform" />
             </div>
         </div>
     );

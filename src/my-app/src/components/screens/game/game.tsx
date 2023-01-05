@@ -6,7 +6,6 @@ import { lockedX } from './constants';
 import PlayCanvas from './canvas/playCanvas';
 import { useContext } from 'react';
 import { Context } from '../../../providers/provider';
-import { Socket } from 'socket.io-client';
 import { IPlayer, GameState } from "../../../interfaces/interfaces";
 import PassiveCanvas from './canvas/passiveCanvas';
 import { useNavigate } from 'react-router-dom';
@@ -15,11 +14,11 @@ import "./game.css";
 function Game() {
     // remember the strokes done
     const states: any = useContext(Context);
-    const [lobby_code, changeLobbyCode] = states.lobby_state;
-    const [player, changePlayer] = states.player_state;
-    const [socket, _] = states.socket_state;
-    const [character, changeChar] = states.character_state;
-    const [otherchar, changeChar2] = states.char2_state;
+    // const [lobby_code, changeLobbyCode] = states.lobby_state;
+    // const [player, changePlayer] = states.player_state;
+    const [socket, ] = states.socket_state;
+    const [character, ] = states.character_state;
+    const [otherchar, ] = states.char2_state;
 
     const navigate = useNavigate();
     /** Static stroke history recording the y */
@@ -56,7 +55,7 @@ function Game() {
     const [justEndedDraw, setJustEndedDraw] = useState<boolean>(false);
 
     // opponent player
-    const [opponentState, setOpponentState] = useState<IPlayer>();
+    // const [opponentState, setOpponentState] = useState<IPlayer>();
 
     // what phase the game is in
     // playPhase is the copy strokes phase.
@@ -70,12 +69,12 @@ function Game() {
 
 
     useEffect(() => {
+        // ! adding back in but I don't know why they are assigned in useEffect here
         const [lobby_code, changeLobbyCode] = states.lobby_state;
         const [player, changePlayer] = states.player_state;
         const [socket, _] = states.socket_state;
         const [character, changeChar] = states.character_state;
         console.log(character)
-
         console.log("Hello game")
         // get the width of the screen
         const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
@@ -146,13 +145,13 @@ function Game() {
     const [char3, char3Check] = useState(false);
 
     useEffect(() => {
-        if (character == 1) {
+        if (character === 1) {
             char1Check(true);
         }
-        else if (character == 2) {
+        else if (character === 2) {
             char2Check(true);
         }
-        else if (character == 3) {
+        else if (character === 3) {
             char3Check(true);
         }
     }, [char1, char2, char3])
@@ -163,13 +162,13 @@ function Game() {
     const [otherchar3, otherchar3Check] = useState(false);
 
     useEffect(() => {
-        if (otherchar == 1) {
+        if (otherchar === 1) {
             otherchar1Check(true);
         }
-        else if (otherchar == 2) {
+        else if (otherchar === 2) {
             otherchar2Check(true);
         }
-        else if (otherchar == 3) {
+        else if (otherchar === 3) {
             otherchar3Check(true);
         }
     }, [otherchar1, otherchar2, otherchar3])
@@ -239,8 +238,8 @@ function Game() {
 
     useEffect(() => {
         if (playerState === "wait") {
-            // console.log("STROKE HISTORY CHANGED");
-            // console.log(strokeHistory)
+            console.log("STROKE HISTORY CHANGED");
+            console.log(strokeHistory)
         }
     }, [strokeHistory])
 
@@ -276,8 +275,8 @@ function Game() {
     }
 
     useEffect(() => {
-        // console.log(strokeHistory);
-    }, [strokeHistory])
+        console.log(strokeHistory);
+    }, [])
 
     return (
         <div>

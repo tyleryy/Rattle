@@ -1,8 +1,8 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useContext } from "react";
 import Button from '../../buton/Button';
 import { Context } from "../../../providers/provider";
 import Title from '../../title/Title';
-import { Stage, AnimatedSprite, PixiComponent } from '@inlet/react-pixi'
+import { Stage, AnimatedSprite } from '@inlet/react-pixi'
 import ButtonPetr from '../../buton/ButtonPetr'
 import "./Home.css";
 import { useNavigate } from "react-router-dom";
@@ -10,9 +10,9 @@ import { useNavigate } from "react-router-dom";
 
 const Home = () => {
   const states = useContext(Context);
-  const [lobby_code, changeLobbyCode] = states.lobby_state;
-  const [player, changePlayer] = states.player_state;
-  const [socket, _] = states.socket_state;
+  const [, changeLobbyCode] = states.lobby_state;
+  const [, changePlayer] = states.player_state;
+  const [socket, ] = states.socket_state;
   // const socket = props.socket;
   const navigate = useNavigate();
   useEffect(() => {
@@ -61,7 +61,7 @@ const Home = () => {
             </div> 
       </div>
       <div className = "petr">
-          <ButtonPetr imageEnter="./game_sprites/char3.png" imageLeave="./game_sprites/char3.png">petr!</ButtonPetr>
+          <ButtonPetr imageEnter="./game_sprites/char3.png" imageLeave="./game_sprites/char3.png">petr!!</ButtonPetr>
       </div>
     </div>
   )

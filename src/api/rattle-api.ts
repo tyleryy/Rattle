@@ -1,5 +1,5 @@
 import express from 'express';
-import e, { Request, Response } from 'express';
+import { Request, Response } from 'express';
 import { generateLobbyCode } from './util/lobby';
 import { createServer } from 'http';
 import { Server, Socket } from "socket.io";
@@ -7,6 +7,19 @@ import { Player, IPlayer } from './classes/player';
 import { GameInstance, Rattle, GameFrameData, PlayerState, Coordinate } from './interfaces/rattle';
 import { findGameFromSocket, getPlayerFromSocket } from './util/socket';
 import { buildGameStateFromInstance } from './util/game';
+import * as dotenv from 'dotenv'
+dotenv.config()
+
+
+// ENVIRONMENT VARIABLES
+let PORT: number = 2000; // for local npm start 
+// (may need to change if local port in use)
+// also must match in frontend App.tsx
+
+if (process.env.BUILD_ENV === "production") { // for deploy npm build
+    // fly io server url: http://rattle-api.fly.dev
+    PORT = 8080;
+}
 
 const app = express();
 const server = createServer(app)
@@ -15,14 +28,18 @@ const io = new Server(server, { cors: { origin: '*' } });
 export let rattle_games: Rattle = {};
 
 app.get('/', (req: Request, res: Response) => {
-    res.sendStatus(200);
+    res.send(`health check -- ${process.env.BUILD_ENV}`)
 })
 
 // ! remove later
-function debugLogger(socket: Socket) {
+function debugLogger() {
     console.log('\n--------------------------');
     console.log("games: ", rattle_games);
-    console.log(socket.rooms);
+    let rooms = new Set<string>()
+    io.sockets.sockets.forEach( (socket)=> {
+        socket.rooms.forEach( room => rooms.add(room))
+    })
+    console.log(rooms);
     console.log("num of sockets: " + io.sockets.sockets.size);
     console.log('--------------------------\n');
 }
@@ -43,7 +60,7 @@ io.on('connection', (socket: Socket) => {
 
     socket.on('enterHome', () => {
         cleanUp(socket);
-        debugLogger(socket);
+        // debugLogger();
     })
 
     socket.on('createLobby', () => {
@@ -65,8 +82,8 @@ io.on('connection', (socket: Socket) => {
             roomCode: lobby_code
         }
         rattle_games[lobby_code] = game;
+        // debugLogger()
         socket.to(lobby_code).emit('doneCreateLobby', lobby_code);
-        debugLogger(socket);
         return lobby_code; // return code so that frontend can reference the correct game/room
     })
 
@@ -82,7 +99,7 @@ io.on('connection', (socket: Socket) => {
         game.p2 = new Player(2, socket.id, socket);
         // send data to frontend
         socket.emit("P2JoinedLobby", { p1char: game.p1?.char, p2char: game.p2.char, code: code });
-        debugLogger(socket);
+        // debugLogger();
     })
 
     socket.on('selectCharacter', (JSONStrPayload: any) => {
@@ -138,7 +155,7 @@ io.on('connection', (socket: Socket) => {
         console.log("disconnected " + socket.id);
     })
 
-    socket.on('disconnect', () => { debugLogger(socket) });
+    // socket.on('disconnect', () => { debugLogger() });
 
     // socket event for updating game state frame by frame
     socket.on('update_game_frame', (frameData: GameFrameData) => {
@@ -375,13 +392,11 @@ io.on('connection', (socket: Socket) => {
 
 });
 
-server.listen(2000, () => console.log("server up"));
+server.listen(PORT, () => console.log(`server up in ${process.env.BUILD_ENV}`));
 
 module.exports = {
     app
 }
-
-
 
 
 
