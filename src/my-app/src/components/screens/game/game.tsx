@@ -1,4 +1,4 @@
-import { Stage, Sprite, AnimatedSprite } from '@inlet/react-pixi'
+import { Stage, Sprite, AnimatedSprite } from '@inlet/react-pixi';
 import { useState, useEffect, useRef } from 'react';
 import DrawCanvas from './canvas/drawCanvas';
 import { Coordinate } from '../../../interfaces/interfaces';
@@ -20,7 +20,6 @@ function Game() {
     const [socket, ] = states.socket_state;
     const [character, ] = states.character_state;
     const [otherchar, ] = states.char2_state;
-
     const navigate = useNavigate();
     /** Static stroke history recording the y */
     const [strokeHistory, setStrokeHistory] = useState<(number | null)[]>([]);
@@ -52,6 +51,7 @@ function Game() {
 
     // client player (not the opponent)
     const [playerState, setPlayerState] = useState<"wait" | "draw" | "play">("wait");
+
     // figure out if the player just ended drawing phase
     const [justEndedDraw, setJustEndedDraw] = useState<boolean>(false);
 
@@ -63,6 +63,8 @@ function Game() {
     // const [isPlayPhase, setPlayPhase] = useState<boolean>(false);
     // waiting phase renders a passive canvas where all you do is move around
     // const [isWaiting, setWaiting] = useState<boolean>(true);
+
+    // Red label in top left hand corner displaying what phase the player is in
     const [turnImage, setTurnImage] = useState<string>("./game_sprites/wait.png");
 
     // opponent position
@@ -70,11 +72,6 @@ function Game() {
 
 
     useEffect(() => {
-        // ! adding back in but I don't know why they are assigned in useEffect here
-        const [lobby_code, changeLobbyCode] = states.lobby_state;
-        const [player, changePlayer] = states.player_state;
-        const [socket, _] = states.socket_state;
-        const [character, changeChar] = states.character_state;
         console.log(character)
         console.log("Hello game")
         // get the width of the screen
@@ -106,7 +103,7 @@ function Game() {
             setGameState(gameState);
         });
 
-        // start to draw
+        // 4. start to draw
         socket.on("startTurn", () => {
             // setPlayPhase(false);
             // setWaiting(false);
@@ -114,7 +111,7 @@ function Game() {
             setPlayerState("draw");
         });
 
-        // waiting for other player to draw
+        // 4. waiting for other player to draw
         socket.on("waitTurn", () => {
             // setPlayPhase(false);
             // setWaiting(true);
@@ -122,6 +119,7 @@ function Game() {
             setPlayerState("wait");
         });
 
+        // 8. set player to play phase and send stroke history to backend
         socket.on("startPlay", (strokeHistory: (number | null)[]) => {
             console.log("STARTING PLAY NOW STATE");
             setBackendStrokeHistory(strokeHistory);
@@ -135,7 +133,7 @@ function Game() {
             // }
         });
 
-        // start the game
+        // 1. start the game
         socket.emit("startGame");
 
         // loopPosition(isDrawing, prevCoord, currCoord);
@@ -146,16 +144,16 @@ function Game() {
     const [char3, char3Check] = useState(false);
 
     useEffect(() => {
-        if (character === 1) {
+        if (character == 1) {
             char1Check(true);
         }
-        else if (character === 2) {
+        else if (character == 2) {
             char2Check(true);
         }
-        else if (character === 3) {
+        else if (character == 3) {
             char3Check(true);
         }
-    }, [char1, char2, char3])
+    }, [])
 
 
     const [otherchar1, otherchar1Check] = useState(false);
@@ -163,16 +161,19 @@ function Game() {
     const [otherchar3, otherchar3Check] = useState(false);
 
     useEffect(() => {
-        if (otherchar === 1) {
+        if (otherchar == 1) {
             otherchar1Check(true);
         }
-        else if (otherchar === 2) {
+        else if (otherchar == 2) {
             otherchar2Check(true);
         }
-        else if (otherchar === 3) {
+        else if (otherchar == 3) {
             otherchar3Check(true);
         }
-    }, [otherchar1, otherchar2, otherchar3])
+    }, [])
+    
+    // console.log(char1)
+    // console.log(otherchar2)
 
     // when we update game state, update the smaller states connected
     useEffect(() => {
@@ -183,18 +184,33 @@ function Game() {
         }
     }, [gameState]);
 
-    // handle player state changes
+
     useEffect(() => {
         console.log("PLAYER STATE JUST CHANGED TO " + playerState);
-        // start timer if the player is drawing
-        let imagePath = playerState === "wait" ? "./game_sprites/wait.png" : "./game_sprites/freestyle.png";
+
+        // set red phase label to match the game phase player is in
+        let imagePath: string;
+        switch (playerState) {
+            case "wait":
+                imagePath = "./game_sprites/wait.png";
+                break;
+            case "play":
+                imagePath = "./game_sprites/freestyle.png"
+                break;
+            case "draw":
+                imagePath = "./game_sprites/draw.png"
+                break;
+            default:
+                throw new Error("invalid player state");
+        }
         setTurnImage(imagePath);
 
         // ! HARDCODE THE TIME
+        // start timer if the player is drawing
         const drawTime = 5000;
         if (playerState === "draw") {
             console.log("SETTING DRAW TIME TIMER FOR " + drawTime + " ms");
-            setStrokeHistory([])
+            setStrokeHistory([]) // init blank stroke hist
             setTimeout(() => {
                 console.log("DRAW TIMEOUT EXECUTED")
                 setJustEndedDraw(true);
@@ -221,10 +237,11 @@ function Game() {
 
     // used to send drawings to backend with timer
     useEffect(() => {
+        // 6. end of draw phase
         if (justEndedDraw && playerState === "draw") {
             console.log("Emitting the following stroke history to backend")
             console.log(strokeHistory);
-            setJustEndedDraw(false);
+            setJustEndedDraw(false); // ! possibly circular useEffect (not a a big deal)
             socket.emit("endTurn", strokeHistory);
         }
     }, [justEndedDraw]);
@@ -233,7 +250,7 @@ function Game() {
         if (backendStrokeHistory.length > 0) {
             setPlayerState("play");
             console.log("GOT THIS FROM SOCKET")
-            console.log(strokeHistory)
+            console.log(backendStrokeHistory) // ! originally strokeHistory
         }
     }, [backendStrokeHistory])
 
@@ -283,7 +300,7 @@ function Game() {
      * This function is called every frame in the canvas to push the new coordinate
      */
     function pushCoordinates() {
-        let coordinate = lastNonNullPos;
+        let coordinate: Coordinate = lastNonNullPos;
         if (!isDrawing) {
             // push null
             // console.log("NULL")

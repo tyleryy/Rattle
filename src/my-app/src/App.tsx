@@ -40,7 +40,8 @@ function App() {
     player_state: player_state, 
     socket_state: socket_state, 
     character_state: character, 
-    char2_state: char2 }
+    char2_state: char2 
+  }
 
 
   const [playSound] = useSound("./game_audio/home_audio.mp3", { volume: 0.03, loop: true })

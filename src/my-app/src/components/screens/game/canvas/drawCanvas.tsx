@@ -8,6 +8,7 @@ import { recreateStrokes } from "./common";
 function DrawCanvas({ lastNonNull, animateHistory, isDrawing, socket, p2Pos, updatePosHistory }: { lastNonNull: Coordinate, animateHistory: Coordinate[], isDrawing: boolean, socket: Socket, p2Pos: Coordinate, updatePosHistory: () => void }) {
     const [time, changeTime] = useState(0);
 
+    // 5a. drawing
     useTick((delta) => {
         updatePosHistory();
         const newTime = time + delta;
@@ -32,8 +33,6 @@ function DrawCanvas({ lastNonNull, animateHistory, isDrawing, socket, p2Pos, upd
     })
 
     const [circleRad, changeCircleRad] = useState(circleIdleRadius);
-
-
 
     return (
         <Graphics draw={(g) => {

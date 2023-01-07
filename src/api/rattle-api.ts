@@ -28,7 +28,7 @@ const io = new Server(server, { cors: { origin: "*" } });
 export let rattle_games: Rattle = {};
 
 app.get('/', (req: Request, res: Response) => {
-    res.send(`health check -- ${process.env.BUILD_ENV}`)
+    res.send(`health check - ${process.env.BUILD_ENV}`)
 })
 
 // ! remove later
@@ -170,6 +170,7 @@ io.on("connection", (socket: Socket) => {
     debugLogger(socket);
   });
 
+  // 6ab. update backend game frame and then output to both players
   // socket event for updating game state frame by frame
   socket.on("update_game_frame", (frameData: GameFrameData) => {
     // update the player
@@ -197,7 +198,8 @@ io.on("connection", (socket: Socket) => {
           active: player.active,
           yPos: player.yPos,
         };
-
+        
+        // ! why are there two different game state data being passed, shouldn't it be standardized?
         // old data for the opponent
         const opponent =
           player.player_num === 1 ? gameInstance.p2 : gameInstance.p1;
@@ -251,7 +253,7 @@ io.on("connection", (socket: Socket) => {
     }
   });
 
-  // call this when a player joins the game screen
+  // 2. call this when a player joins the game screen
   socket.on("startGame", () => {
     console.log("STARTING GAME FOR " + socket.id);
     const gameRes = findGameFromSocket(socket);
@@ -291,8 +293,9 @@ io.on("connection", (socket: Socket) => {
           console.log("socket existence verification done");
           p1?.setActive(true);
           p2?.setActive(false);
-          p1Socket.emit("startTurn");
-          p2Socket.emit("waitTurn");
+          // 3. 
+          p1Socket.emit("startTurn"); // player 1 starts draw phase
+          p2Socket.emit("waitTurn"); // player 2 waits
         }
       } else {
         console.log("NOT ALL PLAYERS IN");
@@ -325,6 +328,7 @@ io.on("connection", (socket: Socket) => {
     }
   });
 
+  // 7. sends both players to play phase
   socket.on("endTurn", (strokeHistory) => {
     console.log(socket.id + " just ended turn");
     const gameRes = findGameFromSocket(socket);

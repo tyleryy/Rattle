@@ -6,7 +6,7 @@ export interface Coordinate {
   y: number | null;
 }
 
-/** interface for knowing all the game instances */
+/** interface for knowing all the game instances  */
 export interface Rattle {
   [lobbyCode: string]: GameInstance;
 }

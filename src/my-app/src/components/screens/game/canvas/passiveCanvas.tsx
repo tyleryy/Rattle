@@ -10,14 +10,17 @@ function PassiveCanvas({ lastNonNull, p2Pos, socket }: { lastNonNull: Coordinate
     const [timeTick, changeTimeTick] = useState(0);
 
     // strokeHistory is all the strokes that need to be recreated over time.
+    // ! not used either
     const [animateHistory, changeAnimatedStrokes] = useState<Coordinate[]>([]);
-
+    
     useEffect(() => {
+        // ! does this do anything; not called from API sendAnimatedStrokes
         socket.on("updateAnimatedStrokes", (animatedStrokes) => {
             changeAnimatedStrokes(animatedStrokes);
         })
     }, []);
 
+    // 5b. waiting
     useTick((delta) => {
         // wait until the first part has reached the end
 
